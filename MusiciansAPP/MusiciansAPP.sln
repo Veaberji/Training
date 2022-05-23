@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{810E34D5-DE05-40C3-AB54-89EC7A4979A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusiciansAPP.API", "API\MusiciansAPP.API.csproj", "{810E34D5-DE05-40C3-AB54-89EC7A4979A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BL", "BL\BL.csproj", "{6B1BA044-DEA0-4296-A91D-8DD67206EE9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusiciansAPP.BL", "BL\MusiciansAPP.BL.csproj", "{6B1BA044-DEA0-4296-A91D-8DD67206EE9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{2623F0B6-7863-468C-AABA-8D91438EE397}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusiciansAPP.Domain", "Domain\MusiciansAPP.Domain.csproj", "{2623F0B6-7863-468C-AABA-8D91438EE397}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{546332B6-D25D-48FB-8DC1-F3EC520FB4C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusiciansAPP.DAL", "DAL\MusiciansAPP.DAL.csproj", "{546332B6-D25D-48FB-8DC1-F3EC520FB4C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

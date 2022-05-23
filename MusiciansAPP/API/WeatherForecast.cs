@@ -1,6 +1,6 @@
 using System;
 
-namespace API
+namespace MusiciansAPP.API
 {
     public class WeatherForecast
     {

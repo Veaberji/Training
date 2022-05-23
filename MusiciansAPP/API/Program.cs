@@ -7,10 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddCors(options =>
-    options.AddDefaultPolicy((b =>
+    options.AddDefaultPolicy((policy =>
     {
-        b.SetIsOriginAllowed(origin =>
-                new Uri(origin).Host == builder.Configuration["Host"])
+        policy.SetIsOriginAllowed(uri =>
+                new Uri(uri).Host == builder.Configuration["Host"])
             .AllowAnyHeader()
             .AllowAnyMethod();
     })));
