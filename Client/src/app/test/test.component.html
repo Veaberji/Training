@@ -1,0 +1,12 @@
+<p>test works!</p>
+
+<div class="card">
+  <div class="card-header">Test Data</div>
+  <ul>
+    <li class="text-warning">date | temperatureC | temperatureF | summary</li>
+    <li *ngFor="let item of data">
+      {{ item.date }} | {{ item.temperatureC }} | {{ item.temperatureF }} |
+      {{ item.summary }}
+    </li>
+  </ul>
+</div>
