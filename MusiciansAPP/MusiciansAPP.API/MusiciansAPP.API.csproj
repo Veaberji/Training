@@ -11,8 +11,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\BL\MusiciansAPP.BL.csproj" />
-	  <ProjectReference Include="..\DAL\MusiciansAPP.DAL.csproj" />
+	  <ProjectReference Include="..\MusiciansAPP.BL\MusiciansAPP.BL.csproj" />
+	  <ProjectReference Include="..\MusiciansAPP.DAL\MusiciansAPP.DAL.csproj" />
 	</ItemGroup>
 
 </Project>
