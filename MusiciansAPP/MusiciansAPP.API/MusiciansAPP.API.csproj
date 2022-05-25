@@ -3,7 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+		<Nullable>disable</Nullable>
+		<UserSecretsId>94735517-193a-498c-8c9a-14778e3a7c5b</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -11,8 +12,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\MusiciansAPP.BL\MusiciansAPP.BL.csproj" />
-	  <ProjectReference Include="..\MusiciansAPP.DAL\MusiciansAPP.DAL.csproj" />
+		<ProjectReference Include="..\MusiciansAPP.BL\MusiciansAPP.BL.csproj" />
+		<ProjectReference Include="..\MusiciansAPP.DAL\MusiciansAPP.DAL.csproj" />
 	</ItemGroup>
 
 </Project>

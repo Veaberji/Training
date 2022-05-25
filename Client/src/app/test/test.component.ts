@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../services/data-service';
+import { Artist } from '../models/artist';
+import { ArtistService } from '../services/artist.service';
 
 @Component({
   selector: 'app-test',
@@ -7,8 +8,8 @@ import { DataService } from '../services/data-service';
   styleUrls: ['./test.component.css'],
 })
 export class TestComponent implements OnInit {
-  data: any;
-  constructor(private service: DataService) {}
+  data: Artist[] = [];
+  constructor(private service: ArtistService) {}
 
   ngOnInit() {
     this.service.getAll().subscribe((response) => {
