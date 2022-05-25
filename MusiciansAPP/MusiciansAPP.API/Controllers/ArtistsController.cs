@@ -29,7 +29,7 @@ namespace MusiciansAPP.API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ArtistDto>>> GetTopArtists(
-            int pageSize, int page = 1)
+            [FromQuery] int pageSize, [FromQuery] int page = 1)
         {
             try
             {

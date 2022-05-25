@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { Artist } from '../models/artist';
 import { DataService } from './data.service';
 
@@ -8,6 +9,6 @@ import { DataService } from './data.service';
 })
 export class ArtistService extends DataService<Artist> {
   constructor(http: HttpClient) {
-    super('https://localhost:7093/api/artists/', http);
+    super(environment.artistsApiUrl, http);
   }
 }

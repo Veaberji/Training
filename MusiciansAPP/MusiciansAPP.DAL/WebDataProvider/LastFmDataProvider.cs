@@ -27,19 +27,18 @@ namespace MusiciansAPP.DAL.WebDataProvider
             var url = $"{BaseUrl}?method={method}&page={page}&limit={pageSize}&api_key={_apiKey}&format=json";
 
             //todo: interface
-            using (var httpClient = new HttpClient())
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync(url);
+            if (response.IsSuccessStatusCode)
             {
-                var response = await httpClient.GetAsync(url);
-                if (response.IsSuccessStatusCode)
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<LastFmArtistsTopLevelDto>(apiResponse);
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<LastFmArtistsTopLevelDto>(apiResponse);
 
-                    var artists = _mapper.Map<IEnumerable<Artist>>(result.TopLevel.Artists);
-                    return artists;
-                }
+                var artists = _mapper.Map<IEnumerable<Artist>>(result.TopLevel.Artists);
+                return artists;
             }
-            return null;
+
+            return new List<Artist>();
         }
     }
 }

@@ -7,17 +7,16 @@ namespace MusiciansAPP.API.Utils
         public static int GetCorrectPageSize(int pageSize)
         {
             int maxSize = AppConfigs.MaxPageSize;
-            int size = pageSize;
             if (pageSize > maxSize)
             {
-                size = maxSize;
+                pageSize = maxSize;
             }
             else if (pageSize < 1)
             {
-                size = AppConfigs.DefaultPageSize;
+                pageSize = AppConfigs.DefaultPageSize;
             }
 
-            return size;
+            return pageSize;
         }
     }
 }
