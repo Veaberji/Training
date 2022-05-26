@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MusiciansAPP.BL.ArtistsService.Interfaces;
+using MusiciansAPP.BL.ArtistsService.Resources;
 using MusiciansAPP.Domain;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -27,6 +28,21 @@ namespace MusiciansAPP.BL.ArtistsService.Logic
         {
             var artistDTo = await _webDataProvider.GetArtistDetails(name);
             return _mapper.Map<Artist>(artistDTo);
+        }
+
+        public async Task<ArtistTracksDto> GetArtistTopTracks(string name)
+        {
+            return await _webDataProvider.GetArtistTopTracks(name);
+        }
+
+        public async Task<ArtistAlbumsDto> GetArtistTopAlbums(string name)
+        {
+            return await _webDataProvider.GetArtistTopAlbums(name);
+        }
+
+        public async Task<SimilarArtistDto> GetSimilarArtists(string name)
+        {
+            return await _webDataProvider.GetSimilarArtists(name);
         }
     }
 }

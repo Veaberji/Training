@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MusiciansAPP.API.Resources;
 using MusiciansAPP.API.Services.Interfaces;
 using MusiciansAPP.API.Utils;
 using MusiciansAPP.BL.ArtistsService.Interfaces;
+using MusiciansAPP.BL.ArtistsService.Resources;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ArtistDetailsDto = MusiciansAPP.API.Resources.ArtistDetailsDto;
+using ArtistDto = MusiciansAPP.API.Resources.ArtistDto;
 
 namespace MusiciansAPP.API.Controllers
 {
@@ -62,6 +64,63 @@ namespace MusiciansAPP.API.Controllers
             catch (Exception error)
             {
                 _errorHandler.HandleError(error, nameof(GetArtistDetails));
+                return CreateError();
+            }
+        }
+
+        [HttpGet("{name}/top-tracks")]
+        public async Task<ActionResult<ArtistTracksDto>> GetArtistTopTracks(
+            string name)
+        {
+            try
+            {
+                return Ok(await _artistsService.GetArtistTopTracks(name));
+            }
+            catch (ArgumentException error)
+            {
+                return NotFound(error.Message);
+            }
+            catch (Exception error)
+            {
+                _errorHandler.HandleError(error, nameof(GetArtistTopTracks));
+                return CreateError();
+            }
+        }
+
+        [HttpGet("{name}/top-albums")]
+        public async Task<ActionResult<ArtistTracksDto>> GetArtistTopAlbums(
+            string name)
+        {
+            try
+            {
+                return Ok(await _artistsService.GetArtistTopAlbums(name));
+            }
+            catch (ArgumentException error)
+            {
+                return NotFound(error.Message);
+            }
+            catch (Exception error)
+            {
+                _errorHandler.HandleError(error, nameof(GetArtistTopAlbums));
+                return CreateError();
+            }
+        }
+
+        [HttpGet("{name}/similar")]
+        public async Task<ActionResult<SimilarArtistDto>> GetSimilarArtists(
+            string name)
+        {
+            try
+            {
+                return Ok(await _artistsService.GetSimilarArtists(name));
+            }
+            catch (ArgumentException error)
+            {
+                return NotFound(error.Message);
+            }
+            catch (Exception error)
+            {
+                _errorHandler.HandleError(error, nameof(GetSimilarArtists));
                 return CreateError();
             }
         }

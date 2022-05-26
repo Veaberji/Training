@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MusiciansAPP.BL.ArtistsService.Resources;
 using MusiciansAPP.DAL.WebDataProvider.Resources.ArtistDetails;
+using MusiciansAPP.DAL.WebDataProvider.Resources.SimilarArtists;
 using MusiciansAPP.DAL.WebDataProvider.Resources.TopArtists;
 
 namespace MusiciansAPP.DAL.WebDataProvider.AutoMapperProfiles
@@ -11,14 +12,24 @@ namespace MusiciansAPP.DAL.WebDataProvider.AutoMapperProfiles
         public ArtistProfile()
         {
             CreateMap<LastFmArtistDto, ArtistDto>()
-                .ForMember(a => a.ImageUrl,
-                    o => o.MapFrom(l => DefaultArtistImage));
+                .ForMember(dest => dest.ImageUrl,
+                    opt => opt.MapFrom(src => DefaultArtistImage));
 
             CreateMap<LastFmArtistDetailsDto, ArtistDetailsDto>()
-                .ForMember(a => a.ImageUrl,
-                    o => o.MapFrom(l => DefaultArtistImage))
-                .ForMember(a => a.Biography,
-                    o => o.MapFrom(l => l.Biography.Content));
+                .ForMember(dest => dest.ImageUrl,
+                    opt => opt.MapFrom(src => DefaultArtistImage))
+                .ForMember(dest => dest.Biography,
+                    o => o.MapFrom(src => src.Biography.Content));
+
+            CreateMap<LastFmSimilarArtistDto, ArtistDto>()
+                .ForMember(dest => dest.ImageUrl,
+                    opt => opt.MapFrom(src => DefaultArtistImage));
+
+            CreateMap<LastFmSimilarArtistsDto, SimilarArtistDto>()
+                .ForMember(dest => dest.ArtistName,
+                    opt => opt.MapFrom(src => src.MetaData.ArtistName))
+                .ForMember(dest => dest.Artists,
+                    opt => opt.MapFrom(src => src.Artists));
         }
     }
 }

@@ -2,11 +2,11 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace MusiciansAPP.DAL.WebDataProvider.Resources.TopArtists
+namespace MusiciansAPP.DAL.WebDataProvider.Resources.SimilarArtists
 {
-    internal class LastFmArtistDto
+    internal class LastFmSimilarArtistDto
     {
-        public LastFmArtistDto()
+        public LastFmSimilarArtistDto()
         {
             Images = new List<LastFmArtistImageDto>();
         }
@@ -22,9 +22,6 @@ namespace MusiciansAPP.DAL.WebDataProvider.Resources.TopArtists
 
         [JsonProperty(PropertyName = "mbid")]
         public string Id { get; set; }
-
-        [JsonProperty(PropertyName = "url")]
-        public string ProfileUrl { get; set; }
 
         [JsonProperty(PropertyName = "streamable")]
         public int Streamable { get; set; }

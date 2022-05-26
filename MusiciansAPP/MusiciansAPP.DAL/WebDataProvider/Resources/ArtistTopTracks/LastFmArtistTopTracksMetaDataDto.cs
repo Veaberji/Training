@@ -1,9 +1,12 @@
 ﻿using Newtonsoft.Json;
 
-namespace MusiciansAPP.DAL.WebDataProvider.Resources.TopArtists
+namespace MusiciansAPP.DAL.WebDataProvider.Resources.ArtistTopTracks
 {
-    internal class LastFmArtistsMetaDataDto
+    internal class LastFmArtistTopTracksMetaDataDto
     {
+        [JsonProperty(PropertyName = "artist")]
+        public string ArtistName { get; set; }
+
         [JsonProperty(PropertyName = "page")]
         public int Page { get; set; }
 

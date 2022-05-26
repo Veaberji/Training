@@ -2,6 +2,9 @@
 using MusiciansAPP.BL.ArtistsService.Interfaces;
 using MusiciansAPP.BL.ArtistsService.Resources;
 using MusiciansAPP.DAL.WebDataProvider.Resources.ArtistDetails;
+using MusiciansAPP.DAL.WebDataProvider.Resources.ArtistTopAlbums;
+using MusiciansAPP.DAL.WebDataProvider.Resources.ArtistTopTracks;
+using MusiciansAPP.DAL.WebDataProvider.Resources.SimilarArtists;
 using MusiciansAPP.DAL.WebDataProvider.Resources.TopArtists;
 using Newtonsoft.Json;
 using System;
@@ -14,9 +17,9 @@ namespace MusiciansAPP.DAL.WebDataProvider
     public class LastFmDataProvider : IWebDataProvider
     {
         private const string BaseUrl = "http://ws.audioscrobbler.com/2.0/";
+        private const int DefaultSize = 10;
         private readonly string _apiKey;
         private readonly IMapper _mapper;
-        private const string LastFmNameSeparator = "+";
 
         public LastFmDataProvider(string apiKey, IMapper mapper)
         {
@@ -36,31 +39,80 @@ namespace MusiciansAPP.DAL.WebDataProvider
 
             var result = JsonConvert
                 .DeserializeObject<LastFmArtistsTopLevelDto>(content);
-            var artists = _mapper.Map<IEnumerable<ArtistDto>>(result.TopLevel.Artists);
-            return artists;
-
+            return _mapper.Map<IEnumerable<ArtistDto>>(result.TopLevel.Artists);
         }
 
         public async Task<ArtistDetailsDto> GetArtistDetails(string name)
         {
             const string method = "artist.getinfo";
-
             var url = $"{BaseUrl}?method={method}&artist={name}&api_key={_apiKey}&format=json";
 
             using var httpClient = new HttpClient();
             var response = await httpClient.GetAsync(url);
-
             string content = await response.Content.ReadAsStringAsync();
+            CheckResponseContent(content, name);
+
+            var result = JsonConvert
+                .DeserializeObject<LastFmArtistDetailsTopLevelDto>(content);
+            return _mapper.Map<ArtistDetailsDto>(result.Artist);
+        }
+
+        public async Task<ArtistTracksDto> GetArtistTopTracks(string name)
+        {
+            const string method = "artist.gettoptracks";
+            var url = GetUrlForSupplements(method, name);
+
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync(url);
+            string content = await response.Content.ReadAsStringAsync();
+            CheckResponseContent(content, name);
+
+            var result = JsonConvert
+                .DeserializeObject<LastFmArtistTopTracksTopLevelDto>(content);
+            return _mapper.Map<ArtistTracksDto>(result.TopLevel);
+        }
+
+        public async Task<ArtistAlbumsDto> GetArtistTopAlbums(string name)
+        {
+            const string method = "artist.gettopalbums";
+            var url = GetUrlForSupplements(method, name);
+
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync(url);
+            string content = await response.Content.ReadAsStringAsync();
+            CheckResponseContent(content, name);
+
+            var result = JsonConvert
+                .DeserializeObject<LastFmArtistTopAlbumsTopLevelDto>(content);
+            return _mapper.Map<ArtistAlbumsDto>(result.TopLevel);
+        }
+
+        public async Task<SimilarArtistDto> GetSimilarArtists(string name)
+        {
+            const string method = "artist.getsimilar";
+            var url = GetUrlForSupplements(method, name);
+
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync(url);
+            string content = await response.Content.ReadAsStringAsync();
+            CheckResponseContent(content, name);
+
+            var result = JsonConvert
+                .DeserializeObject<LastFmSimilarArtistsTopLevelDto>(content);
+            return _mapper.Map<SimilarArtistDto>(result.TopLevel);
+        }
+
+        private string GetUrlForSupplements(string method, string name)
+        {
+            return $"{BaseUrl}?method={method}&artist={name}&limit={DefaultSize}&api_key={_apiKey}&format=json";
+        }
+
+        private static void CheckResponseContent(string content, string name)
+        {
             if (!IsArtistFound(content))
             {
                 throw new ArgumentException($"Artist {name} not found");
             }
-            var result = JsonConvert
-                .DeserializeObject<LastFmArtistDetailsTopLevelDto>(content);
-
-            var artist = _mapper.Map<ArtistDetailsDto>(result.Artist);
-            return artist;
-
         }
 
         private static bool IsArtistFound(string content)
