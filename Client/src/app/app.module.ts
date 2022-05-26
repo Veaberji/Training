@@ -4,13 +4,12 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TestComponent } from './test/test.component';
 import { DataService } from './services/data.service';
 import { ArtistService } from './services/artist.service';
 import { ArtistCardComponent } from './artist-card/artist-card.component';
 import { ArtistsContainerComponent } from './artists-container/artists-container.component';
 import { RouterModule, Routes } from '@angular/router';
-import { ArtistsDetailesComponent } from './artists-detailes/artists-detailes.component';
+import { ArtistdetailsComponent } from './artist-details/artist-details.component';
 
 const appRoutes: Routes = [
   {
@@ -18,18 +17,17 @@ const appRoutes: Routes = [
     component: ArtistsContainerComponent,
   },
   {
-    path: 'artist-details/:id',
-    component: ArtistsDetailesComponent,
+    path: 'artist-details/:name',
+    component: ArtistdetailsComponent,
   },
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    TestComponent,
     ArtistCardComponent,
     ArtistsContainerComponent,
-    ArtistsDetailesComponent,
+    ArtistdetailsComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

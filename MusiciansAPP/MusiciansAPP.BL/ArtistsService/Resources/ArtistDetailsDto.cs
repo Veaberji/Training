@@ -1,6 +1,6 @@
-﻿namespace MusiciansAPP.Domain
+﻿namespace MusiciansAPP.BL.ArtistsService.Resources
 {
-    public class Artist
+    public class ArtistDetailsDto
     {
         public string Name { get; set; }
         public string ImageUrl { get; set; }

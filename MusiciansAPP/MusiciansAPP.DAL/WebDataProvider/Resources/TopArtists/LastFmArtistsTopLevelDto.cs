@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MusiciansAPP.DAL.WebDataProvider.Resources
+namespace MusiciansAPP.DAL.WebDataProvider.Resources.TopArtists
 {
     internal class LastFmArtistsTopLevelDto
     {

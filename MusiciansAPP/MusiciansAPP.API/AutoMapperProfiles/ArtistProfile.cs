@@ -9,6 +9,7 @@ namespace MusiciansAPP.API.AutoMapperProfiles
         public ArtistProfile()
         {
             CreateMap<Artist, ArtistDto>();
+            CreateMap<Artist, ArtistDetailsDto>();
         }
     }
 }

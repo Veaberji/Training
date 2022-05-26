@@ -9,11 +9,11 @@ namespace MusiciansAPP.API.Utils
             int maxSize = AppConfigs.MaxPageSize;
             if (pageSize > maxSize)
             {
-                pageSize = maxSize;
+                return maxSize;
             }
-            else if (pageSize < 1)
+            if (pageSize < 1)
             {
-                pageSize = AppConfigs.DefaultPageSize;
+                return AppConfigs.DefaultPageSize;
             }
 
             return pageSize;

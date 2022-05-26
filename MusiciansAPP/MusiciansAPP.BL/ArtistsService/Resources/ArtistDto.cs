@@ -1,4 +1,4 @@
-﻿namespace MusiciansAPP.API.Resources
+﻿namespace MusiciansAPP.BL.ArtistsService.Resources
 {
     public class ArtistDto
     {

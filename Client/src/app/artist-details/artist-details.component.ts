@@ -2,20 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-artists-detailes',
-  templateUrl: './artists-detailes.component.html',
-  styleUrls: ['./artists-detailes.component.css'],
+  selector: 'app-artist-details',
+  templateUrl: './artist-details.component.html',
+  styleUrls: ['./artist-details.component.css'],
 })
-export class ArtistsDetailesComponent implements OnInit {
+export class ArtistdetailsComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute) {}
-  id!: string;
+  name!: string;
 
   ngOnInit(): void {
     let params = this.route.snapshot.paramMap;
-    this.id = String(params.get('id'));
+    this.name = String(params.get('name'));
+    console.log(this.name);
   }
 
   return() {
     this.router.navigate(['/']);
   }
 }
+
+// TODO: add not found

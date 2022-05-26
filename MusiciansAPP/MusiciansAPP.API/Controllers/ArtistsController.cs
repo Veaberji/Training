@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using MusiciansAPP.API.Resources;
+using MusiciansAPP.API.Services.Interfaces;
 using MusiciansAPP.API.Utils;
 using MusiciansAPP.BL.ArtistsService.Interfaces;
 using System;
@@ -15,16 +15,15 @@ namespace MusiciansAPP.API.Controllers
     [ApiController]
     public class ArtistsController : ControllerBase
     {
-        private readonly ILogger<ArtistsController> _logger;
         private readonly IArtistsService _artistsService;
         private readonly IMapper _mapper;
-
-        public ArtistsController(ILogger<ArtistsController> logger,
-            IArtistsService artistsService, IMapper mapper)
+        private readonly IErrorHandler _errorHandler;
+        public ArtistsController(IArtistsService artistsService, IMapper mapper,
+            IErrorHandler errorHandler)
         {
-            _logger = logger;
             _artistsService = artistsService;
             _mapper = mapper;
+            _errorHandler = errorHandler;
         }
 
         [HttpGet]
@@ -40,9 +39,29 @@ namespace MusiciansAPP.API.Controllers
             }
             catch (Exception error)
             {
-                _logger.LogError(
-                    "Exception while getting Top Artists.",
-                    error);
+                _errorHandler.HandleError(error, nameof(GetTopArtists));
+                return CreateError();
+            }
+        }
+
+        [HttpGet("{name}")]
+        public async Task<ActionResult<ArtistDetailsDto>> GetArtistDetails(
+            string name)
+        {
+            try
+            {
+                var artist = await _artistsService.GetArtistDetails(name);
+                var artistDto =
+                    _mapper.Map<ArtistDetailsDto>(artist);
+                return Ok(artistDto);
+            }
+            catch (ArgumentException error)
+            {
+                return NotFound(error.Message);
+            }
+            catch (Exception error)
+            {
+                _errorHandler.HandleError(error, nameof(GetArtistDetails));
                 return CreateError();
             }
         }

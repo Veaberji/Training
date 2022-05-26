@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MusiciansAPP.API.Services.Interfaces;
+using MusiciansAPP.API.Services.Logic;
 using MusiciansAPP.BL.ArtistsService.Interfaces;
 using MusiciansAPP.BL.ArtistsService.Logic;
 using MusiciansAPP.DAL.WebDataProvider;
@@ -20,6 +22,7 @@ namespace MusiciansAPP.API.Extensions.DependencyInjection
                     "MusiciansAPP.API",
                     "MusiciansAPP.BL",
                     "MusiciansAPP.DAL"));
+            services.AddScoped<IErrorHandler, ErrorHandler>();
 
             return services;
         }

@@ -7,5 +7,6 @@ namespace MusiciansAPP.BL.ArtistsService.Interfaces
     public interface IArtistsService
     {
         Task<IEnumerable<Artist>> GetTopArtists(int pageSize, int page);
+        Task<Artist> GetArtistDetails(string name);
     }
 }

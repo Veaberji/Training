@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace MusiciansAPP.DAL.WebDataProvider.Resources
+namespace MusiciansAPP.DAL.WebDataProvider.Resources.TopArtists
 {
     internal class LastFmArtistsDto
     {
