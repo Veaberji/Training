@@ -24,6 +24,18 @@ export class DataService<T> {
     );
   }
 
+  get(selector: string) {
+    const url = `${this.baseUrl}${selector}`;
+
+    return this.http.get(url).pipe(
+      map((response) => response as T),
+      catchError((error: any) => {
+        console.log(error);
+        return throwError(() => new Error(error));
+      })
+    );
+  }
+
   handleError(error: any) {
     console.log(error);
     return throwError(() => new Error(error));
