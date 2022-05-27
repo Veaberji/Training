@@ -8,7 +8,7 @@ namespace MusiciansAPP.DAL.WebDataProvider.Resources.TopArtists
     {
         public LastFmArtistDto()
         {
-            Images = new List<LastFmArtistImageDto>();
+            Images = new List<LastFmImageDto>();
         }
 
         [JsonProperty(PropertyName = "name")]
@@ -30,6 +30,6 @@ namespace MusiciansAPP.DAL.WebDataProvider.Resources.TopArtists
         public int Streamable { get; set; }
 
         [JsonProperty(PropertyName = "image")]
-        public IEnumerable<LastFmArtistImageDto> Images { get; set; }
+        public IEnumerable<LastFmImageDto> Images { get; set; }
     }
 }

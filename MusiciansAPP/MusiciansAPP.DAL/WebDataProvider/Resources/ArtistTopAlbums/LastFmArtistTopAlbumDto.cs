@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using MusiciansAPP.DAL.WebDataProvider.Resources.Common;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace MusiciansAPP.DAL.WebDataProvider.Resources.ArtistTopAlbums
 {
@@ -9,5 +11,8 @@ namespace MusiciansAPP.DAL.WebDataProvider.Resources.ArtistTopAlbums
 
         [JsonProperty(PropertyName = "playcount")]
         public int PlayCount { get; set; }
+
+        [JsonProperty(PropertyName = "image")]
+        public IEnumerable<LastFmImageDto> Images { get; set; }
     }
 }

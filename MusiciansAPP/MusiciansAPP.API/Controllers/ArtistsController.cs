@@ -88,7 +88,7 @@ namespace MusiciansAPP.API.Controllers
         }
 
         [HttpGet("{name}/top-albums")]
-        public async Task<ActionResult<ArtistTracksDto>> GetArtistTopAlbums(
+        public async Task<ActionResult<ArtistAlbumsDto>> GetArtistTopAlbums(
             string name)
         {
             try
