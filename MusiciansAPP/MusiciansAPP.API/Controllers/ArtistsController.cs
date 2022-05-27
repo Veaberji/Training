@@ -69,7 +69,7 @@ namespace MusiciansAPP.API.Controllers
         }
 
         [HttpGet("{name}/top-tracks")]
-        public async Task<ActionResult<ArtistTracksDto>> GetArtistTopTracks(
+        public async Task<ActionResult<IEnumerable<TrackDto>>> GetArtistTopTracks(
             string name)
         {
             try
@@ -88,7 +88,7 @@ namespace MusiciansAPP.API.Controllers
         }
 
         [HttpGet("{name}/top-albums")]
-        public async Task<ActionResult<ArtistAlbumsDto>> GetArtistTopAlbums(
+        public async Task<ActionResult<IEnumerable<AlbumDto>>> GetArtistTopAlbums(
             string name)
         {
             try
@@ -107,7 +107,7 @@ namespace MusiciansAPP.API.Controllers
         }
 
         [HttpGet("{name}/similar")]
-        public async Task<ActionResult<SimilarArtistDto>> GetSimilarArtists(
+        public async Task<ActionResult<IEnumerable<ArtistDto>>> GetSimilarArtists(
             string name)
         {
             try

@@ -9,8 +9,8 @@ namespace MusiciansAPP.BL.ArtistsService.Interfaces
     {
         Task<IEnumerable<Artist>> GetTopArtists(int pageSize, int page);
         Task<Artist> GetArtistDetails(string name);
-        Task<ArtistTracksDto> GetArtistTopTracks(string name);
-        Task<ArtistAlbumsDto> GetArtistTopAlbums(string name);
-        Task<SimilarArtistDto> GetSimilarArtists(string name);
+        Task<IEnumerable<TrackDto>> GetArtistTopTracks(string name);
+        Task<IEnumerable<AlbumDto>> GetArtistTopAlbums(string name);
+        Task<IEnumerable<ArtistDto>> GetSimilarArtists(string name);
     }
 }
