@@ -5,7 +5,6 @@ import { Album } from '../models/album';
 @Component({
   selector: 'app-albums-card',
   templateUrl: './albums-card.component.html',
-  styleUrls: ['./albums-card.component.css'],
 })
 export class AlbumsCardComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}

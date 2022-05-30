@@ -1,11 +1,7 @@
 <div class="card mb-3">
   <div class="row g-0">
     <div class="col-md-4">
-      <img
-        src="{{ artist.imageUrl }}"
-        class="img-fluid rounded-start"
-        alt="{{ artist.name }}"
-      />
+      <img src="{{ artist.imageUrl }}" class="img-fluid rounded-start" alt="{{ artist.name }}" />
     </div>
     <div class="col-md-8">
       <div class="card-body">
@@ -28,9 +24,7 @@
   <li class="nav-item" (click)="onTopTracksSelect()">
     <a
       class="nav-link"
-      routerLink="/{{ componentRouteName }}/{{ artist.name }}/{{
-        routes.TopTracks
-      }}"
+      routerLink="/{{ componentRouteName }}/{{ artist.name }}/{{ routes.TopTracks }}"
       routerLinkActive="active"
       >Top Tracks
     </a>
@@ -38,9 +32,7 @@
   <li class="nav-item" (click)="onTopAlbumsSelect()">
     <a
       class="nav-link"
-      routerLink="/{{ componentRouteName }}/{{ artist.name }}/{{
-        routes.TopAlbums
-      }}"
+      routerLink="/{{ componentRouteName }}/{{ artist.name }}/{{ routes.TopAlbums }}"
       routerLinkActive="active"
       >Top Albums
     </a>
@@ -48,9 +40,7 @@
   <li class="nav-item" (click)="onSimilarArtistsSelect()">
     <a
       class="nav-link"
-      routerLink="/{{ componentRouteName }}/{{ artist.name }}/{{
-        routes.SimilarArtists
-      }}"
+      routerLink="/{{ componentRouteName }}/{{ artist.name }}/{{ routes.SimilarArtists }}"
       routerLinkActive="active"
       >Similar Artists
     </a>
@@ -58,19 +48,11 @@
 </ul>
 
 <div [ngSwitch]="supplementType">
-  <app-track-list
-    *ngSwitchCase="routes.TopTracks"
-    [tracks]="supplements.topTracks"
-  ></app-track-list>
-  <app-albums-container
-    *ngSwitchCase="routes.TopAlbums"
-    [albums]="supplements.topAlbums"
-    [artistName]="artist.name"
+  <app-track-list *ngSwitchCase="routes.TopTracks" [tracks]="supplements.topTracks"></app-track-list>
+  <app-albums-container *ngSwitchCase="routes.TopAlbums" [albums]="supplements.topAlbums" [artistName]="artist.name"
     >TopAlbums</app-albums-container
   >
-  <app-similar-artists
-    *ngSwitchCase="routes.SimilarArtists"
-    [artists]="supplements.similarArtists"
+  <app-similar-artists *ngSwitchCase="routes.SimilarArtists" [artists]="supplements.similarArtists"
     >SimilarArtists</app-similar-artists
   >
   <div *ngSwitchDefault class="card-text">{{ artist.biography }}</div>

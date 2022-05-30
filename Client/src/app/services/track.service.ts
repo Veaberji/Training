@@ -13,6 +13,7 @@ export class TrackService extends DataService<Track> {
   }
 
   getTopTracks(artistName: string) {
-    return this.getAll(`${artistName}/${environment.topTracksApiPostfix}`);
+    const topTracksApiPostfix = 'top-tracks';
+    return this.getAll(`${artistName}/${topTracksApiPostfix}`);
   }
 }

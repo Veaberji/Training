@@ -4,9 +4,6 @@
 
 export const environment = {
   artistsApiUrl: 'https://localhost:7093/api/artists/',
-  topTracksApiPostfix: 'top-tracks',
-  topAlbumsApiPostfix: 'top-albums',
-  similarArtistsApiPostfix: 'similar',
   production: false,
 };
 

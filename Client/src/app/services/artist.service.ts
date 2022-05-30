@@ -12,6 +12,7 @@ export class ArtistService extends DataService<Artist> {
     super(environment.artistsApiUrl, http);
   }
   getSimilarArtists(artistName: string) {
-    return this.getAll(`${artistName}/${environment.similarArtistsApiPostfix}`);
+    const similarArtistsApiPostfix = 'similar';
+    return this.getAll(`${artistName}/${similarArtistsApiPostfix}`);
   }
 }

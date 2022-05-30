@@ -1,19 +1,18 @@
 ﻿using AutoMapper;
-using MusiciansAPP.BL.ArtistsService.Resources;
-using MusiciansAPP.DAL.WebDataProvider.Resources.ArtistTopTracks;
+using MusiciansAPP.DAL.DALModels;
+using MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.ArtistTopTracks;
 
-namespace MusiciansAPP.DAL.WebDataProvider.AutoMapperProfiles
+namespace MusiciansAPP.DAL.WebDataProvider.AutoMapperProfiles;
+
+public class TrackProfile : Profile
 {
-    public class TrackProfile : Profile
+    public TrackProfile()
     {
-        public TrackProfile()
-        {
-            CreateMap<LastFmArtistTopTracksDto, ArtistTracksDto>()
-                .ForMember(a => a.ArtistName,
-                    o => o.MapFrom(l => l.MetaData.ArtistName))
-                .ForMember(a => a.Tracks,
-                    o => o.MapFrom(l => l.Tracks));
-            CreateMap<LastFmArtistTopTrackDto, TrackDto>();
-        }
+        CreateMap<LastFmArtistTopTracksDto, ArtistTracksDAL>()
+            .ForMember(a => a.ArtistName,
+                o => o.MapFrom(l => l.MetaData.ArtistName))
+            .ForMember(a => a.Tracks,
+                o => o.MapFrom(l => l.Tracks));
+        CreateMap<LastFmArtistTopTrackDto, TrackDAL>();
     }
 }

@@ -13,6 +13,7 @@ export class AlbumService extends DataService<Album> {
   }
 
   getTopAlbums(artistName: string) {
-    return this.getAll(`${artistName}/${environment.topAlbumsApiPostfix}`);
+    const topAlbumsApiPostfix = 'top-albums';
+    return this.getAll(`${artistName}/${topAlbumsApiPostfix}`);
   }
 }

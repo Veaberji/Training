@@ -8,7 +8,7 @@ import { DataService } from './services/data.service';
 import { ArtistService } from './services/artist.service';
 import { ArtistCardComponent } from './artist-card/artist-card.component';
 import { ArtistsContainerComponent } from './artists-container/artists-container.component';
-import { ArtistdetailsComponent } from './artist-details/artist-details.component';
+import { ArtistDetailsComponent } from './artist-details/artist-details.component';
 import { ArtistDetailsService } from './services/artist-details.service';
 import { TrackService } from './services/track.service';
 import { AlbumService } from './services/album.service';
@@ -24,7 +24,7 @@ import { NotFoundComponent } from './common/not-found/not-found.component';
     AppComponent,
     ArtistCardComponent,
     ArtistsContainerComponent,
-    ArtistdetailsComponent,
+    ArtistDetailsComponent,
     TrackListComponent,
     AlbumsContainerComponent,
     AlbumsCardComponent,

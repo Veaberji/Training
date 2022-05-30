@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ArtistDetails } from '../models/artist-details';
 import { ArtistSupplements } from '../models/artist-supplements';
 import { AlbumService } from '../services/album.service';
@@ -11,9 +11,8 @@ import { supplementRoutes } from '../supplementRoutes';
 @Component({
   selector: 'app-artist-details',
   templateUrl: './artist-details.component.html',
-  styleUrls: ['./artist-details.component.css'],
 })
-export class ArtistdetailsComponent implements OnInit {
+export class ArtistDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private artistService: ArtistService,

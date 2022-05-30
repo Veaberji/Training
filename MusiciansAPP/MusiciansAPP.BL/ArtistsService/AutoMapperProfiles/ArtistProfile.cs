@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
-using MusiciansAPP.BL.ArtistsService.Resources;
+using MusiciansAPP.BL.ArtistsService.BLModels;
+using MusiciansAPP.DAL.DALModels;
 using MusiciansAPP.Domain;
 
-namespace MusiciansAPP.BL.ArtistsService.AutoMapperProfiles
+namespace MusiciansAPP.BL.ArtistsService.AutoMapperProfiles;
+
+public class ArtistProfile : Profile
 {
-    public class ArtistProfile : Profile
+    public ArtistProfile()
     {
-        public ArtistProfile()
-        {
-            CreateMap<ArtistDto, Artist>();
-            CreateMap<ArtistDetailsDto, Artist>();
-        }
+        CreateMap<ArtistBL, Artist>();
+        CreateMap<ArtistDetailsDAL, ArtistDetailsBL>();
+        CreateMap<ArtistDAL, ArtistBL>();
     }
 }

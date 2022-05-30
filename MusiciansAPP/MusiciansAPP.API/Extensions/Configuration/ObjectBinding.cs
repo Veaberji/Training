@@ -2,16 +2,15 @@
 using Microsoft.Extensions.Configuration;
 using MusiciansAPP.API.Configs;
 
-namespace MusiciansAPP.API.Extensions.Configuration
-{
-    public static class ObjectBinding
-    {
-        public static WebApplicationBuilder BindObjects(
-            this WebApplicationBuilder builder)
-        {
-            builder.Configuration.Bind("AppConfigs", new AppConfigs());
+namespace MusiciansAPP.API.Extensions.Configuration;
 
-            return builder;
-        }
+public static class ObjectBinding
+{
+    public static WebApplicationBuilder BindObjects(
+        this WebApplicationBuilder builder)
+    {
+        builder.Configuration.Bind("AppConfigs", new AppConfigs());
+
+        return builder;
     }
 }

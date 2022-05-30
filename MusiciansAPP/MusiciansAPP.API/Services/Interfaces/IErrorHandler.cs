@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace MusiciansAPP.API.Services.Interfaces
+namespace MusiciansAPP.API.Services.Interfaces;
+
+public interface IErrorHandler
 {
-    public interface IErrorHandler
-    {
-        void HandleError(Exception error, string method);
-    }
+    void HandleError(Exception error, string method);
 }

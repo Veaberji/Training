@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AlbumDetailsComponent } from './album-details/album-details.component';
-import { ArtistdetailsComponent } from './artist-details/artist-details.component';
+import { ArtistDetailsComponent } from './artist-details/artist-details.component';
 import { ArtistsContainerComponent } from './artists-container/artists-container.component';
 import { NotFoundComponent } from './common/not-found/not-found.component';
 import { supplementRoutes } from './supplementRoutes';
@@ -14,11 +14,11 @@ const routes: Routes = [
   },
   {
     path: 'artist-details/:name',
-    component: ArtistdetailsComponent,
+    component: ArtistDetailsComponent,
   },
   {
     path: 'artist-details/:name/:supplement',
-    component: ArtistdetailsComponent,
+    component: ArtistDetailsComponent,
   },
   {
     path: ':artistName/album-details/:albumTitle',

@@ -13,7 +13,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\MusiciansAPP.BL\MusiciansAPP.BL.csproj" />
-		<ProjectReference Include="..\MusiciansAPP.DAL\MusiciansAPP.DAL.csproj" />
 	</ItemGroup>
 
 </Project>

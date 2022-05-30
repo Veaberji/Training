@@ -2,133 +2,116 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MusiciansAPP.API.Services.Interfaces;
+using MusiciansAPP.API.UIModels;
 using MusiciansAPP.API.Utils;
 using MusiciansAPP.BL.ArtistsService.Interfaces;
-using MusiciansAPP.BL.ArtistsService.Resources;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ArtistDetailsDto = MusiciansAPP.API.Resources.ArtistDetailsDto;
-using ArtistDto = MusiciansAPP.API.Resources.ArtistDto;
 
-namespace MusiciansAPP.API.Controllers
+namespace MusiciansAPP.API.Controllers;
+
+[Route("api/artists")]
+[ApiController]
+public class ArtistsController : ControllerBase
 {
-    [Route("api/artists")]
-    [ApiController]
-    public class ArtistsController : ControllerBase
+    private readonly IArtistsService _artistsService;
+    private readonly IMapper _mapper;
+    private readonly IErrorHandler _errorHandler;
+    public ArtistsController(IArtistsService artistsService, IMapper mapper,
+        IErrorHandler errorHandler)
     {
-        private readonly IArtistsService _artistsService;
-        private readonly IMapper _mapper;
-        private readonly IErrorHandler _errorHandler;
-        public ArtistsController(IArtistsService artistsService, IMapper mapper,
-            IErrorHandler errorHandler)
-        {
-            _artistsService = artistsService;
-            _mapper = mapper;
-            _errorHandler = errorHandler;
-        }
+        _artistsService = artistsService;
+        _mapper = mapper;
+        _errorHandler = errorHandler;
+    }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ArtistDto>>> GetTopArtists(
-            [FromQuery] int pageSize, [FromQuery] int page = 1)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<ArtistUI>>> GetTopArtists(
+        [FromQuery] int pageSize, [FromQuery] int page = 1)
+    {
+        var action = async () =>
         {
-            try
-            {
-                int size = PagingHelper.GetCorrectPageSize(pageSize);
-                var artists = await _artistsService.GetTopArtists(size, page);
-                var artistsDto = _mapper.Map<IEnumerable<ArtistDto>>(artists);
-                return Ok(artistsDto);
-            }
-            catch (Exception error)
-            {
-                _errorHandler.HandleError(error, nameof(GetTopArtists));
-                return CreateError();
-            }
-        }
+            int size = PagingHelper.GetCorrectPageSize(pageSize);
+            var artists = await _artistsService.GetTopArtistsAsync(size, page);
+            return _mapper.Map<IEnumerable<ArtistUI>>(artists);
+        };
 
-        [HttpGet("{name}")]
-        public async Task<ActionResult<ArtistDetailsDto>> GetArtistDetails(
-            string name)
-        {
-            try
-            {
-                var artist = await _artistsService.GetArtistDetails(name);
-                var artistDto =
-                    _mapper.Map<ArtistDetailsDto>(artist);
-                return Ok(artistDto);
-            }
-            catch (ArgumentException error)
-            {
-                return NotFound(error.Message);
-            }
-            catch (Exception error)
-            {
-                _errorHandler.HandleError(error, nameof(GetArtistDetails));
-                return CreateError();
-            }
-        }
+        return await GetDataAsync(action, nameof(GetArtistDetails));
+    }
 
-        [HttpGet("{name}/top-tracks")]
-        public async Task<ActionResult<IEnumerable<TrackDto>>> GetArtistTopTracks(
-            string name)
+    [HttpGet("{name}")]
+    public async Task<ActionResult<ArtistDetailsUI>> GetArtistDetails(
+        string name)
+    {
+        var action = async () =>
         {
-            try
-            {
-                return Ok(await _artistsService.GetArtistTopTracks(name));
-            }
-            catch (ArgumentException error)
-            {
-                return NotFound(error.Message);
-            }
-            catch (Exception error)
-            {
-                _errorHandler.HandleError(error, nameof(GetArtistTopTracks));
-                return CreateError();
-            }
-        }
+            var artist = await _artistsService.GetArtistDetailsAsync(name);
+            return _mapper.Map<ArtistDetailsUI>(artist);
+        };
 
-        [HttpGet("{name}/top-albums")]
-        public async Task<ActionResult<IEnumerable<AlbumDto>>> GetArtistTopAlbums(
-            string name)
-        {
-            try
-            {
-                return Ok(await _artistsService.GetArtistTopAlbums(name));
-            }
-            catch (ArgumentException error)
-            {
-                return NotFound(error.Message);
-            }
-            catch (Exception error)
-            {
-                _errorHandler.HandleError(error, nameof(GetArtistTopAlbums));
-                return CreateError();
-            }
-        }
+        return await GetDataAsync(action, nameof(GetArtistDetails));
+    }
 
-        [HttpGet("{name}/similar")]
-        public async Task<ActionResult<IEnumerable<ArtistDto>>> GetSimilarArtists(
-            string name)
+    [HttpGet("{name}/top-tracks")]
+    public async Task<ActionResult<IEnumerable<TrackUI>>> GetArtistTopTracks(
+        string name)
+    {
+        var action = async () =>
         {
-            try
-            {
-                return Ok(await _artistsService.GetSimilarArtists(name));
-            }
-            catch (ArgumentException error)
-            {
-                return NotFound(error.Message);
-            }
-            catch (Exception error)
-            {
-                _errorHandler.HandleError(error, nameof(GetSimilarArtists));
-                return CreateError();
-            }
-        }
+            var blModels = await _artistsService.GetArtistTopTracksAsync(name);
+            return _mapper.Map<IEnumerable<TrackUI>>(blModels);
+        };
 
-        private ObjectResult CreateError()
+        return await GetDataAsync(action, nameof(GetArtistTopTracks));
+    }
+
+    [HttpGet("{name}/top-albums")]
+    public async Task<ActionResult<IEnumerable<AlbumUI>>> GetArtistTopAlbums(
+        string name)
+    {
+        var action = async () =>
         {
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                "A problem happened while handling your request.");
+            var blModels = await _artistsService.GetArtistTopAlbumsAsync(name);
+            return _mapper.Map<IEnumerable<AlbumUI>>(blModels);
+        };
+
+        return await GetDataAsync(action, nameof(GetArtistTopAlbums));
+    }
+
+    [HttpGet("{name}/similar")]
+    public async Task<ActionResult<IEnumerable<ArtistUI>>> GetSimilarArtists(
+        string name)
+    {
+        var action = async () =>
+        {
+            var blModels = await _artistsService.GetSimilarArtistsAsync(name);
+            return _mapper.Map<IEnumerable<ArtistUI>>(blModels);
+        };
+
+        return await GetDataAsync(action, nameof(GetSimilarArtists));
+    }
+
+    private async Task<ActionResult<T>> GetDataAsync<T>(Func<Task<T>> action, string method)
+    {
+        try
+        {
+            return Ok(await action());
         }
+        catch (ArgumentException error)
+        {
+            return NotFound(error.Message);
+        }
+        catch (Exception error)
+        {
+            _errorHandler.HandleError(error, method);
+            return CreateError();
+        }
+    }
+
+    private ObjectResult CreateError()
+    {
+        return StatusCode(StatusCodes.Status500InternalServerError,
+            "A problem happened while handling your request.");
     }
 }
