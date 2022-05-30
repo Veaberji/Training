@@ -11,4 +11,5 @@ public interface IWebDataProvider
     Task<ArtistTracksDAL> GetArtistTopTracksAsync(string name);
     Task<ArtistAlbumsDAL> GetArtistTopAlbumsAsync(string name);
     Task<SimilarArtistDAL> GetSimilarArtistsAsync(string name);
+    Task<AlbumDetailsDAL> GetArtistAlbumAsync(string artistName, string albumName);
 }

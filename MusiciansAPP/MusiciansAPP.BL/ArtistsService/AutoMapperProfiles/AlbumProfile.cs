@@ -11,5 +11,6 @@ public class AlbumProfile : Profile
     {
         CreateMap<AlbumBL, Album>();
         CreateMap<AlbumDAL, AlbumBL>();
+        CreateMap<AlbumDetailsDAL, AlbumDetailsBL>();
     }
 }

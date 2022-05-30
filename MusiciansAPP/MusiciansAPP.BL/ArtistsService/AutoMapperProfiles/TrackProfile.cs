@@ -11,5 +11,6 @@ public class TrackProfile : Profile
     {
         CreateMap<TrackBL, Track>();
         CreateMap<TrackDAL, TrackBL>();
+        CreateMap<AlbumTrackDAL, AlbumTrackBL>();
     }
 }

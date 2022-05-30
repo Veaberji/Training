@@ -9,5 +9,6 @@ public class TracksProfile : Profile
     public TracksProfile()
     {
         CreateMap<TrackBL, TrackUI>();
+        CreateMap<AlbumTrackBL, AlbumTrackUI>();
     }
 }
