@@ -4,40 +4,42 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TestComponent } from './test/test.component';
 import { DataService } from './services/data.service';
 import { ArtistService } from './services/artist.service';
 import { ArtistCardComponent } from './artist-card/artist-card.component';
 import { ArtistsContainerComponent } from './artists-container/artists-container.component';
-import { RouterModule, Routes } from '@angular/router';
-import { ArtistsDetailesComponent } from './artists-detailes/artists-detailes.component';
-
-const appRoutes: Routes = [
-  {
-    path: '',
-    component: ArtistsContainerComponent,
-  },
-  {
-    path: 'artist-details/:id',
-    component: ArtistsDetailesComponent,
-  },
-];
+import { ArtistDetailsComponent } from './artist-details/artist-details.component';
+import { ArtistDetailsService } from './services/artist-details.service';
+import { TrackService } from './services/track.service';
+import { AlbumService } from './services/album.service';
+import { TrackListComponent } from './track-list/track-list.component';
+import { AlbumsContainerComponent } from './albums-container/albums-container.component';
+import { AlbumsCardComponent } from './albums-card/albums-card.component';
+import { AlbumDetailsComponent } from './album-details/album-details.component';
+import { SimilarArtistsComponent } from './similar-artists/similar-artists.component';
+import { NotFoundComponent } from './common/not-found/not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TestComponent,
     ArtistCardComponent,
     ArtistsContainerComponent,
-    ArtistsDetailesComponent,
+    ArtistDetailsComponent,
+    TrackListComponent,
+    AlbumsContainerComponent,
+    AlbumsCardComponent,
+    AlbumDetailsComponent,
+    SimilarArtistsComponent,
+    NotFoundComponent,
   ],
-  imports: [
-    RouterModule.forRoot(appRoutes),
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  providers: [
+    DataService,
+    ArtistService,
+    ArtistDetailsService,
+    TrackService,
+    AlbumService,
   ],
-  providers: [DataService, ArtistService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using MusiciansAPP.API.Resources;
-using MusiciansAPP.Domain;
+using MusiciansAPP.API.UIModels;
+using MusiciansAPP.BL.ArtistsService.BLModels;
 
-namespace MusiciansAPP.API.AutoMapperProfiles
+namespace MusiciansAPP.API.AutoMapperProfiles;
+
+public class ArtistProfile : Profile
 {
-    public class ArtistProfile : Profile
+    public ArtistProfile()
     {
-        public ArtistProfile()
-        {
-            CreateMap<Artist, ArtistDto>();
-        }
+        CreateMap<ArtistDetailsBL, ArtistDetailsUI>();
+        CreateMap<ArtistBL, ArtistUI>();
     }
 }

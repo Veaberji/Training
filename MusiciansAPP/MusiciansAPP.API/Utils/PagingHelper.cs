@@ -1,22 +1,22 @@
 ﻿using MusiciansAPP.API.Configs;
 
-namespace MusiciansAPP.API.Utils
-{
-    public class PagingHelper
-    {
-        public static int GetCorrectPageSize(int pageSize)
-        {
-            int maxSize = AppConfigs.MaxPageSize;
-            if (pageSize > maxSize)
-            {
-                pageSize = maxSize;
-            }
-            else if (pageSize < 1)
-            {
-                pageSize = AppConfigs.DefaultPageSize;
-            }
+namespace MusiciansAPP.API.Utils;
 
-            return pageSize;
+public class PagingHelper
+{
+    public static int GetCorrectPageSize(int pageSize)
+    {
+        int maxSize = AppConfigs.MaxPageSize;
+        if (pageSize > maxSize)
+        {
+            return maxSize;
         }
+
+        if (pageSize < 1)
+        {
+            return AppConfigs.DefaultPageSize;
+        }
+
+        return pageSize;
     }
 }

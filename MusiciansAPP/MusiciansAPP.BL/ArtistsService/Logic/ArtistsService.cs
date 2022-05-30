@@ -1,22 +1,50 @@
-﻿using MusiciansAPP.BL.ArtistsService.Interfaces;
-using MusiciansAPP.Domain;
+﻿using AutoMapper;
+using MusiciansAPP.BL.ArtistsService.BLModels;
+using MusiciansAPP.BL.ArtistsService.Interfaces;
+using MusiciansAPP.DAL.WebDataProvider.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MusiciansAPP.BL.ArtistsService.Logic
+namespace MusiciansAPP.BL.ArtistsService.Logic;
+
+public class ArtistsService : IArtistsService
 {
-    public class ArtistsService : IArtistsService
+    private readonly IWebDataProvider _webDataProvider;
+    private readonly IMapper _mapper;
+
+    public ArtistsService(IWebDataProvider webDataProvider, IMapper mapper)
     {
-        private readonly IWebDataProvider _webDataProvider;
+        _webDataProvider = webDataProvider;
+        _mapper = mapper;
+    }
 
-        public ArtistsService(IWebDataProvider webDataProvider)
-        {
-            _webDataProvider = webDataProvider;
-        }
+    public async Task<IEnumerable<ArtistBL>> GetTopArtistsAsync(int pageSize, int page)
+    {
+        var topArtists = await _webDataProvider.GetTopArtistsAsync(pageSize, page);
+        return _mapper.Map<IEnumerable<ArtistBL>>(topArtists);
+    }
 
-        public Task<IEnumerable<Artist>> GetTopArtists(int pageSize, int page)
-        {
-            return _webDataProvider.GetTopArtists(pageSize, page);
-        }
+    public async Task<ArtistDetailsBL> GetArtistDetailsAsync(string name)
+    {
+        var artistDetails = await _webDataProvider.GetArtistDetailsAsync(name);
+        return _mapper.Map<ArtistDetailsBL>(artistDetails);
+    }
+
+    public async Task<IEnumerable<TrackBL>> GetArtistTopTracksAsync(string name)
+    {
+        var artistTracks = await _webDataProvider.GetArtistTopTracksAsync(name);
+        return _mapper.Map<IEnumerable<TrackBL>>(artistTracks.Tracks);
+    }
+
+    public async Task<IEnumerable<AlbumBL>> GetArtistTopAlbumsAsync(string name)
+    {
+        var artistAlbums = await _webDataProvider.GetArtistTopAlbumsAsync(name);
+        return _mapper.Map<IEnumerable<AlbumBL>>(artistAlbums.Albums);
+    }
+
+    public async Task<IEnumerable<ArtistBL>> GetSimilarArtistsAsync(string name)
+    {
+        var similarArtists = await _webDataProvider.GetSimilarArtistsAsync(name);
+        return _mapper.Map<IEnumerable<ArtistBL>>(similarArtists.Artists);
     }
 }

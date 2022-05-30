@@ -1,0 +1,5 @@
+<div class="row">
+  <div *ngFor="let album of albums" class="col-lg-4 p-2">
+    <app-albums-card [album]="album" [artistName]="artistName"></app-albums-card>
+  </div>
+</div>
