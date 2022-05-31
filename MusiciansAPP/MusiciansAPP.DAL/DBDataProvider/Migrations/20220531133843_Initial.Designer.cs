@@ -12,8 +12,8 @@ using MusiciansAPP.DAL.DBDataProvider;
 namespace MusiciansAPP.DAL.DBDataProvider.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220531112031_AddTracksToArtist")]
-    partial class AddTracksToArtist
+    [Migration("20220531133843_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,6 +30,9 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ArtistId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -41,11 +44,11 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("PlayCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ArtistId");
 
                     b.ToTable("Albums");
                 });
@@ -81,6 +84,9 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("AlbumId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ArtistId")
                         .HasColumnType("uniqueidentifier");
 
@@ -93,21 +99,21 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("PlayCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AlbumId");
 
                     b.HasIndex("ArtistId");
 
                     b.ToTable("Tracks");
                 });
 
-            modelBuilder.Entity("MusiciansAPP.Domain.Track", b =>
+            modelBuilder.Entity("MusiciansAPP.Domain.Album", b =>
                 {
                     b.HasOne("MusiciansAPP.Domain.Artist", "Artist")
-                        .WithMany("Tracks")
+                        .WithMany("Albums")
                         .HasForeignKey("ArtistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -115,8 +121,32 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                     b.Navigation("Artist");
                 });
 
+            modelBuilder.Entity("MusiciansAPP.Domain.Track", b =>
+                {
+                    b.HasOne("MusiciansAPP.Domain.Album", "Album")
+                        .WithMany("Tracks")
+                        .HasForeignKey("AlbumId");
+
+                    b.HasOne("MusiciansAPP.Domain.Artist", "Artist")
+                        .WithMany("Tracks")
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Album");
+
+                    b.Navigation("Artist");
+                });
+
+            modelBuilder.Entity("MusiciansAPP.Domain.Album", b =>
+                {
+                    b.Navigation("Tracks");
+                });
+
             modelBuilder.Entity("MusiciansAPP.Domain.Artist", b =>
                 {
+                    b.Navigation("Albums");
+
                     b.Navigation("Tracks");
                 });
 #pragma warning restore 612, 618

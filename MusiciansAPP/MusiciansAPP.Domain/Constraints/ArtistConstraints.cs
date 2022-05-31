@@ -1,4 +1,4 @@
-﻿namespace MusiciansAPP.DAL.DBDataProvider.Constraints
+﻿namespace MusiciansAPP.Domain.Constraints
 {
     public static class ArtistConstraints
     {

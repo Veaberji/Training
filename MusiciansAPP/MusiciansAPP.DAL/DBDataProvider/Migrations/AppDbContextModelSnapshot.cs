@@ -42,9 +42,7 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("PlayCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -99,9 +97,7 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("PlayCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

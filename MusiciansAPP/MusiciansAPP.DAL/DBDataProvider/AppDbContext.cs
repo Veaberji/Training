@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MusiciansAPP.DAL.DBDataProvider.EntityConfigurations;
 using MusiciansAPP.Domain;
 
 namespace MusiciansAPP.DAL.DBDataProvider
@@ -8,13 +7,6 @@ namespace MusiciansAPP.DAL.DBDataProvider
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfiguration(new ArtistConfiguration());
-            modelBuilder.ApplyConfiguration(new AlbumConfiguration());
-            modelBuilder.ApplyConfiguration(new TrackConfiguration());
         }
 
         public DbSet<Artist> Artists { get; set; }

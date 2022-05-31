@@ -1,15 +1,17 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MusiciansAPP.API.Services.Interfaces;
 using MusiciansAPP.API.Services.Logic;
 using MusiciansAPP.BL.ArtistsService.Interfaces;
 using MusiciansAPP.BL.ArtistsService.Logic;
+using MusiciansAPP.DAL.DBDataProvider;
 using MusiciansAPP.DAL.WebDataProvider;
 using MusiciansAPP.DAL.WebDataProvider.Interfaces;
 
 namespace MusiciansAPP.API.Extensions.DependencyInjection;
 
-public static class AppServices
+public static class ServiceCollectionExtension
 {
     public static IServiceCollection AddAppServices(this IServiceCollection services, IConfiguration config)
     {
@@ -24,6 +26,16 @@ public static class AppServices
                 "MusiciansAPP.BL",
                 "MusiciansAPP.DAL"));
         services.AddScoped<IErrorHandler, ErrorHandler>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddDbService(
+        this IServiceCollection services, IConfiguration config)
+    {
+        services.AddDbContext<AppDbContext>(
+            options => options.UseSqlServer(
+                config.GetConnectionString("DefaultConnection")));
 
         return services;
     }
