@@ -8,7 +8,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\MusiciansAPP.DAL\MusiciansAPP.DAL.csproj" />
-		<ProjectReference Include="..\MusiciansAPP.Domain\MusiciansAPP.Domain.csproj" />
 	</ItemGroup>
 
 </Project>
