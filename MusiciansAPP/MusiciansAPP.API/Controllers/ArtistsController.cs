@@ -92,6 +92,20 @@ public class ArtistsController : ControllerBase
         return await GetDataAsync(action, nameof(GetSimilarArtists));
     }
 
+
+    [HttpGet("{artistName}/album-details/{albumName}")]
+    public async Task<ActionResult<AlbumDetailsUI>> GetArtistAlbum(
+        string artistName, string albumName)
+    {
+        var action = async () =>
+        {
+            var blModels = await _artistsService.GetArtistAlbumAsync(artistName, albumName);
+            return _mapper.Map<AlbumDetailsUI>(blModels);
+        };
+
+        return await GetDataAsync(action, nameof(GetArtistAlbum));
+    }
+
     private async Task<ActionResult<T>> GetDataAsync<T>(Func<Task<T>> action, string method)
     {
         try

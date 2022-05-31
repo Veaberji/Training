@@ -47,4 +47,10 @@ public class ArtistsService : IArtistsService
         var similarArtists = await _webDataProvider.GetSimilarArtistsAsync(name);
         return _mapper.Map<IEnumerable<ArtistBL>>(similarArtists.Artists);
     }
+
+    public async Task<AlbumDetailsBL> GetArtistAlbumAsync(string artistName, string albumName)
+    {
+        var albumDetails = await _webDataProvider.GetArtistAlbumAsync(artistName, albumName);
+        return _mapper.Map<AlbumDetailsBL>(albumDetails);
+    }
 }

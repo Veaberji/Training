@@ -18,6 +18,7 @@ import { AlbumsCardComponent } from './albums-card/albums-card.component';
 import { AlbumDetailsComponent } from './album-details/album-details.component';
 import { SimilarArtistsComponent } from './similar-artists/similar-artists.component';
 import { NotFoundComponent } from './common/not-found/not-found.component';
+import { AlbumTrackListComponent } from './album-track-list/album-track-list.component';
 
 @NgModule({
   declarations: [
@@ -31,15 +32,10 @@ import { NotFoundComponent } from './common/not-found/not-found.component';
     AlbumDetailsComponent,
     SimilarArtistsComponent,
     NotFoundComponent,
+    AlbumTrackListComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
-  providers: [
-    DataService,
-    ArtistService,
-    ArtistDetailsService,
-    TrackService,
-    AlbumService,
-  ],
+  providers: [DataService, ArtistService, ArtistDetailsService, TrackService, AlbumService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

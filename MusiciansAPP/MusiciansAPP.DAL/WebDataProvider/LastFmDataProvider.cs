@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MusiciansAPP.DAL.DALModels;
 using MusiciansAPP.DAL.WebDataProvider.Interfaces;
+using MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.AlbumDetails;
 using MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.ArtistDetails;
 using MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.ArtistTopAlbums;
 using MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.ArtistTopTracks;
@@ -49,7 +50,7 @@ public class LastFmDataProvider : IWebDataProvider
     {
         const string method = "artist.getinfo";
         var url = $"{BaseUrl}?method={method}&artist={name}&api_key={_apiKey}&format=json";
-        string content = await GetContent(url, name);
+        string content = await GetContentAsync(url, name);
 
         var result = JsonConvert
             .DeserializeObject<LastFmArtistDetailsTopLevelDto>(content);
@@ -61,7 +62,7 @@ public class LastFmDataProvider : IWebDataProvider
     {
         const string method = "artist.gettoptracks";
         var url = GetUrlForSupplements(method, name);
-        string content = await GetContent(url, name);
+        string content = await GetContentAsync(url, name);
 
         var result = JsonConvert
             .DeserializeObject<LastFmArtistTopTracksTopLevelDto>(content);
@@ -73,7 +74,7 @@ public class LastFmDataProvider : IWebDataProvider
     {
         const string method = "artist.gettopalbums";
         var url = GetUrlForSupplements(method, name);
-        string content = await GetContent(url, name);
+        string content = await GetContentAsync(url, name);
 
         var result = JsonConvert
             .DeserializeObject<LastFmArtistTopAlbumsTopLevelDto>(content);
@@ -85,7 +86,7 @@ public class LastFmDataProvider : IWebDataProvider
     {
         const string method = "artist.getsimilar";
         var url = GetUrlForSupplements(method, name);
-        string content = await GetContent(url, name);
+        string content = await GetContentAsync(url, name);
 
         var result = JsonConvert
             .DeserializeObject<LastFmSimilarArtistsTopLevelDto>(content);
@@ -93,7 +94,25 @@ public class LastFmDataProvider : IWebDataProvider
         return _mapper.Map<SimilarArtistDAL>(result.TopLevel);
     }
 
-    private async Task<string> GetContent(string url, string artistName)
+    public async Task<AlbumDetailsDAL> GetArtistAlbumAsync(string artistName, string albumName)
+    {
+        const string method = "album.getinfo";
+        var url = $"{BaseUrl}?method={method}&artist={artistName}&album={albumName}&api_key={_apiKey}&format=json";
+        var response = await GetResponseAsync(url);
+        if (!response.IsSuccessStatusCode)
+        {
+            ThrowError($"Album {albumName} by artist {artistName} not found");
+        }
+
+        string content = await GetResponseContentAsync(response);
+
+        var result = JsonConvert
+            .DeserializeObject<LastFmArtistAlbumTopLevelDto>(content);
+
+        return _mapper.Map<AlbumDetailsDAL>(result.TopLevel);
+    }
+
+    private async Task<string> GetContentAsync(string url, string artistName)
     {
         var response = await GetResponseAsync(url);
         string content = await GetResponseContentAsync(response);
@@ -119,16 +138,21 @@ public class LastFmDataProvider : IWebDataProvider
         return await response.Content.ReadAsStringAsync();
     }
 
-    private static void CheckResponseContent(string content, string name)
+    private void CheckResponseContent(string content, string name)
     {
         if (!IsArtistFound(content))
         {
-            throw new ArgumentException($"Artist {name} not found");
+            ThrowError($"Artist {name} not found");
         }
     }
 
     private static bool IsArtistFound(string content)
     {
         return !content.Contains("error");
+    }
+
+    private void ThrowError(string message)
+    {
+        throw new ArgumentException(message);
     }
 }

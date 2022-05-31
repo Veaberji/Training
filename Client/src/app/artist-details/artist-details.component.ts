@@ -6,7 +6,7 @@ import { AlbumService } from '../services/album.service';
 import { ArtistDetailsService } from '../services/artist-details.service';
 import { ArtistService } from '../services/artist.service';
 import { TrackService } from '../services/track.service';
-import { supplementRoutes } from '../supplementRoutes';
+import { SupplementRoute } from '../supplementRoutes';
 
 @Component({
   selector: 'app-artist-details',
@@ -22,7 +22,7 @@ export class ArtistDetailsComponent implements OnInit {
   ) {}
 
   private name!: string;
-  routes = supplementRoutes;
+  supplementRoute = SupplementRoute;
   supplementType: string | null = null;
   componentRouteName: string = 'artist-details';
 
@@ -53,15 +53,15 @@ export class ArtistDetailsComponent implements OnInit {
 
   private initSupplement() {
     switch (this.supplementType) {
-      case this.routes.TopTracks: {
+      case this.supplementRoute.TopTracks: {
         this.loadTracks();
         break;
       }
-      case this.routes.TopAlbums: {
+      case this.supplementRoute.TopAlbums: {
         this.loadAlbums();
         break;
       }
-      case this.routes.SimilarArtists: {
+      case this.supplementRoute.SimilarArtists: {
         this.loadSimilarArtists();
         break;
       }
