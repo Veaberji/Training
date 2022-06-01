@@ -11,7 +11,7 @@ var services = builder.Services;
 builder.BindObjects();
 services.AddAppCors();
 services.AddAppServices(builder.Configuration);
-services.AddDbService(builder.Configuration);
+services.AddDbServices(builder.Configuration);
 services.AddControllers();
 
 

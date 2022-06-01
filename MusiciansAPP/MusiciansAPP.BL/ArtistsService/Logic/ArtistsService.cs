@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MusiciansAPP.BL.ArtistsService.BLModels;
 using MusiciansAPP.BL.ArtistsService.Interfaces;
+using MusiciansAPP.DAL.DBDataProvider.Interfaces;
 using MusiciansAPP.DAL.WebDataProvider.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,11 +11,14 @@ namespace MusiciansAPP.BL.ArtistsService.Logic;
 public class ArtistsService : IArtistsService
 {
     private readonly IWebDataProvider _webDataProvider;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public ArtistsService(IWebDataProvider webDataProvider, IMapper mapper)
+    public ArtistsService(IWebDataProvider webDataProvider, IUnitOfWork unitOfWork,
+        IMapper mapper)
     {
         _webDataProvider = webDataProvider;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
