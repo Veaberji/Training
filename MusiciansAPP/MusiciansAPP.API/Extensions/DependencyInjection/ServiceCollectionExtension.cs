@@ -6,6 +6,8 @@ using MusiciansAPP.API.Services.Logic;
 using MusiciansAPP.BL.ArtistsService.Interfaces;
 using MusiciansAPP.BL.ArtistsService.Logic;
 using MusiciansAPP.DAL.DBDataProvider;
+using MusiciansAPP.DAL.DBDataProvider.Interfaces;
+using MusiciansAPP.DAL.DBDataProvider.Logic;
 using MusiciansAPP.DAL.WebDataProvider;
 using MusiciansAPP.DAL.WebDataProvider.Interfaces;
 
@@ -30,12 +32,13 @@ public static class ServiceCollectionExtension
         return services;
     }
 
-    public static IServiceCollection AddDbService(
+    public static IServiceCollection AddDbServices(
         this IServiceCollection services, IConfiguration config)
     {
         services.AddDbContext<AppDbContext>(
             options => options.UseSqlServer(
                 config.GetConnectionString("DefaultConnection")));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }
