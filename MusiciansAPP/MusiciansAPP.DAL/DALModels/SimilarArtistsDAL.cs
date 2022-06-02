@@ -2,9 +2,9 @@
 
 namespace MusiciansAPP.DAL.DALModels;
 
-public class SimilarArtistDAL
+public class SimilarArtistsDAL
 {
-    public SimilarArtistDAL()
+    public SimilarArtistsDAL()
     {
         Artists = new List<ArtistDAL>();
     }

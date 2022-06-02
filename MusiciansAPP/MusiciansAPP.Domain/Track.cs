@@ -12,9 +12,8 @@ public class Track
     [MaxLength(TrackConstraints.NameMaxLength)]
     public string Name { get; set; }
 
-    [Required]
     [Range(TrackConstraints.PlayCountMinValue, int.MaxValue)]
-    public int PlayCount { get; set; }
+    public int? PlayCount { get; set; }
 
     [Range(TrackConstraints.DurationInSecondsMinValue, int.MaxValue)]
     public int? DurationInSeconds { get; set; }

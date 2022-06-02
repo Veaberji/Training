@@ -22,7 +22,6 @@ public class Artist
     [MaxLength(ArtistConstraints.NameMaxLength)]
     public string Name { get; set; }
 
-    [Required]
     [MaxLength(ArtistConstraints.ImageUrlMaxLength)]
     public string ImageUrl { get; set; }
 
@@ -32,7 +31,7 @@ public class Artist
     public IEnumerable<Album> Albums { get; set; }
 
     [InverseProperty(nameof(ReverseSimilarArtists))]
-    public IEnumerable<Artist> SimilarArtists { get; set; }
+    public List<Artist> SimilarArtists { get; set; }
 
     [InverseProperty(nameof(SimilarArtists))]
     public IEnumerable<Artist> ReverseSimilarArtists { get; set; }

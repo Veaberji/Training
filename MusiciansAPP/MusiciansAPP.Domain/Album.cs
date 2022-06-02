@@ -22,9 +22,8 @@ public class Album
     [MaxLength(AlbumConstraints.ImageUrlMaxLength)]
     public string ImageUrl { get; set; }
 
-    [Required]
     [Range(AlbumConstraints.PlayCountMinValue, int.MaxValue)]
-    public int PlayCount { get; set; }
+    public int? PlayCount { get; set; }
     public Guid ArtistId { get; set; }
     public Artist Artist { get; set; }
     public IEnumerable<Track> Tracks { get; set; }
