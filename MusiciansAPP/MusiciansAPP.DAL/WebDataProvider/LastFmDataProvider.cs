@@ -148,7 +148,8 @@ public class LastFmDataProvider : IWebDataProvider
 
     private static bool IsArtistFound(string content)
     {
-        return !content.Contains("error");
+        const string lastFmErrorMessage = "The artist you supplied could not be found";
+        return !content.Contains(lastFmErrorMessage);
     }
 
     private void ThrowError(string message)

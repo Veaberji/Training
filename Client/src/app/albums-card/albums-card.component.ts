@@ -6,12 +6,8 @@ import { Album } from '../models/album';
   selector: 'app-albums-card',
   templateUrl: './albums-card.component.html',
 })
-export class AlbumsCardComponent implements OnInit {
+export class AlbumsCardComponent {
   constructor(private route: ActivatedRoute) {}
   @Input('album') album!: Album;
   @Input('artistName') artistName!: string;
-
-  ngOnInit(): void {
-    let params = this.route.snapshot.paramMap;
-  }
 }

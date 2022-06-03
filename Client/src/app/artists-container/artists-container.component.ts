@@ -11,7 +11,8 @@ export class ArtistsContainerComponent implements OnInit {
   constructor(private service: ArtistService) {}
 
   ngOnInit() {
-    this.service.getAll().subscribe((response) => {
+    const pagingQueryString = '?pageSize=12&page=1';
+    this.service.getAll(pagingQueryString).subscribe((response) => {
       this.artists = response;
     });
   }

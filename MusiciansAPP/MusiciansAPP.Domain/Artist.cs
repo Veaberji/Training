@@ -25,6 +25,7 @@ public class Artist
     [MaxLength(ArtistConstraints.ImageUrlMaxLength)]
     public string ImageUrl { get; set; }
 
+    [Column(TypeName = "ntext")]
     [MaxLength(ArtistConstraints.BiographyMaxLength)]
     public string Biography { get; set; }
     public IEnumerable<Track> Tracks { get; set; }
