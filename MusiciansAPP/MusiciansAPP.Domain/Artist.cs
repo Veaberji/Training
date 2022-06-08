@@ -36,4 +36,14 @@ public class Artist
 
     [InverseProperty(nameof(SimilarArtists))]
     public IEnumerable<Artist> ReverseSimilarArtists { get; set; }
+
+    public bool IsArtistDetailsUpToDate()
+    {
+        return IsArtistHasImageUrl() && Biography is not null;
+    }
+
+    public bool IsArtistHasImageUrl()
+    {
+        return ImageUrl is not null;
+    }
 }
