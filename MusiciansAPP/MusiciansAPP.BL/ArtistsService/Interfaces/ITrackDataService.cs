@@ -7,5 +7,5 @@ namespace MusiciansAPP.BL.ArtistsService.Interfaces;
 public interface ITrackDataService
 {
     Task SaveTopTracksAsync(ArtistTracksBL tracks);
-    Task UpdateArtistTracksAsync(Album newAlbum);
+    Task UpdateAlbumTracksAsync(Album newAlbum);
 }

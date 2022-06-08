@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MusiciansAPP.DAL.DBDataProvider.Interfaces;
+﻿using MusiciansAPP.DAL.DBDataProvider.Interfaces;
 using MusiciansAPP.DAL.DBDataProvider.Interfaces.Repositories;
 using MusiciansAPP.DAL.DBDataProvider.Logic.Repositories;
 using System.Threading.Tasks;
@@ -10,10 +9,10 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
 
-    public UnitOfWork(AppDbContext context, IMapper mapper)
+    public UnitOfWork(AppDbContext context)
     {
         _context = context;
-        Artists = new ArtistRepository(_context, mapper);
+        Artists = new ArtistRepository(_context);
         Albums = new AlbumRepository(_context);
         Tracks = new TrackRepository(_context);
     }

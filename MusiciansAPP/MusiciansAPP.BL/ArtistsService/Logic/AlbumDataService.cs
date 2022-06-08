@@ -25,11 +25,10 @@ public class AlbumDataService : IAlbumDataService
 
     public async Task SaveTopAlbumsAsync(ArtistAlbumsBL albums)
     {
-        var albumsFromDb = await GetAlbumsFromDbAsync(albums);
-        var newAlbums = await CreateNotExistingAlbumsAsync(albums, albumsFromDb);
-        UpdateAlbumPlayCount(albums.Albums, albumsFromDb);
-
-        await _unitOfWork.Albums.AddRangeAsync(newAlbums);
+        var mappedAlbums = _mapper.Map<IEnumerable<Album>>(albums.Albums);
+        var artist = await GetOrCreateArtistAsync(albums.ArtistName);
+        await _unitOfWork.Albums
+            .AddOrUpdateArtistAlbumsAsync(artist, mappedAlbums);
         await _unitOfWork.CompleteAsync();
     }
 
@@ -41,7 +40,7 @@ public class AlbumDataService : IAlbumDataService
         {
             var newAlbum = _mapper.Map<Album>(album);
             await AddArtistToAlbumAsync(album, newAlbum);
-            await _trackDataService.UpdateArtistTracksAsync(newAlbum);
+            await _trackDataService.UpdateAlbumTracksAsync(newAlbum);
             await _unitOfWork.Albums.AddAsync(newAlbum);
         }
         else
@@ -49,7 +48,7 @@ public class AlbumDataService : IAlbumDataService
             if (!IsAlbumTracksUpToDate(album, albumFromDb))
             {
                 _mapper.Map(album, albumFromDb);
-                await _trackDataService.UpdateArtistTracksAsync(albumFromDb);
+                await _trackDataService.UpdateAlbumTracksAsync(albumFromDb);
             }
 
             if (!IsAlbumTracksDetailsUpToDate(albumFromDb))
@@ -61,86 +60,20 @@ public class AlbumDataService : IAlbumDataService
         await _unitOfWork.CompleteAsync();
     }
 
-    private async Task<IEnumerable<Album>> GetAlbumsFromDbAsync(ArtistAlbumsBL albums)
-    {
-        var albumsNames = albums.Albums.Select(a => a.Name).ToList();
-        return await _unitOfWork.Albums
-            .FindAsync(a => albumsNames.Contains(a.Name)
-                            && a.Artist.Name == albums.ArtistName);
-    }
-
-    private async Task<IEnumerable<Album>> CreateNotExistingAlbumsAsync(ArtistAlbumsBL albums,
-        IEnumerable<Album> albumsFromDb)
-    {
-        var newAlbums = GetNewAlbums(albums, albumsFromDb);
-        await AddArtistToAlbumsAsync(albums, newAlbums);
-
-        return newAlbums;
-    }
-
-    private void UpdateAlbumPlayCount(IEnumerable<AlbumBL> albums,
-        IEnumerable<Album> albumsFromDb)
-    {
-        foreach (var albumFromDb in albumsFromDb)
-        {
-            if (IsAlbumHasPlayCount(albumFromDb))
-            {
-                continue;
-            }
-
-            var album = albums.First(a => a.Name == albumFromDb.Name);
-            _mapper.Map(album, albumFromDb);
-        }
-    }
-
-    private IEnumerable<Album> GetNewAlbums(ArtistAlbumsBL albums,
-        IEnumerable<Album> albumsFromDb)
-    {
-        var albumsFromDbNames = albumsFromDb.Select(a => a.Name).ToList();
-        var newAlbumsBL = albums.Albums
-            .Where(album => IsNewItem(albumsFromDbNames, album.Name))
-            .ToList();
-        var newAlbums = _mapper.Map<IEnumerable<Album>>(newAlbumsBL);
-
-        return newAlbums;
-    }
-
-    private async Task AddArtistToAlbumsAsync(ArtistAlbumsBL albums,
-        IEnumerable<Album> newAlbums)
-    {
-        var artist = await GetOrCreateArtistAsync(albums.ArtistName);
-        foreach (var album in newAlbums)
-        {
-            album.Artist = artist;
-        }
-    }
-
-    private bool IsAlbumHasPlayCount(Album albumFromDb)
-    {
-        return albumFromDb.PlayCount is not null;
-    }
-
-    private static bool IsNewItem(IEnumerable<string> existingNames, string name)
-    {
-        return !existingNames.Contains(name);
-    }
-
-    private async Task<Artist> GetOrCreateArtistAsync(string name)
-    {
-        return await _unitOfWork.Artists
-            .GetArtistDetailsAsync(name) ?? new Artist
-            {
-                Name = name
-            };
-    }
-
     private async Task AddArtistToAlbumAsync(AlbumDetailsBL album, Album newAlbum)
     {
         var artist = await GetOrCreateArtistAsync(album.ArtistName);
         newAlbum.Artist = artist;
     }
 
-
+    private async Task<Artist> GetOrCreateArtistAsync(string artistName)
+    {
+        return await _unitOfWork.Artists
+            .GetArtistDetailsAsync(artistName) ?? new Artist
+            {
+                Name = artistName
+            };
+    }
 
     private bool IsAlbumTracksUpToDate(AlbumDetailsBL album, Album albumFromDb)
     {

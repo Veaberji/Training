@@ -21,4 +21,9 @@ public class Track
     public Artist Artist { get; set; }
     public Guid? AlbumId { get; set; }
     public Album Album { get; set; }
+
+    public bool IsTrackHasPlayCount()
+    {
+        return PlayCount is not null;
+    }
 }

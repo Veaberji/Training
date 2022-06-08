@@ -27,4 +27,9 @@ public class Album
     public Guid ArtistId { get; set; }
     public Artist Artist { get; set; }
     public IEnumerable<Track> Tracks { get; set; }
+
+    public bool IsAlbumHasPlayCount()
+    {
+        return PlayCount is not null;
+    }
 }

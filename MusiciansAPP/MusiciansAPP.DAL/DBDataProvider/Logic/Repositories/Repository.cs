@@ -12,7 +12,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 {
     protected readonly DbContext Context;
 
-    public Repository(DbContext context)
+    protected Repository(DbContext context)
     {
         Context = context;
     }
@@ -36,5 +36,10 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     public async Task AddRangeAsync(IEnumerable<TEntity> entities)
     {
         await Context.Set<TEntity>().AddRangeAsync(entities);
+    }
+
+    protected bool IsNewItem(IEnumerable<string> existingNames, string name)
+    {
+        return !existingNames.Contains(name);
     }
 }

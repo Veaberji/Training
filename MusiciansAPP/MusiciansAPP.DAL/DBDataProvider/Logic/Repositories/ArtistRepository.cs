@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MusiciansAPP.DAL.DBDataProvider.Interfaces.Repositories;
 using MusiciansAPP.Domain;
 using System;
@@ -11,10 +10,8 @@ namespace MusiciansAPP.DAL.DBDataProvider.Logic.Repositories;
 
 public class ArtistRepository : Repository<Artist>, IArtistRepository
 {
-    private readonly IMapper _mapper;
-    public ArtistRepository(DbContext context, IMapper mapper) : base(context)
+    public ArtistRepository(DbContext context) : base(context)
     {
-        _mapper = mapper;
     }
 
     public async Task<IEnumerable<Artist>> GetTopArtistsAsync(int pageSize, int page)
@@ -51,7 +48,7 @@ public class ArtistRepository : Repository<Artist>, IArtistRepository
         }
         else if (!artistFromDb.IsArtistDetailsUpToDate())
         {
-            _mapper.Map(artist, artistFromDb);
+            UpdateArtistDetails(artist, artistFromDb);
         }
     }
 
@@ -94,10 +91,6 @@ public class ArtistRepository : Repository<Artist>, IArtistRepository
         return await FindAsync(a => artistsNames.Contains(a.Name));
     }
 
-    private static bool IsNewItem(IEnumerable<string> existingNames, string name)
-    {
-        return !existingNames.Contains(name);
-    }
 
     private void UpdateArtistImageUrl(IEnumerable<Artist> artists,
         IEnumerable<Artist> artistsFromDb)
@@ -114,6 +107,12 @@ public class ArtistRepository : Repository<Artist>, IArtistRepository
         }
     }
 
+    private void UpdateArtistDetails(Artist artist, Artist artistFromDb)
+    {
+        artistFromDb.Biography = artist.Biography;
+        artistFromDb.ImageUrl = artist.ImageUrl;
+    }
+
     private async Task AddSimilarToArtistAsync(Artist artist,
         IEnumerable<Artist> similarArtists)
     {
@@ -126,8 +125,8 @@ public class ArtistRepository : Repository<Artist>, IArtistRepository
     {
         var artistsFromDb = await GetArtistsFromDbAsync(similarArtists);
         var newArtists = CreateNotExistingArtists(similarArtists, artistsFromDb);
-
         var artists = artistsFromDb.Concat(newArtists).ToList();
+
         return artists;
     }
 
@@ -135,11 +134,9 @@ public class ArtistRepository : Repository<Artist>, IArtistRepository
         IEnumerable<Artist> artistsFromDb)
     {
         var artistsFromDbNames = artistsFromDb.Select(a => a.Name).ToList();
-        var newArtists = artists
+        return artists
             .Where(artist => IsNewItem(artistsFromDbNames, artist.Name))
             .ToList();
-
-        return _mapper.Map<IEnumerable<Artist>>(newArtists);
     }
 
     private static IEnumerable<Artist> GetNewSimilarArtists(Artist artist,
