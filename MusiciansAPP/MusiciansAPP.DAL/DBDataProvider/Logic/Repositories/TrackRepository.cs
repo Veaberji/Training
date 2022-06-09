@@ -33,15 +33,14 @@ public class TrackRepository : Repository<Track>, ITrackRepository
         await AddRangeAsync(newTracks);
     }
 
-    public async Task AddOrUpdateAlbumTracksAsync(Album album)
+    public async Task AddOrUpdateAlbumTracksAsync(Album album,
+        IEnumerable<Track> tracks)
     {
-        var tracksNames = album.Tracks.Select(t => t.Name).ToList();
-        var tracksFromDb =
-            await GetTracksFromDbAsync(tracksNames, album.Artist.Name);
-        var newTracks = GetNewTracks(album.Tracks, tracksFromDb);
-
-        AddArtistToTracks(album.Artist, newTracks);
-        ReplaceAlbumTracks(album, tracksFromDb, newTracks);
+        await UpdateAlbumTracksAsync(album, tracks);
+        if (!album.IsAlbumTracksDetailsUpToDate())
+        {
+            AddTracksDetails(album, tracks);
+        }
     }
 
     private DbSet<Track> Tracks => (Context as AppDbContext)?.Tracks;
@@ -78,6 +77,17 @@ public class TrackRepository : Repository<Track>, ITrackRepository
         foreach (var track in newTracks)
         {
             track.Artist = artist;
+            track.ArtistId = artist.Id;
+        }
+    }
+
+    private void AddAlbumToTracks(Album album,
+        IEnumerable<Track> tracks)
+    {
+        foreach (var track in tracks)
+        {
+            track.Album = album;
+            track.AlbumId = album.Id;
         }
     }
 
@@ -98,5 +108,33 @@ public class TrackRepository : Repository<Track>, ITrackRepository
         var tracks = (tracksFromDb ?? emptyEnumerable)
             .Concat(newTracks ?? emptyEnumerable).ToList();
         album.Tracks = tracks;
+    }
+
+    private async Task UpdateAlbumTracksAsync(Album album, IEnumerable<Track> tracks)
+    {
+        var tracksNames = tracks.Select(t => t.Name).ToList();
+        var tracksFromDb =
+            await GetTracksFromDbAsync(tracksNames, album.Artist.Name);
+        var newTracks = GetNewTracks(album.Tracks, tracksFromDb);
+
+        AddArtistToTracks(album.Artist, newTracks);
+        AddAlbumToTracks(album, tracksFromDb);
+        ReplaceAlbumTracks(album, tracksFromDb, newTracks);
+    }
+
+    private void AddTracksDetails(Album album, IEnumerable<Track> tracks)
+    {
+        AddTracksDuration(album, tracks);
+    }
+
+    private void AddTracksDuration(Album album, IEnumerable<Track> tracks)
+    {
+        foreach (var track in album.Tracks) if (!track.IsTrackDurationInSeconds())
+            {
+                int? duration = tracks
+                    .FirstOrDefault(t => t.Name == track.Name)?
+                    .DurationInSeconds;
+                track.DurationInSeconds = duration;
+            }
     }
 }

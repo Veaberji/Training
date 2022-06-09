@@ -22,26 +22,21 @@ public class TrackDataService : ITrackDataService
     public async Task SaveTopTracksAsync(ArtistTracksBL tracks)
     {
         var mappedTracks = _mapper.Map<IEnumerable<Track>>(tracks.Tracks);
-        var artist = await GetOrCreateArtistAsync(tracks.ArtistName);
+        var artist = await _unitOfWork.Artists.GetArtistDetailsAsync(tracks.ArtistName);
         await _unitOfWork.Tracks
             .AddOrUpdateArtistTracksAsync(artist, mappedTracks);
+
         await _unitOfWork.CompleteAsync();
     }
 
 
-    public async Task UpdateAlbumTracksAsync(Album album)
+    public async Task UpdateAlbumTracksAsync(Album album,
+        IEnumerable<AlbumTrackBL> tracks)
     {
+        var mappedTracks = _mapper.Map<IEnumerable<Track>>(tracks);
         await _unitOfWork.Tracks
-            .AddOrUpdateAlbumTracksAsync(album);
-        await _unitOfWork.CompleteAsync();
-    }
+            .AddOrUpdateAlbumTracksAsync(album, mappedTracks);
 
-    private async Task<Artist> GetOrCreateArtistAsync(string artistName)
-    {
-        return await _unitOfWork.Artists
-            .GetArtistDetailsAsync(artistName) ?? new Artist
-            {
-                Name = artistName
-            };
+        await _unitOfWork.CompleteAsync();
     }
 }

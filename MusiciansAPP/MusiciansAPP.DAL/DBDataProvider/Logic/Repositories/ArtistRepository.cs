@@ -26,7 +26,10 @@ public class ArtistRepository : Repository<Artist>, IArtistRepository
     {
         return await Artists
             .Where(a => a.Name == artistName)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync() ?? new Artist
+            {
+                Name = artistName
+            };
     }
 
     public async Task<Artist> GetArtistWithSimilarAsync(
@@ -95,16 +98,11 @@ public class ArtistRepository : Repository<Artist>, IArtistRepository
     private void UpdateArtistImageUrl(IEnumerable<Artist> artists,
         IEnumerable<Artist> artistsFromDb)
     {
-        foreach (var artistFromDb in artistsFromDb)
-        {
-            if (artistFromDb.IsArtistHasImageUrl())
+        foreach (var artistFromDb in artistsFromDb) if (!artistFromDb.IsArtistHasImageUrl())
             {
-                continue;
+                var artist = artists.First(a => a.Name == artistFromDb.Name);
+                artistFromDb.ImageUrl = artist.ImageUrl;
             }
-
-            var artist = artists.First(a => a.Name == artistFromDb.Name);
-            artistFromDb.ImageUrl = artist.ImageUrl;
-        }
     }
 
     private void UpdateArtistDetails(Artist artist, Artist artistFromDb)

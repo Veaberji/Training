@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace MusiciansAPP.Domain;
 
@@ -31,5 +32,15 @@ public class Album
     public bool IsAlbumHasPlayCount()
     {
         return PlayCount is not null;
+    }
+
+    public bool IsAlbumHasImageUrl()
+    {
+        return ImageUrl is not null;
+    }
+
+    public bool IsAlbumTracksDetailsUpToDate()
+    {
+        return !Tracks.Any(track => track.DurationInSeconds is null);
     }
 }

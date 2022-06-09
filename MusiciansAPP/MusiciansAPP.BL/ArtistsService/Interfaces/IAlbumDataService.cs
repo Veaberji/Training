@@ -6,5 +6,5 @@ namespace MusiciansAPP.BL.ArtistsService.Interfaces;
 public interface IAlbumDataService
 {
     Task SaveTopAlbumsAsync(ArtistAlbumsBL albums);
-    Task SaveAlbumDetailsAsync(AlbumDetailsBL albums);
+    Task SaveAlbumDetailsAsync(AlbumDetailsBL album);
 }

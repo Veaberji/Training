@@ -23,6 +23,7 @@ public class ArtistDataService : IArtistDataService
     {
         var mappedArtists = _mapper.Map<IEnumerable<Artist>>(artists);
         await _unitOfWork.Artists.AddOrUpdateRangeAsync(mappedArtists);
+
         await _unitOfWork.CompleteAsync();
     }
 
@@ -30,6 +31,7 @@ public class ArtistDataService : IArtistDataService
     {
         var mappedArtist = _mapper.Map<Artist>(artist);
         await _unitOfWork.Artists.AddOrUpdateAsync(mappedArtist);
+
         await _unitOfWork.CompleteAsync();
     }
 
@@ -38,6 +40,7 @@ public class ArtistDataService : IArtistDataService
         var mappedSimilarArtists = _mapper.Map<IEnumerable<Artist>>(artists.Artists);
         await _unitOfWork.Artists
             .AddOrUpdateSimilarArtistsAsync(artists.ArtistName, mappedSimilarArtists);
+
         await _unitOfWork.CompleteAsync();
     }
 }

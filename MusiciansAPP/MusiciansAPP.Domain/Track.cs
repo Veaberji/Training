@@ -26,4 +26,9 @@ public class Track
     {
         return PlayCount is not null;
     }
+
+    public bool IsTrackDurationInSeconds()
+    {
+        return DurationInSeconds is not null;
+    }
 }

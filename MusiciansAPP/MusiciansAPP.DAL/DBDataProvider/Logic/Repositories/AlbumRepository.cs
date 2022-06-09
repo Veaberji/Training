@@ -38,8 +38,27 @@ public class AlbumRepository : Repository<Album>, IAlbumRepository
     {
         var albumsFromDb = await GetAlbumsFromDbAsync(artist.Name, albums);
         var newAlbums = CreateNotExistingAlbums(artist, albums, albumsFromDb);
-        UpdateAlbumPlayCount(albums, albumsFromDb);
+        UpdateAlbumsPlayCount(albums, albumsFromDb);
         await AddRangeAsync(newAlbums);
+    }
+
+    public async Task<Album> AddOrUpdateAlbumDetailsAsync(Album album)
+    {
+        var albumFromDb = await GetAlbumDetailsAsync(album.Artist.Name, album.Name);
+        if (albumFromDb is null)
+        {
+            await AddAsync(album);
+            return album;
+        }
+
+        if (albumFromDb.IsAlbumHasImageUrl())
+        {
+            return albumFromDb;
+        }
+
+        UpdateAlbumImageUrl(albumFromDb, album.ImageUrl);
+
+        return albumFromDb;
     }
 
     private DbSet<Album> Albums => (Context as AppDbContext)?.Albums;
@@ -79,7 +98,7 @@ public class AlbumRepository : Repository<Album>, IAlbumRepository
         }
     }
 
-    private void UpdateAlbumPlayCount(IEnumerable<Album> albums,
+    private void UpdateAlbumsPlayCount(IEnumerable<Album> albums,
         IEnumerable<Album> albumsFromDb)
     {
         foreach (var albumFromDb in albumsFromDb) if (!albumFromDb.IsAlbumHasPlayCount())
@@ -87,5 +106,11 @@ public class AlbumRepository : Repository<Album>, IAlbumRepository
                 var album = albums.First(a => a.Name == albumFromDb.Name);
                 albumFromDb.PlayCount = album.PlayCount;
             }
+    }
+
+
+    private void UpdateAlbumImageUrl(Album album, string imageUrl)
+    {
+        album.ImageUrl = imageUrl;
     }
 }

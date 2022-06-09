@@ -11,4 +11,5 @@ public interface IAlbumRepository : IRepository<Album>
     Task<Album> GetAlbumDetailsAsync(string artistName, string albumName);
     Task AddOrUpdateArtistAlbumsAsync(Artist artist,
         IEnumerable<Album> albums);
+    Task<Album> AddOrUpdateAlbumDetailsAsync(Album album);
 }
