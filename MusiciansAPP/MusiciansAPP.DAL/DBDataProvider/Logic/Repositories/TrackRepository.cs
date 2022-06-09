@@ -77,7 +77,6 @@ public class TrackRepository : Repository<Track>, ITrackRepository
         foreach (var track in newTracks)
         {
             track.Artist = artist;
-            track.ArtistId = artist.Id;
         }
     }
 
@@ -87,7 +86,6 @@ public class TrackRepository : Repository<Track>, ITrackRepository
         foreach (var track in tracks)
         {
             track.Album = album;
-            track.AlbumId = album.Id;
         }
     }
 

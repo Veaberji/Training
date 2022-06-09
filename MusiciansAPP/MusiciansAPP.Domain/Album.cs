@@ -25,7 +25,6 @@ public class Album
 
     [Range(AlbumConstraints.PlayCountMinValue, int.MaxValue)]
     public int? PlayCount { get; set; }
-    public Guid ArtistId { get; set; }
     public Artist Artist { get; set; }
     public IEnumerable<Track> Tracks { get; set; }
 
@@ -36,7 +35,7 @@ public class Album
 
     public bool IsAlbumHasImageUrl()
     {
-        return ImageUrl is not null;
+        return !string.IsNullOrWhiteSpace(ImageUrl);
     }
 
     public bool IsAlbumTracksDetailsUpToDate()

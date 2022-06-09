@@ -17,9 +17,7 @@ public class Track
 
     [Range(TrackConstraints.DurationInSecondsMinValue, int.MaxValue)]
     public int? DurationInSeconds { get; set; }
-    public Guid ArtistId { get; set; }
     public Artist Artist { get; set; }
-    public Guid? AlbumId { get; set; }
     public Album Album { get; set; }
 
     public bool IsTrackHasPlayCount()

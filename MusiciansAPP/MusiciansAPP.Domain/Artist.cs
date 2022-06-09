@@ -39,11 +39,11 @@ public class Artist
 
     public bool IsArtistDetailsUpToDate()
     {
-        return IsArtistHasImageUrl() && Biography is not null;
+        return IsArtistHasImageUrl() && !string.IsNullOrWhiteSpace(Biography);
     }
 
     public bool IsArtistHasImageUrl()
     {
-        return ImageUrl is not null;
+        return !string.IsNullOrWhiteSpace(ImageUrl);
     }
 }

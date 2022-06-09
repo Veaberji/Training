@@ -39,6 +39,7 @@ public class AlbumRepository : Repository<Album>, IAlbumRepository
         var albumsFromDb = await GetAlbumsFromDbAsync(artist.Name, albums);
         var newAlbums = CreateNotExistingAlbums(artist, albums, albumsFromDb);
         UpdateAlbumsPlayCount(albums, albumsFromDb);
+        UpdateAlbumsImageUrl(albums, albumsFromDb);
         await AddRangeAsync(newAlbums);
     }
 
@@ -108,6 +109,15 @@ public class AlbumRepository : Repository<Album>, IAlbumRepository
             }
     }
 
+    private void UpdateAlbumsImageUrl(IEnumerable<Album> albums,
+        IEnumerable<Album> albumsFromDb)
+    {
+        foreach (var albumFromDb in albumsFromDb) if (!albumFromDb.IsAlbumHasImageUrl())
+            {
+                var album = albums.First(a => a.Name == albumFromDb.Name);
+                albumFromDb.ImageUrl = album.ImageUrl;
+            }
+    }
 
     private void UpdateAlbumImageUrl(Album album, string imageUrl)
     {
