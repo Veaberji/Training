@@ -39,10 +39,6 @@ public static class ServiceCollectionExtension
             options => options.UseSqlServer(
                 config.GetConnectionString("DefaultConnection")));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IArtistDataService, ArtistDataService>();
-        services.AddScoped<ITrackDataService, TrackDataService>();
-        services.AddScoped<IAlbumDataService, AlbumDataService>();
-        services.AddScoped<IDBDataService, DBDataService>();
 
         return services;
     }

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using MusiciansAPP.BL.ArtistsService.BLModels;
 using MusiciansAPP.BL.ArtistsService.Interfaces;
+using MusiciansAPP.DAL.DBDataProvider.Interfaces;
 using MusiciansAPP.DAL.WebDataProvider.Interfaces;
+using MusiciansAPP.Domain;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,15 +12,15 @@ namespace MusiciansAPP.BL.ArtistsService.Logic;
 public class ArtistsService : IArtistsService
 {
     private readonly IWebDataProvider _webDataProvider;
-    private readonly IDBDataService _dataService;
+    private readonly IUnitOfWork _unitOfWork;
+
     private readonly IMapper _mapper;
 
-    public ArtistsService(IWebDataProvider webDataProvider, IDBDataService dataService,
-        IMapper mapper)
+    public ArtistsService(IWebDataProvider webDataProvider, IMapper mapper, IUnitOfWork unitOfWork)
     {
         _webDataProvider = webDataProvider;
-        _dataService = dataService;
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<IEnumerable<ArtistBL>> GetTopArtistsAsync(int pageSize, int page)
@@ -26,7 +28,9 @@ public class ArtistsService : IArtistsService
         var topArtistsDAL = await _webDataProvider.GetTopArtistsAsync(pageSize, page);
         var topArtistsBL = _mapper.Map<IEnumerable<ArtistBL>>(topArtistsDAL);
 
-        await _dataService.SaveTopArtistsAsync(topArtistsBL);
+        var artists = _mapper.Map<IEnumerable<Artist>>(topArtistsBL);
+        await _unitOfWork.Artists.AddOrUpdateRangeAsync(artists);
+        await _unitOfWork.CompleteAsync();
 
         return topArtistsBL;
     }
@@ -36,7 +40,9 @@ public class ArtistsService : IArtistsService
         var artistDetailsDAL = await _webDataProvider.GetArtistDetailsAsync(name);
         var artistDetailsBL = _mapper.Map<ArtistDetailsBL>(artistDetailsDAL);
 
-        await _dataService.SaveArtistDetailsAsync(artistDetailsBL);
+        var artist = _mapper.Map<Artist>(artistDetailsBL);
+        await _unitOfWork.Artists.AddOrUpdateAsync(artist);
+        await _unitOfWork.CompleteAsync();
 
         return artistDetailsBL;
     }
@@ -46,7 +52,11 @@ public class ArtistsService : IArtistsService
         var artistTracksDAL = await _webDataProvider.GetArtistTopTracksAsync(name);
         var artistTracksBL = _mapper.Map<ArtistTracksBL>(artistTracksDAL);
 
-        await _dataService.SaveTopTracksAsync(artistTracksBL);
+        var tracks = _mapper.Map<IEnumerable<Track>>(artistTracksBL.Tracks);
+        var artist = await _unitOfWork.Artists.GetArtistDetailsAsync(artistTracksBL.ArtistName);
+        await _unitOfWork.Tracks
+            .AddOrUpdateArtistTracksAsync(artist, tracks);
+        await _unitOfWork.CompleteAsync();
 
         return artistTracksBL.Tracks;
     }
@@ -56,7 +66,10 @@ public class ArtistsService : IArtistsService
         var artistAlbumsDAL = await _webDataProvider.GetArtistTopAlbumsAsync(name);
         var artistAlbumsBL = _mapper.Map<ArtistAlbumsBL>(artistAlbumsDAL);
 
-        await _dataService.SaveTopAlbumsAsync(artistAlbumsBL);
+        var albums = _mapper.Map<IEnumerable<Album>>(artistAlbumsBL.Albums);
+        var artist = await _unitOfWork.Artists.GetArtistDetailsAsync(artistAlbumsBL.ArtistName);
+        await _unitOfWork.Albums.AddOrUpdateArtistAlbumsAsync(artist, albums);
+        await _unitOfWork.CompleteAsync();
 
         return artistAlbumsBL.Albums;
     }
@@ -66,7 +79,10 @@ public class ArtistsService : IArtistsService
         var similarArtistsDAL = await _webDataProvider.GetSimilarArtistsAsync(name);
         var similarArtistsBL = _mapper.Map<SimilarArtistsBL>(similarArtistsDAL);
 
-        await _dataService.SaveSimilarArtistsAsync(similarArtistsBL);
+        var similarArtists = _mapper.Map<IEnumerable<Artist>>(similarArtistsBL.Artists);
+        await _unitOfWork.Artists
+            .AddOrUpdateSimilarArtistsAsync(similarArtistsBL.ArtistName, similarArtists);
+        await _unitOfWork.CompleteAsync();
 
         return similarArtistsBL.Artists;
     }
@@ -78,8 +94,18 @@ public class ArtistsService : IArtistsService
             .GetArtistAlbumDetailsAsync(artistName, albumName);
         var albumDetailsBL = _mapper.Map<AlbumDetailsBL>(albumDetailsDAL);
 
-        await _dataService.SaveAlbumDetailsAsync(albumDetailsBL);
+        var album = _mapper.Map<Album>(albumDetailsBL,
+                opts: opt => opt.AfterMap((_, dest) => dest.Tracks = new List<Track>()));
+        await AddArtistToAlbumAsync(albumDetailsBL.ArtistName, album);
+        var tracks = _mapper.Map<IEnumerable<Track>>(albumDetailsBL.Tracks);
+        await _unitOfWork.SaveAlbumDetailsAsync(album, tracks);
 
         return albumDetailsBL;
+    }
+
+    private async Task AddArtistToAlbumAsync(string artistName, Album newAlbum)
+    {
+        var artist = await _unitOfWork.Artists.GetArtistDetailsAsync(artistName);
+        newAlbum.Artist = artist;
     }
 }
