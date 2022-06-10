@@ -23,12 +23,12 @@ public class ArtistsService : IArtistsService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<ArtistBL>> GetTopArtistsAsync(int pageSize, int page)
+    public async Task<ArtistsPagingBL> GetTopArtistsAsync(int pageSize, int page)
     {
         var topArtistsDAL = await _webDataProvider.GetTopArtistsAsync(pageSize, page);
-        var topArtistsBL = _mapper.Map<IEnumerable<ArtistBL>>(topArtistsDAL);
+        var topArtistsBL = _mapper.Map<ArtistsPagingBL>(topArtistsDAL);
 
-        var artists = _mapper.Map<IEnumerable<Artist>>(topArtistsBL);
+        var artists = _mapper.Map<IEnumerable<Artist>>(topArtistsBL.Artists);
         await _unitOfWork.Artists.AddOrUpdateRangeAsync(artists);
         await _unitOfWork.CompleteAsync();
 

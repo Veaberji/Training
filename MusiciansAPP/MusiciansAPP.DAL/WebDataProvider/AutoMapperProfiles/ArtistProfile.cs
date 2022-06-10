@@ -15,6 +15,12 @@ public class ArtistProfile : Profile
             .ForMember(dest => dest.ImageUrl,
                 opt => opt.MapFrom(src => DefaultArtistImage));
 
+        CreateMap<LastFmArtistsDto, ArtistsPagingDAL>()
+            .ForMember(dest => dest.Artists,
+                opt => opt.MapFrom(src => src.Artists))
+                    .ForMember(dest => dest.PagingData,
+                        opt => opt.MapFrom(src => src.MetaData));
+
         CreateMap<LastFmArtistDetailsDto, ArtistDetailsDAL>()
             .ForMember(dest => dest.ImageUrl,
                 opt => opt.MapFrom(src => DefaultArtistImage))

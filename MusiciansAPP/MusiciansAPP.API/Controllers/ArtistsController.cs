@@ -27,14 +27,14 @@ public class ArtistsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ArtistUI>>> GetTopArtists(
+    public async Task<ActionResult<ArtistsPagingUI>> GetTopArtists(
         [FromQuery] int pageSize, [FromQuery] int page = 1)
     {
         var action = async () =>
         {
             int size = PagingHelper.GetCorrectPageSize(pageSize);
             var artists = await _artistsService.GetTopArtistsAsync(size, page);
-            return _mapper.Map<IEnumerable<ArtistUI>>(artists);
+            return _mapper.Map<ArtistsPagingUI>(artists);
         };
 
         return await GetDataAsync(action, nameof(GetArtistDetails));

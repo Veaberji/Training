@@ -9,7 +9,7 @@ using MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.SimilarArtists;
 using MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.TopArtists;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -28,14 +28,14 @@ public class LastFmDataProvider : IWebDataProvider
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ArtistDAL>> GetTopArtistsAsync(int pageSize, int page)
+    public async Task<ArtistsPagingDAL> GetTopArtistsAsync(int pageSize, int page)
     {
         const string method = "chart.gettopartists";
         var url = $"{BaseUrl}?method={method}&page={page}&limit={pageSize}&api_key={_apiKey}&format=json";
         var response = await GetResponseAsync(url);
         if (!response.IsSuccessStatusCode)
         {
-            return new List<ArtistDAL>();
+            return new ArtistsPagingDAL();
         }
 
         string content = await GetResponseContentAsync(response);
@@ -43,7 +43,10 @@ public class LastFmDataProvider : IWebDataProvider
         var result = JsonConvert
             .DeserializeObject<LastFmArtistsTopLevelDto>(content);
 
-        return _mapper.Map<IEnumerable<ArtistDAL>>(result.TopLevel.Artists);
+        //this line was added because last.fm returns the number of artists equal page * pageSize for some pages.
+        result.TopLevel.Artists = result.TopLevel.Artists.TakeLast(pageSize);
+
+        return _mapper.Map<ArtistsPagingDAL>(result.TopLevel);
     }
 
     public async Task<ArtistDetailsDAL> GetArtistDetailsAsync(string name)

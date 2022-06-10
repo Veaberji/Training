@@ -21,6 +21,11 @@ import { NotFoundComponent } from './common/not-found/not-found.component';
 import { AlbumTrackListComponent } from './album-track-list/album-track-list.component';
 import { NavBarComponent } from './common/nav-bar/nav-bar.component';
 import { FooterComponent } from './common/footer/footer.component';
+import { PaginationComponent } from './common/pagination/pagination.component';
+import { PageSizeSelectorComponent } from './common/page-size-selector/page-size-selector.component';
+import { PageSelectorComponent } from './common/page-selector/page-selector.component';
+import { PagingService } from './services/paging.service';
+import { ArtistsPagingService } from './services/artist-paging.service';
 
 @NgModule({
   declarations: [
@@ -37,9 +42,20 @@ import { FooterComponent } from './common/footer/footer.component';
     AlbumTrackListComponent,
     NavBarComponent,
     FooterComponent,
+    PaginationComponent,
+    PageSizeSelectorComponent,
+    PageSelectorComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
-  providers: [DataService, ArtistService, ArtistDetailsService, TrackService, AlbumService],
+  providers: [
+    DataService,
+    ArtistService,
+    ArtistsPagingService,
+    ArtistDetailsService,
+    TrackService,
+    AlbumService,
+    PagingService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

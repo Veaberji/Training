@@ -10,5 +10,6 @@ public class ArtistProfile : Profile
     {
         CreateMap<ArtistDetailsBL, ArtistDetailsUI>();
         CreateMap<ArtistBL, ArtistUI>();
+        CreateMap<ArtistsPagingBL, ArtistsPagingUI>();
     }
 }
