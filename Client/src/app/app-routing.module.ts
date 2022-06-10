@@ -6,10 +6,20 @@ import { ArtistsContainerComponent } from './artists-container/artists-container
 import { NotFoundComponent } from './common/not-found/not-found.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: '/artists', pathMatch: 'full' },
   {
-    path: '',
+    path: 'artists',
     component: ArtistsContainerComponent,
   },
+  {
+    path: 'artists/page/:page',
+    component: ArtistsContainerComponent,
+  },
+  {
+    path: 'artists/page/:page/pageSize/:pageSize',
+    component: ArtistsContainerComponent,
+  },
+
   {
     path: 'artist-details/:name',
     component: ArtistDetailsComponent,

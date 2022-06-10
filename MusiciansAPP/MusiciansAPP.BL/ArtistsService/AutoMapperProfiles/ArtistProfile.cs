@@ -10,6 +10,7 @@ public class ArtistProfile : Profile
     public ArtistProfile()
     {
         CreateMap<ArtistDAL, ArtistBL>();
+        CreateMap<ArtistsPagingDAL, ArtistsPagingBL>();
         CreateMap<ArtistBL, Artist>();
 
         CreateMap<ArtistDetailsDAL, ArtistDetailsBL>();
