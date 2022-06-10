@@ -92,11 +92,11 @@ public class TrackRepository : Repository<Track>, ITrackRepository
     private void UpdateTrackPlayCount(IEnumerable<Track> tracks,
         IEnumerable<Track> tracksFromDb)
     {
-        foreach (var trackFromDb in tracksFromDb) if (trackFromDb.IsTrackHasPlayCount())
-            {
-                var track = tracks.First(a => a.Name == trackFromDb.Name);
-                trackFromDb.PlayCount = track.PlayCount;
-            }
+        foreach (var trackFromDb in tracksFromDb.Where(t => !t.IsTrackHasPlayCount()))
+        {
+            var track = tracks.First(a => a.Name == trackFromDb.Name);
+            trackFromDb.PlayCount = track.PlayCount;
+        }
     }
 
     private static void ReplaceAlbumTracks(Album album, IEnumerable<Track> tracksFromDb,
@@ -113,7 +113,7 @@ public class TrackRepository : Repository<Track>, ITrackRepository
         var tracksNames = tracks.Select(t => t.Name).ToList();
         var tracksFromDb =
             await GetTracksFromDbAsync(tracksNames, album.Artist.Name);
-        var newTracks = GetNewTracks(album.Tracks, tracksFromDb);
+        var newTracks = GetNewTracks(tracks, tracksFromDb);
 
         AddArtistToTracks(album.Artist, newTracks);
         AddAlbumToTracks(album, tracksFromDb);
@@ -127,12 +127,12 @@ public class TrackRepository : Repository<Track>, ITrackRepository
 
     private void AddTracksDuration(Album album, IEnumerable<Track> tracks)
     {
-        foreach (var track in album.Tracks) if (!track.IsTrackDurationInSeconds())
-            {
-                int? duration = tracks
-                    .FirstOrDefault(t => t.Name == track.Name)?
-                    .DurationInSeconds;
-                track.DurationInSeconds = duration;
-            }
+        foreach (var track in album.Tracks.Where(t => !t.IsTrackHasDurationInSeconds()))
+        {
+            int? duration = tracks
+            .FirstOrDefault(t => t.Name == track.Name)?
+            .DurationInSeconds;
+            track.DurationInSeconds = duration;
+        }
     }
 }

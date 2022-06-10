@@ -70,7 +70,8 @@ public class ArtistRepository : Repository<Artist>, IArtistRepository
     public async Task AddOrUpdateSimilarArtistsAsync(string artistName,
         IEnumerable<Artist> similarArtists)
     {
-        var artistInDB = await GetArtistWithSimilarAsync(artistName, pageSize: int.MaxValue, page: 1);
+        var artistInDB = await GetArtistWithSimilarAsync(artistName,
+            pageSize: int.MaxValue, page: 1);
         if (artistInDB is null)
         {
             var newArtist = new Artist
@@ -98,11 +99,11 @@ public class ArtistRepository : Repository<Artist>, IArtistRepository
     private void UpdateArtistImageUrl(IEnumerable<Artist> artists,
         IEnumerable<Artist> artistsFromDb)
     {
-        foreach (var artistFromDb in artistsFromDb) if (!artistFromDb.IsArtistHasImageUrl())
-            {
-                var artist = artists.First(a => a.Name == artistFromDb.Name);
-                artistFromDb.ImageUrl = artist.ImageUrl;
-            }
+        foreach (var artistFromDb in artistsFromDb.Where(a => !a.IsArtistHasImageUrl()))
+        {
+            var artist = artists.First(a => a.Name == artistFromDb.Name);
+            artistFromDb.ImageUrl = artist.ImageUrl;
+        }
     }
 
     private void UpdateArtistDetails(Artist artist, Artist artistFromDb)

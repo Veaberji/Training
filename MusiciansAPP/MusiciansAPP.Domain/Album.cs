@@ -40,6 +40,6 @@ public class Album
 
     public bool IsAlbumTracksDetailsUpToDate()
     {
-        return !Tracks.Any(track => track.DurationInSeconds is null);
+        return Tracks.All(track => track.IsTrackHasDurationInSeconds());
     }
 }

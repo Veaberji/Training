@@ -102,21 +102,21 @@ public class AlbumRepository : Repository<Album>, IAlbumRepository
     private void UpdateAlbumsPlayCount(IEnumerable<Album> albums,
         IEnumerable<Album> albumsFromDb)
     {
-        foreach (var albumFromDb in albumsFromDb) if (!albumFromDb.IsAlbumHasPlayCount())
-            {
-                var album = albums.First(a => a.Name == albumFromDb.Name);
-                albumFromDb.PlayCount = album.PlayCount;
-            }
+        foreach (var albumFromDb in albumsFromDb.Where(a => !a.IsAlbumHasPlayCount()))
+        {
+            var album = albums.First(a => a.Name == albumFromDb.Name);
+            albumFromDb.PlayCount = album.PlayCount;
+        }
     }
 
     private void UpdateAlbumsImageUrl(IEnumerable<Album> albums,
         IEnumerable<Album> albumsFromDb)
     {
-        foreach (var albumFromDb in albumsFromDb) if (!albumFromDb.IsAlbumHasImageUrl())
-            {
-                var album = albums.First(a => a.Name == albumFromDb.Name);
-                albumFromDb.ImageUrl = album.ImageUrl;
-            }
+        foreach (var albumFromDb in albumsFromDb.Where(a => !a.IsAlbumHasImageUrl()))
+        {
+            var album = albums.First(a => a.Name == albumFromDb.Name);
+            albumFromDb.ImageUrl = album.ImageUrl;
+        }
     }
 
     private void UpdateAlbumImageUrl(Album album, string imageUrl)
