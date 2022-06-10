@@ -94,16 +94,16 @@ public class ArtistsController : ControllerBase
 
 
     [HttpGet("{artistName}/album-details/{albumName}")]
-    public async Task<ActionResult<AlbumDetailsUI>> GetArtistAlbum(
+    public async Task<ActionResult<AlbumDetailsUI>> GetArtistAlbumDetails(
         string artistName, string albumName)
     {
         var action = async () =>
         {
-            var blModels = await _artistsService.GetArtistAlbumAsync(artistName, albumName);
+            var blModels = await _artistsService.GetArtistAlbumDetailsAsync(artistName, albumName);
             return _mapper.Map<AlbumDetailsUI>(blModels);
         };
 
-        return await GetDataAsync(action, nameof(GetArtistAlbum));
+        return await GetDataAsync(action, nameof(GetArtistAlbumDetails));
     }
 
     private async Task<ActionResult<T>> GetDataAsync<T>(Func<Task<T>> action, string method)

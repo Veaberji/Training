@@ -10,6 +10,6 @@ public interface IWebDataProvider
     Task<ArtistDetailsDAL> GetArtistDetailsAsync(string name);
     Task<ArtistTracksDAL> GetArtistTopTracksAsync(string name);
     Task<ArtistAlbumsDAL> GetArtistTopAlbumsAsync(string name);
-    Task<SimilarArtistDAL> GetSimilarArtistsAsync(string name);
-    Task<AlbumDetailsDAL> GetArtistAlbumAsync(string artistName, string albumName);
+    Task<SimilarArtistsDAL> GetSimilarArtistsAsync(string name);
+    Task<AlbumDetailsDAL> GetArtistAlbumDetailsAsync(string artistName, string albumName);
 }

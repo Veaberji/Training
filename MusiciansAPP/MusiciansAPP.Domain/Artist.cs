@@ -22,18 +22,28 @@ public class Artist
     [MaxLength(ArtistConstraints.NameMaxLength)]
     public string Name { get; set; }
 
-    [Required]
     [MaxLength(ArtistConstraints.ImageUrlMaxLength)]
     public string ImageUrl { get; set; }
 
+    [Column(TypeName = "ntext")]
     [MaxLength(ArtistConstraints.BiographyMaxLength)]
     public string Biography { get; set; }
     public IEnumerable<Track> Tracks { get; set; }
     public IEnumerable<Album> Albums { get; set; }
 
     [InverseProperty(nameof(ReverseSimilarArtists))]
-    public IEnumerable<Artist> SimilarArtists { get; set; }
+    public List<Artist> SimilarArtists { get; set; }
 
     [InverseProperty(nameof(SimilarArtists))]
     public IEnumerable<Artist> ReverseSimilarArtists { get; set; }
+
+    public bool IsArtistDetailsUpToDate()
+    {
+        return IsArtistHasImageUrl() && !string.IsNullOrWhiteSpace(Biography);
+    }
+
+    public bool IsArtistHasImageUrl()
+    {
+        return !string.IsNullOrWhiteSpace(ImageUrl);
+    }
 }

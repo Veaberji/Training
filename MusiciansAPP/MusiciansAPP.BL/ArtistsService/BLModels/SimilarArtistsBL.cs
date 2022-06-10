@@ -2,9 +2,9 @@
 
 namespace MusiciansAPP.BL.ArtistsService.BLModels;
 
-public class SimilarArtistBL
+public class SimilarArtistsBL
 {
-    public SimilarArtistBL()
+    public SimilarArtistsBL()
     {
         Artists = new List<ArtistBL>();
     }

@@ -25,7 +25,7 @@ public class ArtistProfile : Profile
             .ForMember(dest => dest.ImageUrl,
                 opt => opt.MapFrom(src => DefaultArtistImage));
 
-        CreateMap<LastFmSimilarArtistsDto, SimilarArtistDAL>()
+        CreateMap<LastFmSimilarArtistsDto, SimilarArtistsDAL>()
             .ForMember(dest => dest.ArtistName,
                 opt => opt.MapFrom(src => src.MetaData.ArtistName))
             .ForMember(dest => dest.Artists,

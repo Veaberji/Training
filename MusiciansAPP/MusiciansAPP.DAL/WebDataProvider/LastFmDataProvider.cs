@@ -82,7 +82,7 @@ public class LastFmDataProvider : IWebDataProvider
         return _mapper.Map<ArtistAlbumsDAL>(result.TopLevel);
     }
 
-    public async Task<SimilarArtistDAL> GetSimilarArtistsAsync(string name)
+    public async Task<SimilarArtistsDAL> GetSimilarArtistsAsync(string name)
     {
         const string method = "artist.getsimilar";
         var url = GetUrlForSupplements(method, name);
@@ -91,10 +91,10 @@ public class LastFmDataProvider : IWebDataProvider
         var result = JsonConvert
             .DeserializeObject<LastFmSimilarArtistsTopLevelDto>(content);
 
-        return _mapper.Map<SimilarArtistDAL>(result.TopLevel);
+        return _mapper.Map<SimilarArtistsDAL>(result.TopLevel);
     }
 
-    public async Task<AlbumDetailsDAL> GetArtistAlbumAsync(string artistName, string albumName)
+    public async Task<AlbumDetailsDAL> GetArtistAlbumDetailsAsync(string artistName, string albumName)
     {
         const string method = "album.getinfo";
         var url = $"{BaseUrl}?method={method}&artist={artistName}&album={albumName}&api_key={_apiKey}&format=json";
@@ -148,7 +148,8 @@ public class LastFmDataProvider : IWebDataProvider
 
     private static bool IsArtistFound(string content)
     {
-        return !content.Contains("error");
+        const string lastFmErrorMessage = "The artist you supplied could not be found";
+        return !content.Contains(lastFmErrorMessage);
     }
 
     private void ThrowError(string message)

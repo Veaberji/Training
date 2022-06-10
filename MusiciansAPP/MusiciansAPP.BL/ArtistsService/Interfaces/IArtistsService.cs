@@ -11,5 +11,5 @@ public interface IArtistsService
     Task<IEnumerable<TrackBL>> GetArtistTopTracksAsync(string name);
     Task<IEnumerable<AlbumBL>> GetArtistTopAlbumsAsync(string name);
     Task<IEnumerable<ArtistBL>> GetSimilarArtistsAsync(string name);
-    Task<AlbumDetailsBL> GetArtistAlbumAsync(string artistName, string albumName);
+    Task<AlbumDetailsBL> GetArtistAlbumDetailsAsync(string artistName, string albumName);
 }

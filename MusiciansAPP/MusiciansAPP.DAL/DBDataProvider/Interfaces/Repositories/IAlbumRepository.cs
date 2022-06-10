@@ -9,4 +9,7 @@ public interface IAlbumRepository : IRepository<Album>
     Task<IEnumerable<Album>> GetTopAlbumsForArtistAsync(
         string artistName, int pageSize, int page);
     Task<Album> GetAlbumDetailsAsync(string artistName, string albumName);
+    Task AddOrUpdateArtistAlbumsAsync(Artist artist,
+        IEnumerable<Album> albums);
+    Task<Album> AddOrUpdateAlbumDetailsAsync(Album album);
 }

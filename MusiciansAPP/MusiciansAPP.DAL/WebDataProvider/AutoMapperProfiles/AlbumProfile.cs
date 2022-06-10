@@ -9,6 +9,7 @@ namespace MusiciansAPP.DAL.WebDataProvider.AutoMapperProfiles;
 public class AlbumProfile : Profile
 {
     private const string DefaultImageSize = "extralarge";
+    private const string DefaultAlbumImage = "https://i.ibb.co/KbYpSBF/default-album.jpg";
 
     public AlbumProfile()
     {
@@ -21,14 +22,20 @@ public class AlbumProfile : Profile
         CreateMap<LastFmArtistTopAlbumDto, AlbumDAL>()
             .ForMember(dest => dest.ImageUrl,
                 opt => opt.MapFrom(scr =>
-                    scr.Images.First(i => i.Size == DefaultImageSize).Url));
+                    MapImageUrl(scr.Images.First(i => i.Size == DefaultImageSize).Url))
+                );
 
         CreateMap<LastFmArtistAlbumDto, AlbumDetailsDAL>()
             .ForMember(dest => dest.ImageUrl,
                 opt => opt.MapFrom(scr =>
-                    scr.Images.First(i => i.Size == DefaultImageSize).Url))
+                        MapImageUrl(scr.Images.First(i => i.Size == DefaultImageSize).Url)))
             .ForMember(dest => dest.Tracks,
                 opt => opt.MapFrom(scr =>
                     scr.Track.Tracks));
+    }
+
+    private string MapImageUrl(string imageUrl)
+    {
+        return string.IsNullOrWhiteSpace(imageUrl) ? DefaultAlbumImage : imageUrl;
     }
 }

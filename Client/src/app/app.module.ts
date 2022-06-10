@@ -19,6 +19,8 @@ import { AlbumDetailsComponent } from './album-details/album-details.component';
 import { SimilarArtistsComponent } from './similar-artists/similar-artists.component';
 import { NotFoundComponent } from './common/not-found/not-found.component';
 import { AlbumTrackListComponent } from './album-track-list/album-track-list.component';
+import { NavBarComponent } from './common/nav-bar/nav-bar.component';
+import { FooterComponent } from './common/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { AlbumTrackListComponent } from './album-track-list/album-track-list.com
     SimilarArtistsComponent,
     NotFoundComponent,
     AlbumTrackListComponent,
+    NavBarComponent,
+    FooterComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [DataService, ArtistService, ArtistDetailsService, TrackService, AlbumService],

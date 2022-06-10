@@ -9,8 +9,12 @@ public class AlbumProfile : Profile
 {
     public AlbumProfile()
     {
-        CreateMap<AlbumBL, Album>();
         CreateMap<AlbumDAL, AlbumBL>();
+        CreateMap<AlbumBL, Album>();
+
         CreateMap<AlbumDetailsDAL, AlbumDetailsBL>();
+        CreateMap<AlbumDetailsBL, Album>();
+
+        CreateMap<ArtistAlbumsDAL, ArtistAlbumsBL>();
     }
 }

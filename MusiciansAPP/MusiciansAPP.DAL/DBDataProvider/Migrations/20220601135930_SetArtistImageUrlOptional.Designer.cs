@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusiciansAPP.DAL.DBDataProvider;
 
@@ -11,9 +12,10 @@ using MusiciansAPP.DAL.DBDataProvider;
 namespace MusiciansAPP.DAL.DBDataProvider.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220601135930_SetArtistImageUrlOptional")]
+    partial class SetArtistImageUrlOptional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +58,7 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int?>("PlayCount")
+                    b.Property<int>("PlayCount")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -73,8 +75,8 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Biography")
-                        .HasMaxLength(10000)
-                        .HasColumnType("ntext");
+                        .HasMaxLength(3500)
+                        .HasColumnType("nvarchar(3500)");
 
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(255)
@@ -110,7 +112,7 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int?>("PlayCount")
+                    b.Property<int>("PlayCount")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

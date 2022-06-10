@@ -9,8 +9,15 @@ public class ArtistProfile : Profile
 {
     public ArtistProfile()
     {
-        CreateMap<ArtistBL, Artist>();
-        CreateMap<ArtistDetailsDAL, ArtistDetailsBL>();
         CreateMap<ArtistDAL, ArtistBL>();
+        CreateMap<ArtistBL, Artist>();
+
+        CreateMap<ArtistDetailsDAL, ArtistDetailsBL>();
+        CreateMap<ArtistDetailsBL, Artist>();
+
+        CreateMap<SimilarArtistsDAL, SimilarArtistsBL>();
+        CreateMap<SimilarArtistsBL, Artist>()
+            .ForMember(dest => dest.Name,
+                opt => opt.MapFrom(src => src.ArtistName));
     }
 }
