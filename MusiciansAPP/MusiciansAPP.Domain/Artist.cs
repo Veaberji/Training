@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MusiciansAPP.Domain;
 
-public class Artist
+public class Artist : Entity
 {
     public Artist()
     {
@@ -45,5 +45,10 @@ public class Artist
     public bool IsArtistHasImageUrl()
     {
         return !string.IsNullOrWhiteSpace(ImageUrl);
+    }
+
+    protected override bool IsFull()
+    {
+        return IsArtistHasImageUrl();
     }
 }

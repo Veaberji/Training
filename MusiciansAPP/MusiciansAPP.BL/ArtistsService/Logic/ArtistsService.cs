@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MusiciansAPP.BL.ArtistsService.BLModels;
 using MusiciansAPP.BL.ArtistsService.Interfaces;
-using MusiciansAPP.BL.Extensions;
 using MusiciansAPP.DAL.DBDataProvider.Interfaces;
 using MusiciansAPP.DAL.WebDataProvider.Interfaces;
 using MusiciansAPP.Domain;
@@ -30,7 +29,7 @@ public class ArtistsService : IArtistsService
     {
         var artistsFromDb = await _unitOfWork.Artists
             .GetTopArtistsAsync(pageSize, page);
-        if (artistsFromDb.IsFullData(pageSize))
+        if (Entity.IsFullData(artistsFromDb, pageSize))
         {
             return _mapper.Map<ArtistsPagingBL>(artistsFromDb);
         }
@@ -63,7 +62,7 @@ public class ArtistsService : IArtistsService
     {
         var tracksFromDb = await _unitOfWork.Tracks
             .GetTopTracksForArtistAsync(name, DefaultSize, DefaultPage);
-        if (tracksFromDb.IsFullData(DefaultSize))
+        if (Entity.IsFullData(tracksFromDb, DefaultSize))
         {
             return _mapper.Map<IEnumerable<TrackBL>>(tracksFromDb);
         }
@@ -80,7 +79,7 @@ public class ArtistsService : IArtistsService
     {
         var albumsFromDb = await _unitOfWork.Albums
             .GetTopAlbumsForArtistAsync(name, DefaultSize, DefaultPage);
-        if (albumsFromDb.IsFullData(DefaultSize))
+        if (Entity.IsFullData(albumsFromDb, DefaultSize))
         {
             return _mapper.Map<IEnumerable<AlbumBL>>(albumsFromDb);
         }
@@ -97,7 +96,7 @@ public class ArtistsService : IArtistsService
     {
         var artistsFromDb = await _unitOfWork.Artists
             .GetArtistWithSimilarAsync(name, DefaultSize, DefaultPage);
-        if (artistsFromDb.SimilarArtists.IsFullData(DefaultSize))
+        if (Entity.IsFullData(artistsFromDb.SimilarArtists, DefaultSize))
         {
             return _mapper.Map<IEnumerable<ArtistBL>>(artistsFromDb.SimilarArtists);
         }
