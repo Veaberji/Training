@@ -3,5 +3,5 @@
 public class AlbumTrackDAL
 {
     public string Name { get; set; }
-    public int? DurationInSeconds { get; set; }
+    public int DurationInSeconds { get; set; }
 }

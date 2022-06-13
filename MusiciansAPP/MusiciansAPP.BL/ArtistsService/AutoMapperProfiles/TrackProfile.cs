@@ -10,10 +10,10 @@ public class TrackProfile : Profile
     public TrackProfile()
     {
         CreateMap<TrackDAL, TrackBL>();
-        CreateMap<TrackBL, Track>();
+        CreateMap<TrackBL, Track>().ReverseMap();
 
         CreateMap<AlbumTrackDAL, AlbumTrackBL>();
-        CreateMap<AlbumTrackBL, Track>();
+        CreateMap<AlbumTrackBL, Track>().ReverseMap();
 
         CreateMap<ArtistTracksDAL, ArtistTracksBL>();
     }

@@ -18,7 +18,6 @@ namespace MusiciansAPP.DAL.WebDataProvider;
 public class LastFmDataProvider : IWebDataProvider
 {
     private const string BaseUrl = "http://ws.audioscrobbler.com/2.0/";
-    private const int DefaultSize = 10;
     private readonly string _apiKey;
     private readonly IMapper _mapper;
 
@@ -61,38 +60,41 @@ public class LastFmDataProvider : IWebDataProvider
         return _mapper.Map<ArtistDetailsDAL>(result.Artist);
     }
 
-    public async Task<ArtistTracksDAL> GetArtistTopTracksAsync(string name)
+    public async Task<ArtistTracksDAL> GetArtistTopTracksAsync(string name, int pageSize, int page)
     {
         const string method = "artist.gettoptracks";
-        var url = GetUrlForSupplements(method, name);
+        var url = GetUrlForSupplements(method, name, pageSize, page);
         string content = await GetContentAsync(url, name);
 
         var result = JsonConvert
             .DeserializeObject<LastFmArtistTopTracksTopLevelDto>(content);
+        result.TopLevel.Tracks = result.TopLevel.Tracks.TakeLast(pageSize);
 
         return _mapper.Map<ArtistTracksDAL>(result.TopLevel);
     }
 
-    public async Task<ArtistAlbumsDAL> GetArtistTopAlbumsAsync(string name)
+    public async Task<ArtistAlbumsDAL> GetArtistTopAlbumsAsync(string name, int pageSize, int page)
     {
         const string method = "artist.gettopalbums";
-        var url = GetUrlForSupplements(method, name);
+        var url = GetUrlForSupplements(method, name, pageSize, page);
         string content = await GetContentAsync(url, name);
 
         var result = JsonConvert
             .DeserializeObject<LastFmArtistTopAlbumsTopLevelDto>(content);
+        result.TopLevel.Albums = result.TopLevel.Albums.TakeLast(pageSize);
 
         return _mapper.Map<ArtistAlbumsDAL>(result.TopLevel);
     }
 
-    public async Task<SimilarArtistsDAL> GetSimilarArtistsAsync(string name)
+    public async Task<SimilarArtistsDAL> GetSimilarArtistsAsync(string name, int pageSize, int page)
     {
         const string method = "artist.getsimilar";
-        var url = GetUrlForSupplements(method, name);
+        var url = $"{BaseUrl}?method={method}&artist={name}&limit={pageSize * page}&api_key={_apiKey}&format=json";
         string content = await GetContentAsync(url, name);
 
         var result = JsonConvert
             .DeserializeObject<LastFmSimilarArtistsTopLevelDto>(content);
+        result.TopLevel.Artists = result.TopLevel.Artists.TakeLast(pageSize);
 
         return _mapper.Map<SimilarArtistsDAL>(result.TopLevel);
     }
@@ -124,15 +126,14 @@ public class LastFmDataProvider : IWebDataProvider
         return content;
     }
 
-    private string GetUrlForSupplements(string method, string name)
+    private string GetUrlForSupplements(string method, string name, int pageSize, int page)
     {
-        return $"{BaseUrl}?method={method}&artist={name}&limit={DefaultSize}&api_key={_apiKey}&format=json";
+        return $"{BaseUrl}?method={method}&artist={name}&limit={pageSize}&page={page}&api_key={_apiKey}&format=json";
     }
 
     private async Task<HttpResponseMessage> GetResponseAsync(string url)
     {
         using var httpClient = new HttpClient();
-
         return await httpClient.GetAsync(url);
     }
 
