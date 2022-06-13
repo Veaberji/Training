@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace MusiciansAPP.Domain;
 
-public class Album
+public class Album : Entity
 {
     public Album()
     {
@@ -40,6 +40,11 @@ public class Album
 
     public bool IsAlbumTracksDetailsUpToDate()
     {
-        return Tracks.All(track => track.IsTrackHasDurationInSeconds());
+        return Tracks.Any() && Tracks.All(track => track.IsTrackHasDurationInSeconds());
+    }
+
+    protected override bool IsFull()
+    {
+        return IsAlbumHasImageUrl() && IsAlbumHasPlayCount();
     }
 }

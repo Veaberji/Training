@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MusiciansAPP.Domain;
 
-public class Track
+public class Track : Entity
 {
     public Guid Id { get; set; }
 
@@ -28,5 +28,10 @@ public class Track
     public bool IsTrackHasDurationInSeconds()
     {
         return DurationInSeconds is not null;
+    }
+
+    protected override bool IsFull()
+    {
+        return IsTrackHasPlayCount();
     }
 }

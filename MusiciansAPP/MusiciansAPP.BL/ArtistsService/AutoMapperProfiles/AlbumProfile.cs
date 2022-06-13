@@ -10,10 +10,10 @@ public class AlbumProfile : Profile
     public AlbumProfile()
     {
         CreateMap<AlbumDAL, AlbumBL>();
-        CreateMap<AlbumBL, Album>();
+        CreateMap<AlbumBL, Album>().ReverseMap();
 
         CreateMap<AlbumDetailsDAL, AlbumDetailsBL>();
-        CreateMap<AlbumDetailsBL, Album>();
+        CreateMap<AlbumDetailsBL, Album>().ReverseMap();
 
         CreateMap<ArtistAlbumsDAL, ArtistAlbumsBL>();
     }

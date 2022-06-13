@@ -22,8 +22,7 @@ public class AlbumProfile : Profile
         CreateMap<LastFmArtistTopAlbumDto, AlbumDAL>()
             .ForMember(dest => dest.ImageUrl,
                 opt => opt.MapFrom(scr =>
-                    MapImageUrl(scr.Images.First(i => i.Size == DefaultImageSize).Url))
-                );
+                    MapImageUrl(scr.Images.First(i => i.Size == DefaultImageSize).Url)));
 
         CreateMap<LastFmArtistAlbumDto, AlbumDetailsDAL>()
             .ForMember(dest => dest.ImageUrl,
