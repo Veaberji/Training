@@ -1,8 +1,8 @@
-﻿using MusiciansAPP.BL.ArtistsService.BLModels;
+﻿using MusiciansAPP.BL.Services.Artists.BLModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MusiciansAPP.BL.ArtistsService.Interfaces;
+namespace MusiciansAPP.BL.Services.Artists.Interfaces;
 
 public interface IArtistsService
 {

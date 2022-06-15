@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using MusiciansAPP.BL.ArtistsService.BLModels;
-using MusiciansAPP.BL.ArtistsService.Interfaces;
+using MusiciansAPP.BL.Services.Artists.BLModels;
+using MusiciansAPP.BL.Services.Artists.Interfaces;
 using MusiciansAPP.DAL.DBDataProvider.Interfaces;
 using MusiciansAPP.DAL.WebDataProvider.Interfaces;
 using MusiciansAPP.Domain;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MusiciansAPP.BL.ArtistsService.Logic;
+namespace MusiciansAPP.BL.Services.Artists.Logic;
 
 public class ArtistsService : IArtistsService
 {

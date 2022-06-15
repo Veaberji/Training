@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using MusiciansAPP.BL.ArtistsService.BLModels;
+using MusiciansAPP.BL.Services.Artists.BLModels;
 using MusiciansAPP.DAL.DALModels;
 using MusiciansAPP.Domain;
 using System.Collections.Generic;
 
-namespace MusiciansAPP.BL.ArtistsService.AutoMapperProfiles;
+namespace MusiciansAPP.BL.Services.Artists.AutoMapperProfiles;
 
 public class ArtistProfile : Profile
 {

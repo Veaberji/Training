@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using MusiciansAPP.BL.ArtistsService.BLModels;
+using MusiciansAPP.BL.Services.Artists.BLModels;
 using MusiciansAPP.DAL.DALModels;
 using MusiciansAPP.Domain;
 
-namespace MusiciansAPP.BL.ArtistsService.AutoMapperProfiles;
+namespace MusiciansAPP.BL.Services.Artists.AutoMapperProfiles;
 
 public class TrackProfile : Profile
 {

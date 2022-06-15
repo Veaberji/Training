@@ -2,24 +2,24 @@
 
 ------------
 
-### Проект – это смесь music.yandex.ru и last.fm. За основу берётся функционал yandex, но для получения данных используется API last.fm. 
+### The project is a mixture of music.yandex.ru and last.fm. The Yandex functionality is taken as a basis, but the Last.fm API is used to receive data.
 
 ------------
 
-- Установить Visual Studio 2019/2022 Community Edition, MSSQL Server 2019, Git клиент (например SourceTree). 
-- Спроектировать архитектуру приложения, которое будет состоять из Back-End (API) + Front-End, уровня бизнес-логики, уровня работы с базой данных, и ещё нескольких уровней при необходимости. За пример можно взять Onion Architecture. 
-- Создать новый проект (.NET Core/.NET 6 + Angular 13, т.е. базовый шаблон в VS). Для красивостей UI рекомендую использовать Bootstrap (можно в связке с Material Design) или Angular Material (предпочтительнее, но не обязательно) 
-- Реализовать главную страницу, куда плитками будет выводится ТОП артистов с last.fm. 
-Плитка — это кликабельная карточка с фото и именем исполнителя. Если не получается достать фото, то ставить какое-нибудь изображение по умолчанию. 
-- Реализовать пагинацию на главной странице с селектором количества записей на странице (12, 24, 48). 
-- Менять URL при смене страниц, чтобы был возможен доступ по прямой ссылке. 
-- Реализовать страницу артиста: фото, имя, биография + три табы (топ песен, топ альбомов, похожие исполнители). UI можно подсмотреть, например, на Яндекс.Музыке https://music.yandex.ru/artist/792433/tracks  
-- Инфа в табы должна подгружаться отдельными запросами. 
-- Доработать вкладку «Похожие», чтобы артисты в ней открывались в твоем приложении в новой вкладке. 
-- Реализовать страницу «Альбом», где будет: Обложка, название, имя исполнителя и ссылка на него + список треков из этого альбома. 
-- Для работы с базой использовать Entity Framework. 
-- Сгенерировать базу данных из моделей, созданных ранее. 
-- Реализовать шаблон Репозиторий для работы с базой данных. 
-- Для каждого обращения к last.fm добавить сохранение результатов в базу. 
-- Обновить сервисные методы так, чтобы они сперва искали необходимые данные в базе, и только если их нету – обращались к last.fm. 
-- Реализовать Юнит-тесты для уровня бизнес-логики.
+- Install Visual Studio 2019/2022 Community Edition, MSSQL Server 2019, and Git client (like SourceTree).
+- Design an architectural application that will consist of Back-End (API), Front-End, business logic layer, database work layer, and several more levels if necessary. Take the Onion Architecture as an example.
+- Create a new project (.NET Core/.NET 6 + Angular 13, i.e. base template in VS). For beautiful UI, it is recommended to use Bootstrap (possible in conjunction with Material Design) or Angular Material (preferred, but not required)
+- Implement the main page, where the Top artists from last.fm will be displayed with tiles.
+A tile is a clickable card with a photo and artist name. If you can not get a photo, then put any image by default.
+- Implement pagination on the main page with a selector of the numbers of entries per page (12, 24, 48).
+- Change the URL on the page, so that direct link access is available.
+- Implement the artist's page: photo, name, biography, and three tabs (top songs, top albums, similar artists). The UI can be viewed, for example, on Yandex Music (https://music.yandex.ru/artist/792433/tracks).
+- Info in the tab should be selected by selective queries.
+- Refine the "Similar" tab so that the artists in it open in your application in a new panel.
+- Implement the "Album" page, where it will have: cover, title, artist name, and link to his page, and a list of tracks from this album.
+- To work with the database, use the Entity Framework.
+- Generate a database from the models created earlier.
+- Implement the Repository template for working with the database.
+- For each last.fm call, add a save to the database.
+- Update the service methods, so that they first look for the necessary data in the database, and only if they are not there, they call last.fm.
+- Implement unit tests for the business logic layer.

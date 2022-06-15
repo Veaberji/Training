@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MusiciansAPP.API.Services.Interfaces;
 using MusiciansAPP.API.UIModels;
 using MusiciansAPP.API.Utils;
-using MusiciansAPP.BL.ArtistsService.Interfaces;
+using MusiciansAPP.BL.Services.Artists.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

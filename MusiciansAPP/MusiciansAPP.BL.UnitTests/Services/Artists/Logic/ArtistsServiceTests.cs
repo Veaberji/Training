@@ -1,6 +1,7 @@
 using AutoMapper;
 using Moq;
-using MusiciansAPP.BL.ArtistsService.BLModels;
+using MusiciansAPP.BL.Services.Artists.BLModels;
+using MusiciansAPP.BL.Services.Artists.Logic;
 using MusiciansAPP.DAL.DALModels;
 using MusiciansAPP.DAL.DBDataProvider.Interfaces;
 using MusiciansAPP.DAL.WebDataProvider.Interfaces;
@@ -10,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MusiciansAPP.BL.UnitTests.ArtistsService.Logic;
+namespace MusiciansAPP.BL.UnitTests.Services.Artists.Logic;
 
 [TestFixture]
 public class ArtistsServiceTests
@@ -23,17 +24,16 @@ public class ArtistsServiceTests
     private const string ArtistTwoName = "b";
     private const string ArtistTwoImageUrl = "bb";
 
-    private BL.ArtistsService.Logic.ArtistsService _service;
-    private Mock<IWebDataProvider> _webDataProvider;
-    private Mock<IUnitOfWork> _unitOfWork;
+    private ArtistsService _service;
+    private Mock<IWebDataProvider> _webDataProviderMock;
+    private Mock<IUnitOfWork> _unitOfWorkMock;
     private IMapper _mapper;
     private List<Artist> _artists;
-    private ArtistsPagingDAL _artistsPaging;
 
     [SetUp]
     public void SetUp()
     {
-        _artistsPaging = new ArtistsPagingDAL
+        var artistsPaging = new ArtistsPagingDAL
         {
             Artists = new List<ArtistDAL>
             {
@@ -42,9 +42,9 @@ public class ArtistsServiceTests
             },
             PagingData = new PagingDataDAL { TotalItems = TotalItems }
         };
-        _webDataProvider = new Mock<IWebDataProvider>();
-        _webDataProvider.Setup(wdp => wdp.GetTopArtistsAsync(PageSize, Page))
-            .ReturnsAsync(() => _artistsPaging);
+        _webDataProviderMock = new Mock<IWebDataProvider>();
+        _webDataProviderMock.Setup(wdp => wdp.GetTopArtistsAsync(PageSize, Page))
+            .ReturnsAsync(() => artistsPaging);
 
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddMaps("MusiciansAPP.BL")));
 
@@ -53,19 +53,21 @@ public class ArtistsServiceTests
             new() { Name = ArtistOneName, ImageUrl = ArtistOneImageUrl },
             new() { Name = ArtistTwoName, ImageUrl = ArtistTwoImageUrl }
         };
-        _unitOfWork = new Mock<IUnitOfWork>();
-        _unitOfWork.Setup(uow => uow.Artists.GetTopArtistsAsync(PageSize, Page))
+        _unitOfWorkMock = new Mock<IUnitOfWork>();
+        _unitOfWorkMock.Setup(uow => uow.Artists.GetTopArtistsAsync(PageSize, Page))
             .ReturnsAsync(() => _artists);
 
-        _service = new BL.ArtistsService.Logic.ArtistsService(
-            _webDataProvider.Object, _mapper, _unitOfWork.Object);
+        _service = new ArtistsService(
+            _webDataProviderMock.Object, _mapper, _unitOfWorkMock.Object);
     }
 
     [Test]
     public async Task GetTopArtistsAsync_DBHasFullData_FullDataReturned()
     {
+        //Act
         var result = await _service.GetTopArtistsAsync(PageSize, Page);
 
+        //Assert
         Assert.That(result.Artists.Count(), Is.EqualTo(PageSize));
         VerifyTopArtistsAreCorrect(result);
         Assert.NotZero(result.PagingData.TotalItems);
@@ -74,9 +76,11 @@ public class ArtistsServiceTests
     [Test]
     public async Task GetTopArtistsAsync_DBHasFullData_WebServiceWasNotCalled()
     {
+        //Act
         await _service.GetTopArtistsAsync(PageSize, Page);
 
-        _webDataProvider.Verify(
+        //Assert
+        _webDataProviderMock.Verify(
             w => w.GetTopArtistsAsync(PageSize, Page), Times.Never);
     }
 
@@ -84,10 +88,13 @@ public class ArtistsServiceTests
     [TestCase(PageSize - 1)]
     public async Task GetTopArtistsAsync_DBDoesNotHaveFullData_FullDataReturned(int amount)
     {
+        //Arrange
         _artists = _artists.Take(amount).ToList();
 
+        //Act
         var result = await _service.GetTopArtistsAsync(PageSize, Page);
 
+        //Assert
         Assert.That(result.Artists.Count(), Is.EqualTo(PageSize));
         VerifyTopArtistsAreCorrect(result);
         Assert.That(result.PagingData.TotalItems, Is.EqualTo(TotalItems));
@@ -97,11 +104,14 @@ public class ArtistsServiceTests
     [TestCase(PageSize - 1)]
     public async Task GetTopArtistsAsync_DBDoesNotHaveFullData_WebServiceWasCalled(int amount)
     {
+        //Arrange
         _artists = _artists.Take(amount).ToList();
 
+        //Act
         await _service.GetTopArtistsAsync(PageSize, Page);
 
-        _webDataProvider.Verify(
+        //Assert
+        _webDataProviderMock.Verify(
             w => w.GetTopArtistsAsync(PageSize, Page), Times.Once);
     }
 
@@ -110,13 +120,16 @@ public class ArtistsServiceTests
     public async Task GetTopArtistsAsync_DBDoesNotHaveFullData_UnitOfWorkSavingWasCalled(
         int amount)
     {
+        //Arrange
         _artists = _artists.Take(amount).ToList();
 
+        //Act
         await _service.GetTopArtistsAsync(PageSize, Page);
 
-        _unitOfWork.Verify(
+        //Assert
+        _unitOfWorkMock.Verify(
             u => u.Artists.AddOrUpdateRangeAsync(It.IsAny<IEnumerable<Artist>>()), Times.Once);
-        _unitOfWork.Verify(u => u.CompleteAsync(), Times.Once);
+        _unitOfWorkMock.Verify(u => u.CompleteAsync(), Times.Once);
     }
 
     private void VerifyTopArtistsAreCorrect(ArtistsPagingBL model)
