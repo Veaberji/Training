@@ -15,6 +15,9 @@ namespace MusiciansAPP.API.Controllers;
 [ApiController]
 public class ArtistsController : ControllerBase
 {
+    private const int DefaultSize = 10;
+    private const int DefaultPage = 1;
+
     private readonly IArtistsService _artistsService;
     private readonly IMapper _mapper;
     private readonly IErrorHandler _errorHandler;
@@ -59,7 +62,7 @@ public class ArtistsController : ControllerBase
     {
         var action = async () =>
         {
-            var blModels = await _artistsService.GetArtistTopTracksAsync(name);
+            var blModels = await _artistsService.GetArtistTopTracksAsync(name, DefaultSize, DefaultPage);
             return _mapper.Map<IEnumerable<TrackUI>>(blModels);
         };
 
@@ -72,7 +75,7 @@ public class ArtistsController : ControllerBase
     {
         var action = async () =>
         {
-            var blModels = await _artistsService.GetArtistTopAlbumsAsync(name);
+            var blModels = await _artistsService.GetArtistTopAlbumsAsync(name, DefaultSize, DefaultPage);
             return _mapper.Map<IEnumerable<AlbumUI>>(blModels);
         };
 
@@ -85,7 +88,7 @@ public class ArtistsController : ControllerBase
     {
         var action = async () =>
         {
-            var blModels = await _artistsService.GetSimilarArtistsAsync(name);
+            var blModels = await _artistsService.GetSimilarArtistsAsync(name, DefaultSize, DefaultPage);
             return _mapper.Map<IEnumerable<ArtistUI>>(blModels);
         };
 

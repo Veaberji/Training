@@ -11,9 +11,6 @@ namespace MusiciansAPP.BL.Services.Artists.Logic;
 
 public class ArtistsService : IArtistsService
 {
-    private const int DefaultSize = 10;
-    private const int DefaultPage = 1;
-
     private readonly IWebDataProvider _webDataProvider;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -58,16 +55,17 @@ public class ArtistsService : IArtistsService
         return artistDetailsBL;
     }
 
-    public async Task<IEnumerable<TrackBL>> GetArtistTopTracksAsync(string name)
+    public async Task<IEnumerable<TrackBL>> GetArtistTopTracksAsync(
+        string name, int pageSize, int page)
     {
         var tracksFromDb = await _unitOfWork.Tracks
-            .GetTopTracksForArtistAsync(name, DefaultSize, DefaultPage);
-        if (Entity.IsFullData(tracksFromDb, DefaultSize))
+            .GetTopTracksForArtistAsync(name, pageSize, page);
+        if (Entity.IsFullData(tracksFromDb, pageSize))
         {
             return _mapper.Map<IEnumerable<TrackBL>>(tracksFromDb);
         }
 
-        var artistTracksDAL = await _webDataProvider.GetArtistTopTracksAsync(name, DefaultSize, DefaultPage);
+        var artistTracksDAL = await _webDataProvider.GetArtistTopTracksAsync(name, pageSize, page);
         var artistTracksBL = _mapper.Map<ArtistTracksBL>(artistTracksDAL);
 
         await SaveArtistTopTracksAsync(artistTracksBL);
@@ -75,16 +73,17 @@ public class ArtistsService : IArtistsService
         return artistTracksBL.Tracks;
     }
 
-    public async Task<IEnumerable<AlbumBL>> GetArtistTopAlbumsAsync(string name)
+    public async Task<IEnumerable<AlbumBL>> GetArtistTopAlbumsAsync(
+        string name, int pageSize, int page)
     {
         var albumsFromDb = await _unitOfWork.Albums
-            .GetTopAlbumsForArtistAsync(name, DefaultSize, DefaultPage);
-        if (Entity.IsFullData(albumsFromDb, DefaultSize))
+            .GetTopAlbumsForArtistAsync(name, pageSize, page);
+        if (Entity.IsFullData(albumsFromDb, pageSize))
         {
             return _mapper.Map<IEnumerable<AlbumBL>>(albumsFromDb);
         }
 
-        var artistAlbumsDAL = await _webDataProvider.GetArtistTopAlbumsAsync(name, DefaultSize, DefaultPage);
+        var artistAlbumsDAL = await _webDataProvider.GetArtistTopAlbumsAsync(name, pageSize, page);
         var artistAlbumsBL = _mapper.Map<ArtistAlbumsBL>(artistAlbumsDAL);
 
         await SaveArtistTopAlbumsAsync(artistAlbumsBL);
@@ -92,16 +91,17 @@ public class ArtistsService : IArtistsService
         return artistAlbumsBL.Albums;
     }
 
-    public async Task<IEnumerable<ArtistBL>> GetSimilarArtistsAsync(string name)
+    public async Task<IEnumerable<ArtistBL>> GetSimilarArtistsAsync(
+        string name, int pageSize, int page)
     {
         var artistsFromDb = await _unitOfWork.Artists
-            .GetArtistWithSimilarAsync(name, DefaultSize, DefaultPage);
-        if (Entity.IsFullData(artistsFromDb.SimilarArtists, DefaultSize))
+            .GetArtistWithSimilarAsync(name, pageSize, page);
+        if (Entity.IsFullData(artistsFromDb.SimilarArtists, pageSize))
         {
             return _mapper.Map<IEnumerable<ArtistBL>>(artistsFromDb.SimilarArtists);
         }
 
-        var similarArtistsDAL = await _webDataProvider.GetSimilarArtistsAsync(name, DefaultSize, DefaultPage);
+        var similarArtistsDAL = await _webDataProvider.GetSimilarArtistsAsync(name, pageSize, page);
         var similarArtistsBL = _mapper.Map<SimilarArtistsBL>(similarArtistsDAL);
 
         await SaveSimilarArtistsAsync(similarArtistsBL);
@@ -113,7 +113,7 @@ public class ArtistsService : IArtistsService
         string artistName, string albumName)
     {
         var albumFromDb = await _unitOfWork.Albums.GetAlbumDetailsAsync(artistName, albumName);
-        if (albumFromDb.IsAlbumTracksDetailsUpToDate())
+        if (albumFromDb.IsAlbumDetailsUpToDate())
         {
             return _mapper.Map<AlbumDetailsBL>(albumFromDb);
         }
