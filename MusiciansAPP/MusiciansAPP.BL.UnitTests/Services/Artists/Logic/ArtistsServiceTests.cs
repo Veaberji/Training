@@ -30,38 +30,13 @@ public class ArtistsServiceTests
 
     private const string ArtistNameForSimilar = "d";
 
-    private const string TracksArtistName = "a";
-    private const string TrackOneName = "aa";
-    private const int TrackOnePlayCount = 1;
-    private const string TrackTwoName = "bb";
-    private const int TrackTwoPlayCount = 2;
-
-    private const string AlbumsArtistName = "a";
-    private const string AlbumOneName = "aa";
-    private const int AlbumOnePlayCount = 1;
-    private const string AlbumOneImageUrl = "aaa";
-    private const string AlbumTwoName = "bb";
-    private const int AlbumTwoPlayCount = 2;
-    private const string AlbumTwoImageUrl = "bbb";
-
-    private const string AlbumDetailsArtistName = "c";
-    private const string AlbumDetailsName = "cc";
-    private const string AlbumDetailsImageUrl = "ccc";
-    private const string AlbumTrackOneName = "dd";
-    private const int AlbumTrackOneDurationInSeconds = 1;
-    private const string AlbumTrackTwoName = "ee";
-    private const int AlbumTrackTwoDurationInSeconds = 2;
-
     private ArtistsService _service;
     private Mock<IWebDataProvider> _webDataProviderMock;
     private Mock<IUnitOfWork> _unitOfWorkMock;
     private IMapper _mapper;
     private List<Artist> _artists;
     private Artist _artistDetails;
-    private List<Track> _tracks;
-    private List<Album> _albums;
     private Artist _artistWithSimilar;
-    private Album _albumDetails;
 
     [SetUp]
     public void SetUp()
@@ -88,30 +63,6 @@ public class ArtistsServiceTests
         _webDataProviderMock.Setup(wdp => wdp.GetArtistDetailsAsync(ArtistDetailsName))
             .ReturnsAsync(artistDetailsDAL);
 
-        var artistTraksDAL = new ArtistTracksDAL
-        {
-            ArtistName = TracksArtistName,
-            Tracks = new List<TrackDAL>
-            {
-                new() { Name = TrackOneName, PlayCount = TrackOnePlayCount },
-                new() { Name = TrackTwoName, PlayCount = TrackTwoPlayCount }
-            }
-        };
-        _webDataProviderMock.Setup(wdp => wdp.GetArtistTopTracksAsync(
-                TracksArtistName, PageSize, Page)).ReturnsAsync(artistTraksDAL);
-
-        var artistAlbumsDAL = new ArtistAlbumsDAL
-        {
-            ArtistName = TracksArtistName,
-            Albums = new List<AlbumDAL>
-            {
-                new() { Name = AlbumOneName, PlayCount = AlbumOnePlayCount, ImageUrl = AlbumOneImageUrl},
-                new() { Name = AlbumTwoName, PlayCount = AlbumTwoPlayCount, ImageUrl = AlbumTwoImageUrl}
-            }
-        };
-        _webDataProviderMock.Setup(wdp => wdp.GetArtistTopAlbumsAsync(
-            AlbumsArtistName, PageSize, Page)).ReturnsAsync(artistAlbumsDAL);
-
         var similarArtistsDAL = new SimilarArtistsDAL
         {
             ArtistName = ArtistNameForSimilar,
@@ -123,20 +74,6 @@ public class ArtistsServiceTests
         };
         _webDataProviderMock.Setup(wdp => wdp.GetSimilarArtistsAsync(
             ArtistNameForSimilar, PageSize, Page)).ReturnsAsync(similarArtistsDAL);
-
-        var albumDetails = new AlbumDetailsDAL()
-        {
-            Name = AlbumDetailsName,
-            ArtistName = AlbumDetailsArtistName,
-            ImageUrl = AlbumDetailsImageUrl,
-            Tracks = new List<AlbumTrackDAL>
-            {
-                new(){ Name = AlbumTrackOneName, DurationInSeconds = AlbumTrackOneDurationInSeconds },
-                new(){ Name = AlbumTrackTwoName, DurationInSeconds = AlbumTrackTwoDurationInSeconds }
-            }
-        };
-        _webDataProviderMock.Setup(wdp => wdp.GetArtistAlbumDetailsAsync(
-            AlbumDetailsArtistName, AlbumDetailsName)).ReturnsAsync(albumDetails);
 
         _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddMaps("MusiciansAPP.BL")));
 
@@ -158,22 +95,6 @@ public class ArtistsServiceTests
         _unitOfWorkMock.Setup(uow => uow.Artists.GetArtistDetailsAsync(It.IsAny<string>()))
             .ReturnsAsync(() => _artistDetails);
 
-        _tracks = new List<Track>
-        {
-            new() { Name = TrackOneName, PlayCount = TrackOnePlayCount },
-            new() { Name = TrackTwoName, PlayCount = TrackTwoPlayCount }
-        };
-        _unitOfWorkMock.Setup(uow => uow.Tracks.GetTopTracksForArtistAsync(
-                TracksArtistName, PageSize, Page)).ReturnsAsync(() => _tracks);
-
-        _albums = new List<Album>
-        {
-            new() { Name = AlbumOneName, PlayCount = AlbumOnePlayCount, ImageUrl = AlbumOneImageUrl},
-            new() { Name = AlbumTwoName, PlayCount = AlbumTwoPlayCount, ImageUrl = AlbumTwoImageUrl}
-        };
-        _unitOfWorkMock.Setup(uow => uow.Albums.GetTopAlbumsForArtistAsync(
-            AlbumsArtistName, PageSize, Page)).ReturnsAsync(() => _albums);
-
         _artistWithSimilar = new Artist
         {
             Name = ArtistNameForSimilar,
@@ -186,25 +107,10 @@ public class ArtistsServiceTests
         _unitOfWorkMock.Setup(uow => uow.Artists.GetArtistWithSimilarAsync(
             ArtistNameForSimilar, PageSize, Page)).ReturnsAsync(() => _artistWithSimilar);
 
-        _albumDetails = new Album
-        {
-            Name = AlbumDetailsName,
-            Artist = new Artist { Name = AlbumDetailsArtistName },
-            ImageUrl = AlbumDetailsImageUrl,
-            Tracks = new List<Track>
-            {
-                new(){ Name = AlbumTrackOneName, DurationInSeconds = AlbumTrackOneDurationInSeconds },
-                new(){ Name = AlbumTrackTwoName, DurationInSeconds = AlbumTrackTwoDurationInSeconds }
-            }
-        };
-        _unitOfWorkMock.Setup(uow => uow.Albums.GetAlbumDetailsAsync(
-            AlbumDetailsArtistName, AlbumDetailsName)).ReturnsAsync(() => _albumDetails);
-
         _service = new ArtistsService(
             _webDataProviderMock.Object, _mapper, _unitOfWorkMock.Object);
     }
 
-    #region TopArtists
     [Test]
     public async Task GetTopArtistsAsync_DBHasFullData_FullDataReturned()
     {
@@ -330,9 +236,7 @@ public class ArtistsServiceTests
             u => u.Artists.AddOrUpdateRangeAsync(It.IsAny<IEnumerable<Artist>>()), Times.Once);
         _unitOfWorkMock.Verify(u => u.CompleteAsync(), Times.Once);
     }
-    #endregion
 
-    #region ArtistDetails
     [Test]
     public async Task GetArtistDetailsAsync_DBHasFullData_FullDataReturned()
     {
@@ -455,301 +359,6 @@ public class ArtistsServiceTests
             u => u.Artists.AddOrUpdateAsync(It.IsAny<Artist>()), Times.Once);
         _unitOfWorkMock.Verify(u => u.CompleteAsync(), Times.Once);
     }
-    #endregion
-
-    #region TopTracks
-
-    [Test]
-    public async Task GetArtistTopTracksAsync_DBHasFullData_FullDataReturned()
-    {
-        //Act
-        var result = await _service.GetArtistTopTracksAsync(TracksArtistName, PageSize, Page);
-
-        //Assert
-        Assert.That(result.Count(), Is.EqualTo(PageSize));
-        VerifyTopTracksAreCorrect(result);
-    }
-
-    [Test]
-    public async Task GetArtistTopTracksAsync_DBHasFullData_WebServiceWasNotCalled()
-    {
-        //Act
-        await _service.GetArtistTopTracksAsync(TracksArtistName, PageSize, Page);
-
-        //Assert
-        _webDataProviderMock.Verify(
-            w => w.GetArtistTopTracksAsync(TracksArtistName, PageSize, Page), Times.Never);
-    }
-
-    [TestCase(0)]
-    [TestCase(PageSize - 1)]
-    public async Task GetArtistTopTracksAsync_DBHasTracksAmountLessThanPageSize_FullDataReturned(
-        int amount)
-    {
-        //Arrange
-        _tracks = _tracks.Take(amount).ToList();
-
-        //Act
-        var result = await _service.GetArtistTopTracksAsync(TracksArtistName, PageSize, Page);
-
-        //Assert
-        Assert.That(result.Count(), Is.EqualTo(PageSize));
-        VerifyTopTracksAreCorrect(result);
-    }
-
-    [TestCase(0)]
-    [TestCase(PageSize - 1)]
-    public async Task GetArtistTopTracksAsync_DBHasTracksAmountLessThanPageSize_WebServiceWasCalled(
-        int amount)
-    {
-        //Arrange
-        _tracks = _tracks.Take(amount).ToList();
-
-        //Act
-        await _service.GetArtistTopTracksAsync(TracksArtistName, PageSize, Page);
-
-        //Assert
-        _webDataProviderMock.Verify(
-            w => w.GetArtistTopTracksAsync(TracksArtistName, PageSize, Page), Times.Once);
-    }
-
-    [TestCase(0)]
-    [TestCase(PageSize - 1)]
-    public async Task GetArtistTopTracksAsync_DBHasTracksAmountLessThanPageSize_UnitOfWorkSavingWasCalled(
-        int amount)
-    {
-        //Arrange
-        _tracks = _tracks.Take(amount).ToList();
-
-        //Act
-        await _service.GetArtistTopTracksAsync(TracksArtistName, PageSize, Page);
-
-        //Assert
-        _unitOfWorkMock.Verify(
-            u => u.Tracks.AddOrUpdateArtistTracksAsync(It.IsAny<Artist>(),
-                It.IsAny<IEnumerable<Track>>()), Times.Once);
-        _unitOfWorkMock.Verify(u => u.CompleteAsync(), Times.Once);
-    }
-
-    [Test]
-    public async Task GetArtistTopTracksAsync_DBDoesNotHaveFullTrackData_FullDataReturned()
-    {
-        //Arrange
-        _tracks[0].PlayCount = null;
-
-        //Act
-        var result = await _service.GetArtistTopTracksAsync(TracksArtistName, PageSize, Page);
-
-        //Assert
-        Assert.That(result.Count(), Is.EqualTo(PageSize));
-        VerifyTopTracksAreCorrect(result);
-    }
-
-    [Test]
-    public async Task GetArtistTopTracksAsync_DBDoesNotHaveFullTrackData_WebServiceWasCalled()
-    {
-        //Arrange
-        _tracks[0].PlayCount = null;
-
-        //Act
-        await _service.GetArtistTopTracksAsync(TracksArtistName, PageSize, Page);
-
-        //Assert
-        _webDataProviderMock.Verify(
-            w => w.GetArtistTopTracksAsync(TracksArtistName, PageSize, Page), Times.Once);
-    }
-
-    [Test]
-    public async Task GetArtistTopTracksAsync_DBDoesNotHaveFullTrackData_UnitOfWorkSavingWasCalled()
-    {
-        //Arrange
-        _tracks[0].PlayCount = null;
-
-        //Act
-        await _service.GetArtistTopTracksAsync(TracksArtistName, PageSize, Page);
-
-        //Assert
-        _unitOfWorkMock.Verify(
-            u => u.Tracks.AddOrUpdateArtistTracksAsync(It.IsAny<Artist>(),
-                It.IsAny<IEnumerable<Track>>()), Times.Once);
-        _unitOfWorkMock.Verify(u => u.CompleteAsync(), Times.Once);
-    }
-    #endregion
-
-    #region TopAlbums
-
-    [Test]
-    public async Task GetArtistTopAlbumsAsync_DBHasFullData_FullDataReturned()
-    {
-        //Act
-        var result = await _service.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page);
-
-        //Assert
-        Assert.That(result.Count(), Is.EqualTo(PageSize));
-        VerifyTopAlbumsAreCorrect(result);
-    }
-
-    [Test]
-    public async Task GetArtistTopAlbumsAsync_DBHasFullData_WebServiceWasNotCalled()
-    {
-        //Act
-        await _service.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page);
-
-        //Assert
-        _webDataProviderMock.Verify(
-            w => w.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page), Times.Never);
-    }
-
-    [TestCase(0)]
-    [TestCase(PageSize - 1)]
-    public async Task GetArtistTopAlbumsAsync_DBHasAlbumsAmountLessThanPageSize_FullDataReturned(
-        int amount)
-    {
-        //Arrange
-        _albums = _albums.Take(amount).ToList();
-
-        //Act
-        var result = await _service.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page);
-
-        //Assert
-        Assert.That(result.Count(), Is.EqualTo(PageSize));
-        VerifyTopAlbumsAreCorrect(result);
-    }
-
-    [TestCase(0)]
-    [TestCase(PageSize - 1)]
-    public async Task GetArtistTopAlbumsAsync_DBHasAlbumsAmountLessThanPageSize_WebServiceWasCalled(
-        int amount)
-    {
-        //Arrange
-        _albums = _albums.Take(amount).ToList();
-
-        //Act
-        await _service.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page);
-
-        //Assert
-        _webDataProviderMock.Verify(
-            w => w.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page), Times.Once);
-    }
-
-    [TestCase(0)]
-    [TestCase(PageSize - 1)]
-    public async Task GetArtistTopAlbumsAsync_DBHasAlbumsAmountLessThanPageSize_UnitOfWorkSavingWasCalled(
-        int amount)
-    {
-        //Arrange
-        _albums = _albums.Take(amount).ToList();
-
-        //Act
-        await _service.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page);
-
-        //Assert
-        _unitOfWorkMock.Verify(
-            u => u.Albums.AddOrUpdateArtistAlbumsAsync(It.IsAny<Artist>(),
-                It.IsAny<IEnumerable<Album>>()), Times.Once);
-        _unitOfWorkMock.Verify(u => u.CompleteAsync(), Times.Once);
-    }
-
-    [TestCase(null)]
-    [TestCase("")]
-    [TestCase(" ")]
-    public async Task GetArtistTopAlbumsAsync_DBDoesNotHaveAlbumImageUrl_FullDataReturned(
-        string imageUrl)
-    {
-        //Arrange
-        _albums[0].ImageUrl = imageUrl;
-
-        //Act
-        var result = await _service.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page);
-
-        //Assert
-        Assert.That(result.Count(), Is.EqualTo(PageSize));
-        VerifyTopAlbumsAreCorrect(result);
-    }
-
-    [TestCase(null)]
-    [TestCase("")]
-    [TestCase(" ")]
-    public async Task GetArtistTopAlbumsAsync_DBDoesNotHaveAlbumImageUrl_WebServiceWasCalled(
-        string imageUrl)
-    {
-        //Arrange
-        _albums[0].ImageUrl = imageUrl;
-
-        //Act
-        await _service.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page);
-
-        //Assert
-        _webDataProviderMock.Verify(
-            w => w.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page), Times.Once);
-    }
-
-    [TestCase(null)]
-    [TestCase("")]
-    [TestCase(" ")]
-    public async Task GetArtistTopAlbumsAsync_DBDoesNotHaveAlbumImageUrl_UnitOfWorkSavingWasCalled(
-        string imageUrl)
-    {
-        //Arrange
-        _albums[0].ImageUrl = imageUrl;
-
-        //Act
-        await _service.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page);
-
-        //Assert
-        _unitOfWorkMock.Verify(
-            u => u.Albums.AddOrUpdateArtistAlbumsAsync(It.IsAny<Artist>(),
-                It.IsAny<IEnumerable<Album>>()), Times.Once);
-        _unitOfWorkMock.Verify(u => u.CompleteAsync(), Times.Once);
-    }
-
-    [Test]
-    public async Task GetArtistTopAlbumsAsync_DBDoesNotHaveAlbumPlayCount_FullDataReturned()
-    {
-        //Arrange
-        _albums[0].PlayCount = null;
-
-        //Act
-        var result = await _service.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page);
-
-        //Assert
-        Assert.That(result.Count(), Is.EqualTo(PageSize));
-        VerifyTopAlbumsAreCorrect(result);
-    }
-
-    [Test]
-    public async Task GetArtistTopAlbumsAsync_DBDoesNotHaveAlbumImageUrl_WebServiceWasCalled()
-    {
-        //Arrange
-        _albums[0].PlayCount = null;
-
-        //Act
-        await _service.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page);
-
-        //Assert
-        _webDataProviderMock.Verify(
-            w => w.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page), Times.Once);
-    }
-
-    [Test]
-    public async Task GetArtistTopAlbumsAsync_DBDoesNotHaveAlbumImageUrl_UnitOfWorkSavingWasCalled()
-    {
-        //Arrange
-        _albums[0].PlayCount = null;
-
-        //Act
-        await _service.GetArtistTopAlbumsAsync(AlbumsArtistName, PageSize, Page);
-
-        //Assert
-        _unitOfWorkMock.Verify(
-            u => u.Albums.AddOrUpdateArtistAlbumsAsync(It.IsAny<Artist>(),
-                It.IsAny<IEnumerable<Album>>()), Times.Once);
-        _unitOfWorkMock.Verify(u => u.CompleteAsync(), Times.Once);
-    }
-
-    #endregion
-
-    #region SimilarArtists
 
     [Test]
     public async Task GetSimilarArtistsAsync_DBHasFullData_FullDataReturned()
@@ -875,170 +484,6 @@ public class ArtistsServiceTests
                 It.IsAny<IEnumerable<Artist>>()), Times.Once);
         _unitOfWorkMock.Verify(u => u.CompleteAsync(), Times.Once);
     }
-    #endregion
-
-
-
-
-    [Test]
-    public async Task GetArtistAlbumDetailsAsync_DBHasFullData_FullDataReturned()
-    {
-        //Act
-        var result = await _service.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName);
-
-        //Assert
-        VerifyAlbumDetailsAreCorrect(result);
-    }
-
-    [Test]
-    public async Task GetArtistAlbumDetailsAsync_DBHasFullData_WebServiceWasNotCalled()
-    {
-        //Act
-        await _service.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName);
-
-        //Assert
-        _webDataProviderMock.Verify(
-            w => w.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName),
-            Times.Never);
-    }
-
-    [TestCase(null)]
-    [TestCase("")]
-    [TestCase(" ")]
-    public async Task GetArtistAlbumDetailsAsync_DBDoesNotHaveAlbumImageUrl_FullDataReturned(
-        string imageUrl)
-    {
-        //Arrange
-        _albumDetails.ImageUrl = imageUrl;
-
-        //Act
-        var result = await _service.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName);
-
-        //Assert
-        VerifyAlbumDetailsAreCorrect(result);
-    }
-
-    [TestCase(null)]
-    [TestCase("")]
-    [TestCase(" ")]
-    public async Task GetArtistAlbumDetailsAsync_DBDoesNotHaveAlbumImageUrl_WebServiceWasCalled(
-        string imageUrl)
-    {
-        //Arrange
-        _albumDetails.ImageUrl = imageUrl;
-
-        //Act
-        await _service.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName);
-
-        //Assert
-        _webDataProviderMock.Verify(
-            w => w.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName),
-            Times.Once);
-    }
-
-    [TestCase(null)]
-    [TestCase("")]
-    [TestCase(" ")]
-    public async Task GetArtistAlbumDetailsAsync_DBDoesNotHaveAlbumImageUrl_UnitOfWorkSavingWasCalled(
-        string imageUrl)
-    {
-        //Arrange
-        _albumDetails.ImageUrl = imageUrl;
-
-        //Act
-        await _service.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName);
-
-        //Assert
-        _unitOfWorkMock.Verify(
-            u => u.SaveAlbumDetailsAsync(It.IsAny<Album>(), It.IsAny<IEnumerable<Track>>()),
-            Times.Once);
-    }
-
-    [Test]
-    public async Task GetArtistAlbumDetailsAsync_DBDoesNotHaveTrackDurationInSeconds_FullDataReturned()
-    {
-        //Arrange
-        _albumDetails.Tracks[0].DurationInSeconds = null;
-
-        //Act
-        var result = await _service.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName);
-
-        //Assert
-        VerifyAlbumDetailsAreCorrect(result);
-    }
-
-    [Test]
-    public async Task GetArtistAlbumDetailsAsync_DBDoesNotHaveTrackDurationInSeconds_WebServiceWasCalled()
-    {
-        //Arrange
-        _albumDetails.Tracks[0].DurationInSeconds = null;
-
-        //Act
-        await _service.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName);
-
-        //Assert
-        _webDataProviderMock.Verify(
-            w => w.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName),
-            Times.Once);
-    }
-
-    [Test]
-    public async Task GetArtistAlbumDetailsAsync_DBDoesNotHaveTrackDurationInSeconds_UnitOfWorkSavingWasCalled()
-    {
-        //Arrange
-        _albumDetails.Tracks[0].DurationInSeconds = null;
-
-        //Act
-        await _service.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName);
-
-        //Assert
-        _unitOfWorkMock.Verify(
-            u => u.SaveAlbumDetailsAsync(It.IsAny<Album>(), It.IsAny<IEnumerable<Track>>()),
-            Times.Once);
-    }
-
-    [Test]
-    public async Task GetArtistAlbumDetailsAsync_DBDoesNotHaveAlbumTracks_FullDataReturned()
-    {
-        //Arrange
-        _albumDetails.Tracks = new List<Track>();
-
-        //Act
-        var result = await _service.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName);
-
-        //Assert
-        VerifyAlbumDetailsAreCorrect(result);
-    }
-
-    [Test]
-    public async Task GetArtistAlbumDetailsAsync_DBDoesNotHaveAlbumTracks_WebServiceWasCalled()
-    {
-        //Arrange
-        _albumDetails.Tracks = new List<Track>();
-
-        //Act
-        await _service.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName);
-
-        //Assert
-        _webDataProviderMock.Verify(
-            w => w.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName),
-            Times.Once);
-    }
-
-    [Test]
-    public async Task GetArtistAlbumDetailsAsync_DBDoesNotHaveAlbumTracks_UnitOfWorkSavingWasCalled()
-    {
-        //Arrange
-        _albumDetails.Tracks = new List<Track>();
-
-        //Act
-        await _service.GetArtistAlbumDetailsAsync(AlbumDetailsArtistName, AlbumDetailsName);
-
-        //Assert
-        _unitOfWorkMock.Verify(
-            u => u.SaveAlbumDetailsAsync(It.IsAny<Album>(), It.IsAny<IEnumerable<Track>>()),
-            Times.Once);
-    }
 
     private void VerifyTopArtistsAreCorrect(IEnumerable<ArtistBL> model)
     {
@@ -1055,42 +500,5 @@ public class ArtistsServiceTests
         Assert.That(artist.Name, Is.EqualTo(ArtistDetailsName));
         Assert.That(artist.ImageUrl, Is.EqualTo(ArtistDetailsImageUrl));
         Assert.That(artist.Biography, Is.EqualTo(ArtistDetailsBiography));
-    }
-
-    private void VerifyTopTracksAreCorrect(IEnumerable<TrackBL> model)
-    {
-        var tracks = model.ToList();
-
-        Assert.That(tracks[0].Name, Is.EqualTo(TrackOneName));
-        Assert.That(tracks[0].PlayCount, Is.EqualTo(TrackOnePlayCount));
-
-        Assert.That(tracks[1].Name, Is.EqualTo(TrackTwoName));
-        Assert.That(tracks[1].PlayCount, Is.EqualTo(TrackTwoPlayCount));
-    }
-
-    private void VerifyTopAlbumsAreCorrect(IEnumerable<AlbumBL> model)
-    {
-        var albums = model.ToList();
-
-        Assert.That(albums[0].Name, Is.EqualTo(AlbumOneName));
-        Assert.That(albums[0].PlayCount, Is.EqualTo(AlbumOnePlayCount));
-        Assert.That(albums[0].ImageUrl, Is.EqualTo(AlbumOneImageUrl));
-
-        Assert.That(albums[1].Name, Is.EqualTo(AlbumTwoName));
-        Assert.That(albums[1].PlayCount, Is.EqualTo(AlbumTwoPlayCount));
-        Assert.That(albums[1].ImageUrl, Is.EqualTo(AlbumTwoImageUrl));
-    }
-    private void VerifyAlbumDetailsAreCorrect(AlbumDetailsBL album)
-    {
-        Assert.That(album.Name, Is.EqualTo(AlbumDetailsName));
-        Assert.That(album.ArtistName, Is.EqualTo(AlbumDetailsArtistName));
-        Assert.That(album.ImageUrl, Is.EqualTo(AlbumDetailsImageUrl));
-
-        var tracks = album.Tracks.ToList();
-        Assert.That(tracks[0].Name, Is.EqualTo(AlbumTrackOneName));
-        Assert.That(tracks[0].DurationInSeconds, Is.EqualTo(AlbumTrackOneDurationInSeconds));
-
-        Assert.That(tracks[1].Name, Is.EqualTo(AlbumTrackTwoName));
-        Assert.That(tracks[1].DurationInSeconds, Is.EqualTo(AlbumTrackTwoDurationInSeconds));
     }
 }

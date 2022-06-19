@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using MusiciansAPP.BL.Services.Tracks.BLModels;
+using System.Collections.Generic;
 
-namespace MusiciansAPP.BL.Services.Artists.BLModels;
+namespace MusiciansAPP.BL.Services.Albums.BLModels;
 
 public class AlbumDetailsBL
 {

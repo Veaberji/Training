@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MusiciansAPP.BL.Services.Artists.BLModels;
+namespace MusiciansAPP.BL.Services.Tracks.BLModels;
 
 public class ArtistTracksBL
 {

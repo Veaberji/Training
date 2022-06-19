@@ -1,4 +1,4 @@
-﻿namespace MusiciansAPP.BL.Services.Artists.BLModels;
+﻿namespace MusiciansAPP.BL.Services.Albums.BLModels;
 
 public class AlbumBL
 {

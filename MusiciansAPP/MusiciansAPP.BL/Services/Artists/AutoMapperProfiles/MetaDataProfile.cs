@@ -2,13 +2,12 @@
 using MusiciansAPP.BL.Services.Artists.BLModels;
 using MusiciansAPP.DAL.DALModels;
 
-namespace MusiciansAPP.BL.Services.Artists.AutoMapperProfiles
+namespace MusiciansAPP.BL.Services.Artists.AutoMapperProfiles;
+
+public class MetaDataProfile : Profile
 {
-    public class MetaDataProfile : Profile
+    public MetaDataProfile()
     {
-        public MetaDataProfile()
-        {
-            CreateMap<PagingDataDAL, PagingDataBL>();
-        }
+        CreateMap<PagingDataDAL, PagingDataBL>();
     }
 }
