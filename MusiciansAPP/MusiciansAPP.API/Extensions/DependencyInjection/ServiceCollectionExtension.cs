@@ -3,8 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MusiciansAPP.API.Services.Interfaces;
 using MusiciansAPP.API.Services.Logic;
-using MusiciansAPP.BL.ArtistsService.Interfaces;
-using MusiciansAPP.BL.ArtistsService.Logic;
+using MusiciansAPP.BL.Services.Albums.Interfaces;
+using MusiciansAPP.BL.Services.Albums.Logic;
+using MusiciansAPP.BL.Services.Artists.Interfaces;
+using MusiciansAPP.BL.Services.Artists.Logic;
+using MusiciansAPP.BL.Services.Tracks.Interfaces;
+using MusiciansAPP.BL.Services.Tracks.Logic;
 using MusiciansAPP.DAL.DBDataProvider;
 using MusiciansAPP.DAL.DBDataProvider.Interfaces;
 using MusiciansAPP.DAL.DBDataProvider.Logic;
@@ -20,6 +24,8 @@ public static class ServiceCollectionExtension
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddScoped<IArtistsService, ArtistsService>();
+        services.AddScoped<IAlbumsService, AlbumsService>();
+        services.AddScoped<ITracksService, TracksService>();
         services.AddScoped<IWebDataProvider>(p =>
             ActivatorUtilities.CreateInstance<LastFmDataProvider>(p, config["Secrets:LastFmApiKey"]));
         services.AddAutoMapper(cfg =>

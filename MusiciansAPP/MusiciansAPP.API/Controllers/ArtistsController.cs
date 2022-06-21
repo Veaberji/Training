@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using MusiciansAPP.API.Services.Interfaces;
 using MusiciansAPP.API.UIModels;
 using MusiciansAPP.API.Utils;
-using MusiciansAPP.BL.ArtistsService.Interfaces;
+using MusiciansAPP.BL.Services.Albums.Interfaces;
+using MusiciansAPP.BL.Services.Artists.Interfaces;
+using MusiciansAPP.BL.Services.Tracks.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,15 +17,25 @@ namespace MusiciansAPP.API.Controllers;
 [ApiController]
 public class ArtistsController : ControllerBase
 {
+    private const int DefaultSize = 10;
+    private const int DefaultPage = 1;
+
     private readonly IArtistsService _artistsService;
+    private readonly ITracksService _tracksService;
+    private readonly IAlbumsService _albumsService;
     private readonly IMapper _mapper;
     private readonly IErrorHandler _errorHandler;
-    public ArtistsController(IArtistsService artistsService, IMapper mapper,
+    public ArtistsController(IArtistsService artistsService,
+        ITracksService tracksService,
+        IAlbumsService albumsService,
+        IMapper mapper,
         IErrorHandler errorHandler)
     {
         _artistsService = artistsService;
         _mapper = mapper;
         _errorHandler = errorHandler;
+        _albumsService = albumsService;
+        _tracksService = tracksService;
     }
 
     [HttpGet]
@@ -59,7 +71,7 @@ public class ArtistsController : ControllerBase
     {
         var action = async () =>
         {
-            var blModels = await _artistsService.GetArtistTopTracksAsync(name);
+            var blModels = await _tracksService.GetArtistTopTracksAsync(name, DefaultSize, DefaultPage);
             return _mapper.Map<IEnumerable<TrackUI>>(blModels);
         };
 
@@ -72,7 +84,7 @@ public class ArtistsController : ControllerBase
     {
         var action = async () =>
         {
-            var blModels = await _artistsService.GetArtistTopAlbumsAsync(name);
+            var blModels = await _albumsService.GetArtistTopAlbumsAsync(name, DefaultSize, DefaultPage);
             return _mapper.Map<IEnumerable<AlbumUI>>(blModels);
         };
 
@@ -85,7 +97,7 @@ public class ArtistsController : ControllerBase
     {
         var action = async () =>
         {
-            var blModels = await _artistsService.GetSimilarArtistsAsync(name);
+            var blModels = await _artistsService.GetSimilarArtistsAsync(name, DefaultSize, DefaultPage);
             return _mapper.Map<IEnumerable<ArtistUI>>(blModels);
         };
 
@@ -99,7 +111,7 @@ public class ArtistsController : ControllerBase
     {
         var action = async () =>
         {
-            var blModels = await _artistsService.GetArtistAlbumDetailsAsync(artistName, albumName);
+            var blModels = await _albumsService.GetArtistAlbumDetailsAsync(artistName, albumName);
             return _mapper.Map<AlbumDetailsUI>(blModels);
         };
 

@@ -26,7 +26,7 @@ public class Album : Entity
     [Range(AlbumConstraints.PlayCountMinValue, int.MaxValue)]
     public int? PlayCount { get; set; }
     public Artist Artist { get; set; }
-    public IEnumerable<Track> Tracks { get; set; }
+    public List<Track> Tracks { get; set; }
 
     public bool IsAlbumHasPlayCount()
     {
@@ -41,6 +41,11 @@ public class Album : Entity
     public bool IsAlbumTracksDetailsUpToDate()
     {
         return Tracks.Any() && Tracks.All(track => track.IsTrackHasDurationInSeconds());
+    }
+
+    public bool IsAlbumDetailsUpToDate()
+    {
+        return IsAlbumHasImageUrl() && IsAlbumTracksDetailsUpToDate();
     }
 
     protected override bool IsFull()

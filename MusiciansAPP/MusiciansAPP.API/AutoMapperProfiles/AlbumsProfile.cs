@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MusiciansAPP.API.UIModels;
-using MusiciansAPP.BL.ArtistsService.BLModels;
+using MusiciansAPP.BL.Services.Albums.BLModels;
+using MusiciansAPP.BL.Services.Artists.BLModels;
 
 namespace MusiciansAPP.API.AutoMapperProfiles;
 
