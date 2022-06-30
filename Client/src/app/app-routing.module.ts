@@ -1,36 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AlbumDetailsComponent } from './album-details/album-details.component';
-import { ArtistDetailsComponent } from './artist-details/artist-details.component';
-import { ArtistsContainerComponent } from './artists-container/artists-container.component';
-import { NotFoundComponent } from './common/not-found/not-found.component';
+import { ArtistRoutingModule } from './artists/artist-routing.module';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/artists', pathMatch: 'full' },
   {
     path: 'artists',
-    component: ArtistsContainerComponent,
+    loadChildren: () => import('./artists/artist-routing.module').then((m) => m.ArtistRoutingModule),
   },
   {
-    path: 'artists/page/:page',
-    component: ArtistsContainerComponent,
-  },
-  {
-    path: 'artists/page/:page/pageSize/:pageSize',
-    component: ArtistsContainerComponent,
-  },
-
-  {
-    path: 'artist-details/:name',
-    component: ArtistDetailsComponent,
-  },
-  {
-    path: 'artist-details/:name/:supplement',
-    component: ArtistDetailsComponent,
-  },
-  {
-    path: ':artistName/album-details/:albumTitle',
-    component: AlbumDetailsComponent,
+    path: 'albums',
+    loadChildren: () => import('./albums/album-routing.module').then((m) => m.AlbumRoutingModule),
   },
   {
     path: '**',
@@ -39,7 +20,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes), ArtistRoutingModule],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
