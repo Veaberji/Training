@@ -6,22 +6,14 @@
     <div class="col-md-8">
       <div class="card-body">
         <h5 class="card-title fs-4">{{ artist.name }}</h5>
+        <div class="card-text">{{ artist.biography }}</div>
       </div>
     </div>
   </div>
 </div>
 
 <ul class="nav nav-tabs">
-  <li class="nav-item" (click)="onOverviewSelect()">
-    <a
-      class="nav-link"
-      [routerLink]="['/artists', componentRouteName, artist.name]"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      >Overview
-    </a>
-  </li>
-  <li class="nav-item" (click)="onTopTracksSelect()">
+  <li class="nav-item">
     <a
       class="nav-link"
       [routerLink]="['/artists', componentRouteName, artist.name, supplementRoute.TopTracks]"
@@ -29,7 +21,7 @@
       >Top Tracks
     </a>
   </li>
-  <li class="nav-item" (click)="onTopAlbumsSelect()">
+  <li class="nav-item">
     <a
       class="nav-link"
       [routerLink]="['/artists', componentRouteName, artist.name, supplementRoute.TopAlbums]"
@@ -37,7 +29,7 @@
       >Top Albums
     </a>
   </li>
-  <li class="nav-item" (click)="onSimilarArtistsSelect()">
+  <li class="nav-item">
     <a
       class="nav-link"
       [routerLink]="['/artists', componentRouteName, artist.name, supplementRoute.SimilarArtists]"
@@ -47,16 +39,6 @@
   </li>
 </ul>
 
-<div [ngSwitch]="supplementType">
-  <app-track-list *ngSwitchCase="supplementRoute.TopTracks" [tracks]="supplements.topTracks"></app-track-list>
-  <app-albums-container
-    *ngSwitchCase="supplementRoute.TopAlbums"
-    [albums]="supplements.topAlbums"
-    [artistName]="artist.name"
-    >TopAlbums</app-albums-container
-  >
-  <app-similar-artists *ngSwitchCase="supplementRoute.SimilarArtists" [artists]="supplements.similarArtists"
-    >SimilarArtists</app-similar-artists
-  >
-  <div *ngSwitchDefault class="card-text">{{ artist.biography }}</div>
+<div class="container">
+  <router-outlet></router-outlet>
 </div>
