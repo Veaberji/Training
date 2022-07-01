@@ -1,4 +1,7 @@
-<div class="row">
+<a routerLink="/artists/details/City Girls/similar"
+  >Test: similar artists for City Girls fetch by artistName:Observable</a
+>
+<div class="row" *ngIf="artists$ | async as artists">
   <div *ngFor="let artist of artists" class="col-lg-4 p-2">
     <app-artist-card [artist]="artist" [newWindow]="true"></app-artist-card>
   </div>

@@ -1,25 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { map, Observable } from 'rxjs';
 import { ArtistService } from '../services/artist.service';
 import { Artist } from '../models/artist';
 
 @Component({
   selector: 'app-similar-artists',
   templateUrl: './similar-artists.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SimilarArtistsComponent implements OnInit {
-  artists: Artist[] = [];
+  artists$: Observable<Artist[]> | undefined;
 
   constructor(private route: ActivatedRoute, private artistService: ArtistService) {}
 
   ngOnInit(): void {
-    this.loadSimilarArtists();
+    this.initSimilarArtists();
   }
 
-  private loadSimilarArtists(): void {
-    const artistName = String(this.route.parent?.snapshot.paramMap.get('name'));
-    this.artistService.getSimilarArtists(artistName).subscribe((response) => {
-      this.artists = response;
-    });
+  private initSimilarArtists(): void {
+    const artistName$ = this.route.parent?.params.pipe(map((param) => param['name']));
+    if (artistName$) {
+      this.artists$ = this.artistService.getSimilarArtists(artistName$);
+    }
   }
 }

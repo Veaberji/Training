@@ -1,38 +1,24 @@
-<div>
+<div *ngIf="paging$ | async as paging">
   <ul class="pagination">
-    <li class="page-item" [class.disabled]="firstPage == currentPage">
-      <a
-        class="page-link"
-        [routerLink]="['/artists', 'page', currentPage - 1, 'pageSize', pageSize]"
-        (click)="changeCurrentPage(currentPage - 1)"
-      >
-        Previous</a
-      >
+    <li class="page-item" [class.disabled]="firstPage == paging.page">
+      <a class="page-link" [routerLink]="['/artists', 'page', paging.page - 1, 'pageSize', paging.pageSize]"
+        >Previous
+      </a>
     </li>
-    <li
-      *ngFor="let page of pages"
-      class="page-item"
-      [class.active]="page == currentPage"
-      (click)="changeCurrentPage(page)"
-    >
-      <a *ngIf="!pageSize" class="page-link" [routerLink]="['/artists', 'page', page]" routerLinkActive="active"
+    <li *ngFor="let page of pages" class="page-item" [class.active]="page == paging.page">
+      <a *ngIf="!paging.pageSize" class="page-link" [routerLink]="['/artists', 'page', page]" routerLinkActive="active"
         >{{ page }}
       </a>
       <a
-        *ngIf="pageSize"
+        *ngIf="paging.pageSize"
         class="page-link"
-        [routerLink]="['/artists', 'page', page, 'pageSize', pageSize]"
+        [routerLink]="['/artists', 'page', page, 'pageSize', paging.pageSize]"
         routerLinkActive="active"
         >{{ page }}
       </a>
     </li>
-    <li class="page-item" [class.disabled]="lastPage == currentPage">
-      <a
-        class="page-link"
-        [routerLink]="['/artists', 'page', currentPage + 1, 'pageSize', pageSize]"
-        (click)="changeCurrentPage(currentPage + 1)"
-        >Next</a
-      >
+    <li class="page-item" [class.disabled]="lastPage == paging.page">
+      <a class="page-link" [routerLink]="['/artists', 'page', paging.page + 1, 'pageSize', paging.pageSize]">Next</a>
     </li>
   </ul>
 </div>

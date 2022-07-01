@@ -39,7 +39,7 @@ public class ArtistRepository : Repository<Artist>, IArtistRepository
             .Include(a => a.SimilarArtists
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize))
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync() ?? new Artist();
     }
 
     public async Task AddOrUpdateAsync(Artist artist)

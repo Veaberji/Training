@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Artist } from '../models/artist';
 
 @Component({
   selector: 'app-artist-card',
   templateUrl: './artist-card.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArtistCardComponent {
   constructor(private router: Router) {}

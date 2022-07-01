@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Artist } from '../models/artist';
 import { DataService } from '../../shared/services/data.service';
+import { Artist } from '../models/artist';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,9 @@ export class ArtistService extends DataService<Artist> {
     super(environment.artistsApiUrl, http);
   }
 
-  getSimilarArtists(artistName: string) {
+  getSimilarArtists(artistName$: Observable<string>): Observable<Artist[]> {
     const similarArtistsApiPostfix = 'similar';
-    return this.getAll(`${artistName}/${similarArtistsApiPostfix}`);
+    const query$: Observable<string> = artistName$.pipe(map((name) => `${name}/${similarArtistsApiPostfix}`));
+    return this.getAllByObservable(query$);
   }
 }

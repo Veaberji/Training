@@ -1,17 +1,8 @@
 <nav class="row mt-3">
   <div class="col text-start ms-3">
-    <app-page-selector
-      [pagingData]="pagingData"
-      [pageSize]="currentPageSize"
-      [(currentPage)]="currentPage"
-      (currentPageChange)="onChangeCurrentPageChanged($event)"
-    ></app-page-selector>
+    <app-page-selector [pagingData]="pagingData" [paging$]="paging$"></app-page-selector>
   </div>
   <div class="col text-end me-3">
-    <app-page-size-selector
-      [pageSizes]="pageSizes"
-      [currentPageSize]="currentPageSize"
-      (currentPageSizeChange)="onCurrentPageSizeChanged($event)"
-    ></app-page-size-selector>
+    <app-page-size-selector [pageSizes]="pageSizes" [paging$]="paging$"></app-page-size-selector>
   </div>
 </nav>

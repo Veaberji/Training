@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Observable } from 'rxjs';
 import { PagingService } from '../services/paging.service';
 import PagingData from '../models/paging-data';
 import PagingDetails from '../models/paging-details';
@@ -6,46 +7,35 @@ import PagingDetails from '../models/paging-details';
 @Component({
   selector: 'app-page-selector',
   templateUrl: './page-selector.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageSelectorComponent implements OnChanges {
+export class PageSelectorComponent implements OnInit {
   readonly pagesAmount: number = 10;
   pages: number[] = [];
   firstPage!: number;
   lastPage!: number;
   @Input('pagingData') pagingData!: PagingData;
-  @Input('pageSize') pageSize!: number;
-  @Input('currentPage') currentPage!: number;
-  @Output('currentPageChange') currentPageChange = new EventEmitter<number>();
+  @Input('paging$') paging$: Observable<{ page: number; pageSize: number }> | undefined;
 
   constructor(private service: PagingService) {}
 
-  ngOnChanges(): void {
+  ngOnInit(): void {
     this.initPages();
   }
 
-  changeCurrentPage(page: number): void {
-    this.currentPageChange.emit(page);
-  }
-
   private initPages(): void {
-    if (!this.isParamsPassed()) {
-      return;
-    }
-
-    this.pages = this.service.getPagesArray(this.getPagingDetails());
-    this.firstPage = this.pages[0];
-    this.lastPage = this.pages[this.pages.length - 1];
+    this.paging$?.subscribe(({ page, pageSize }) => {
+      this.pages = this.service.getPagesArray(this.getPagingDetails(page, pageSize));
+      this.firstPage = this.pages[0];
+      this.lastPage = this.pages[this.pages.length - 1];
+    });
   }
 
-  private isParamsPassed(): boolean {
-    return this.pageSize > 0 && this.currentPage > 0;
-  }
-
-  private getPagingDetails(): PagingDetails {
+  private getPagingDetails(page: number, pageSize: number): PagingDetails {
     const pagingDetails: PagingDetails = {
-      CurrentPage: this.currentPage,
+      CurrentPage: page,
       TotalItems: this.pagingData.totalItems,
-      PageSize: this.pageSize,
+      PageSize: pageSize,
       PagesAmount: this.pagesAmount,
     };
 

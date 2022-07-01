@@ -1,15 +1,21 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-page-size-selector',
   templateUrl: './page-size-selector.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageSizeSelectorComponent {
-  @Input('currentPageSize') currentPageSize!: number;
   @Input('pageSizes') pageSizes!: number[];
-  @Output('currentPageSizeChange') currentPageSizeChange = new EventEmitter<number>();
+  @Input('paging$') paging$: Observable<{ page: number; pageSize: number }> | undefined;
 
-  changeCurrentPageSize(size: number): void {
-    this.currentPageSizeChange.emit(size);
+  constructor(private router: Router) {}
+
+  onCurrentPageSizeChanged(size: number): void {
+    const firstPage = 1;
+    const url = `artists/page/${firstPage}/pageSize/${size}`;
+    this.router.navigate([url]);
   }
 }

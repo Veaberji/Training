@@ -1,9 +1,9 @@
-<div class="btn-group">
+<div class="btn-group" *ngIf="paging$ | async as paging">
   <label
     *ngFor="let pageSize of pageSizes"
     class="btn btn-outline-primary"
-    [class.active]="pageSize == currentPageSize"
-    (click)="changeCurrentPageSize(pageSize)"
+    [class.active]="pageSize == paging.pageSize"
+    (click)="onCurrentPageSizeChanged(pageSize)"
     >{{ pageSize }}
   </label>
 </div>

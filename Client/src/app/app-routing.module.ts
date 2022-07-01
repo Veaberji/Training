@@ -13,9 +13,10 @@ const routes: Routes = [
     loadChildren: () => import('./albums/album-routing.module').then((m) => m.AlbumRoutingModule),
   },
   {
-    path: '**',
+    path: 'not-found',
     component: NotFoundComponent,
   },
+  { path: '**', redirectTo: '/not-found', pathMatch: 'full' },
 ];
 
 @NgModule({

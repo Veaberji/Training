@@ -1,13 +1,8 @@
-<div class="row">
-  <div *ngFor="let artist of artistsPaging?.artists" class="col-lg-3 col-md-4 col-sm-6 p-2">
-    <app-artist-card [artist]="artist"></app-artist-card>
+<div *ngIf="artistsPaging$ | async as artistsPaging">
+  <div class="row">
+    <div *ngFor="let artist of artistsPaging?.artists" class="col-lg-3 col-md-4 col-sm-6 p-2">
+      <app-artist-card [artist]="artist"></app-artist-card>
+    </div>
   </div>
+  <app-pagination [pagingData]="artistsPaging.pagingData" [pageSizes]="pageSizes" [paging$]="paging$"></app-pagination>
 </div>
-<app-pagination
-  [pagingData]="artistsPaging.pagingData"
-  [pageSizes]="pageSizes"
-  [currentPage]="currentPage"
-  [currentPageSize]="currentPageSize"
-  (currentPageChange)="changeCurrentPage($event)"
-  (currentPageSizeChanged)="changeCurrentPageSize($event)"
-></app-pagination>

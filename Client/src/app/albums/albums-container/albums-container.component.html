@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="albums$ | async as albums">
   <div *ngFor="let album of albums" class="col-lg-4 p-2">
     <app-albums-card [album]="album" [artistName]="artistName"></app-albums-card>
   </div>
