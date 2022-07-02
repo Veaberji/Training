@@ -7,8 +7,6 @@ import { PageSelectorComponent } from './page-selector/page-selector.component';
 import { PageSizeSelectorComponent } from './page-size-selector/page-size-selector.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { FooterComponent } from './footer/footer.component';
-import { PagingService } from './services/paging.service';
-import { DataService } from './services/data.service';
 
 @NgModule({
   declarations: [
@@ -19,7 +17,6 @@ import { DataService } from './services/data.service';
     PageSelectorComponent,
     FooterComponent,
   ],
-  providers: [PagingService, DataService],
   imports: [CommonModule, RouterModule],
   exports: [CommonModule, NotFoundComponent, NavBarComponent, PaginationComponent, FooterComponent],
 })

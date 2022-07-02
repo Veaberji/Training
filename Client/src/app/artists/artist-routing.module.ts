@@ -43,10 +43,6 @@ const routes: Routes = [
       },
     ],
   },
-  {
-    path: 'details/:name/:supplement',
-    component: ArtistDetailsComponent,
-  },
 ];
 
 @NgModule({

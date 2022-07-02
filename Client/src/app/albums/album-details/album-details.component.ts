@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
 import { AlbumDetails } from '../models/album-details';
-import { AlbumDetailsService } from '../services/album-details.service';
 
 @Component({
   selector: 'app-album-details',
@@ -10,24 +8,11 @@ import { AlbumDetailsService } from '../services/album-details.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlbumDetailsComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private service: AlbumDetailsService) {}
+  album: AlbumDetails | undefined;
 
-  artistName!: string;
-  albumTitle!: string;
-  album$: Observable<AlbumDetails> | undefined;
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.initFieldsFromUrl();
-    this.initAlbum();
-  }
-
-  private initFieldsFromUrl(): void {
-    let params = this.route.snapshot.paramMap;
-    this.albumTitle = String(params.get('albumTitle'));
-    this.artistName = String(params.get('artistName'));
-  }
-
-  private initAlbum(): void {
-    this.album$ = this.service.getAlbumDetails(this.artistName, this.albumTitle);
+    this.album = this.route.snapshot.data['resolvedData'];
   }
 }

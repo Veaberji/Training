@@ -20,10 +20,7 @@ public class AlbumRepository : Repository<Album>, IAlbumRepository
                 a => a.Artist.Name == artistName && a.Name == albumName)
             .Include(a => a.Artist)
             .Include(a => a.Tracks)
-            .FirstOrDefaultAsync() ?? new Album
-            {
-                Name = albumName
-            };
+            .FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<Album>> GetTopAlbumsForArtistAsync(

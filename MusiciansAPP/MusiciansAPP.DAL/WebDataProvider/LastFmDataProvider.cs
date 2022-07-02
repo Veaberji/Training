@@ -51,7 +51,7 @@ public class LastFmDataProvider : IWebDataProvider
     public async Task<ArtistDetailsDAL> GetArtistDetailsAsync(string name)
     {
         const string method = "artist.getinfo";
-        var url = $"{BaseUrl}?method={method}&artist={name}&api_key={_apiKey}&format=json";
+        var url = $"{BaseUrl}?method={method}&artist={EscapeName(name)}&api_key={_apiKey}&format=json";
         string content = await GetContentAsync(url, name);
 
         var result = JsonConvert
@@ -89,7 +89,7 @@ public class LastFmDataProvider : IWebDataProvider
     public async Task<SimilarArtistsDAL> GetSimilarArtistsAsync(string name, int pageSize, int page)
     {
         const string method = "artist.getsimilar";
-        var url = $"{BaseUrl}?method={method}&artist={name}&limit={pageSize * page}&api_key={_apiKey}&format=json";
+        var url = $"{BaseUrl}?method={method}&artist={EscapeName(name)}&limit={pageSize * page}&api_key={_apiKey}&format=json";
         string content = await GetContentAsync(url, name);
 
         var result = JsonConvert
@@ -102,7 +102,7 @@ public class LastFmDataProvider : IWebDataProvider
     public async Task<AlbumDetailsDAL> GetArtistAlbumDetailsAsync(string artistName, string albumName)
     {
         const string method = "album.getinfo";
-        var url = $"{BaseUrl}?method={method}&artist={artistName}&album={albumName}&api_key={_apiKey}&format=json";
+        var url = $"{BaseUrl}?method={method}&artist={EscapeName(artistName)}&album={EscapeName(albumName)}&api_key={_apiKey}&format=json";
         var response = await GetResponseAsync(url);
         if (!response.IsSuccessStatusCode)
         {
@@ -111,10 +111,29 @@ public class LastFmDataProvider : IWebDataProvider
 
         string content = await GetResponseContentAsync(response);
 
-        var result = JsonConvert
-            .DeserializeObject<LastFmArtistAlbumTopLevelDto>(content);
+        // this code added because if there is only one track in an album,
+        // last.fm returns the track as an object, not as an array.
+        try
+        {
+            var result = JsonConvert
+                .DeserializeObject<LastFmArtistAlbumTopLevelDto>(content);
 
-        return _mapper.Map<AlbumDetailsDAL>(result.TopLevel);
+            return _mapper.Map<AlbumDetailsDAL>(result.TopLevel);
+        }
+        catch (Exception)
+        {
+            var result = JsonConvert
+                .DeserializeObject<LastFmArtistAlbumOneTrackTopLevelDto>(content);
+
+            return _mapper.Map<AlbumDetailsDAL>(result.TopLevel);
+        }
+
+    }
+
+    private string EscapeName(string name)
+    {
+        const string ampersand = "%26";
+        return name.Replace("&", ampersand);
     }
 
     private async Task<string> GetContentAsync(string url, string artistName)
@@ -128,7 +147,7 @@ public class LastFmDataProvider : IWebDataProvider
 
     private string GetUrlForSupplements(string method, string name, int pageSize, int page)
     {
-        return $"{BaseUrl}?method={method}&artist={name}&limit={pageSize}&page={page}&api_key={_apiKey}&format=json";
+        return $"{BaseUrl}?method={method}&artist={EscapeName(name)}&limit={pageSize}&page={page}&api_key={_apiKey}&format=json";
     }
 
     private async Task<HttpResponseMessage> GetResponseAsync(string url)

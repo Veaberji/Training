@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { PagingService } from '../services/paging.service';
 import PagingData from '../models/paging-data';
 import PagingDetails from '../models/paging-details';
@@ -9,7 +9,8 @@ import PagingDetails from '../models/paging-details';
   templateUrl: './page-selector.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageSelectorComponent implements OnInit {
+export class PageSelectorComponent implements OnInit, OnDestroy {
+  private _subscribtion: Subscription | undefined;
   readonly pagesAmount: number = 10;
   pages: number[] = [];
   firstPage!: number;
@@ -23,8 +24,12 @@ export class PageSelectorComponent implements OnInit {
     this.initPages();
   }
 
+  ngOnDestroy(): void {
+    this._subscribtion?.unsubscribe();
+  }
+
   private initPages(): void {
-    this.paging$?.subscribe(({ page, pageSize }) => {
+    this._subscribtion = this.paging$?.subscribe(({ page, pageSize }) => {
       this.pages = this.service.getPagesArray(this.getPagingDetails(page, pageSize));
       this.firstPage = this.pages[0];
       this.lastPage = this.pages[this.pages.length - 1];
