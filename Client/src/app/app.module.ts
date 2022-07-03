@@ -1,6 +1,7 @@
 import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
@@ -12,7 +13,15 @@ import { AppErrorHandler } from './shared/common/errors/app-error-handler';
 @NgModule({
   declarations: [AppComponent],
   providers: [{ provide: ErrorHandler, useClass: AppErrorHandler }],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, SharedModule, ArtistModule, AlbumModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    SharedModule,
+    ArtistModule,
+    AlbumModule,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

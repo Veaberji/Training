@@ -7,6 +7,7 @@ import { PageSelectorComponent } from './page-selector/page-selector.component';
 import { PageSizeSelectorComponent } from './page-size-selector/page-size-selector.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { FooterComponent } from './footer/footer.component';
+import { LoadingComponent } from './loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -16,8 +17,9 @@ import { FooterComponent } from './footer/footer.component';
     PageSizeSelectorComponent,
     PageSelectorComponent,
     FooterComponent,
+    LoadingComponent,
   ],
   imports: [CommonModule, RouterModule],
-  exports: [CommonModule, NotFoundComponent, NavBarComponent, PaginationComponent, FooterComponent],
+  exports: [CommonModule, NotFoundComponent, NavBarComponent, PaginationComponent, FooterComponent, LoadingComponent],
 })
 export class SharedModule {}
