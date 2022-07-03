@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusiciansAPP.DAL.DBDataProvider.Interfaces.Repositories;
 using MusiciansAPP.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -94,7 +95,8 @@ public class TrackRepository : Repository<Track>, ITrackRepository
     {
         foreach (var trackFromDb in tracksFromDb.Where(t => !t.IsTrackHasPlayCount()))
         {
-            var track = tracks.First(a => a.Name == trackFromDb.Name);
+            var track = tracks.First(t => string
+                .Equals(t.Name, trackFromDb.Name, StringComparison.OrdinalIgnoreCase));
             trackFromDb.PlayCount = track.PlayCount;
         }
     }

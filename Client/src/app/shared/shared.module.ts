@@ -8,6 +8,8 @@ import { PageSizeSelectorComponent } from './page-size-selector/page-size-select
 import { PaginationComponent } from './pagination/pagination.component';
 import { FooterComponent } from './footer/footer.component';
 import { LoadingComponent } from './loading/loading.component';
+import { CardComponent } from './card/card.component';
+import { TableComponent } from './table/table.component';
 
 @NgModule({
   declarations: [
@@ -18,8 +20,19 @@ import { LoadingComponent } from './loading/loading.component';
     PageSelectorComponent,
     FooterComponent,
     LoadingComponent,
+    CardComponent,
+    TableComponent,
   ],
   imports: [CommonModule, RouterModule],
-  exports: [CommonModule, NotFoundComponent, NavBarComponent, PaginationComponent, FooterComponent, LoadingComponent],
+  exports: [
+    CommonModule,
+    NotFoundComponent,
+    NavBarComponent,
+    PaginationComponent,
+    FooterComponent,
+    LoadingComponent,
+    CardComponent,
+    TableComponent,
+  ],
 })
 export class SharedModule {}

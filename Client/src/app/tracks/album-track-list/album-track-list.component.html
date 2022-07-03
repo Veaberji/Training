@@ -1,18 +1,1 @@
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Title</th>
-      <th scope="col">Duration</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let track of tracks; let i = index">
-      <th scope="row">{{ i + 1 }}</th>
-      <td>{{ track.name }}</td>
-      <td>
-        <span *ngIf="track.durationInSeconds">{{ track.durationInSeconds * 1000 | date: 'mm:ss':'UTC' }}</span>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<app-table [columns]="columns" [rows]="getTracks()"></app-table>

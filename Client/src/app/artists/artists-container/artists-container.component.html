@@ -1,7 +1,11 @@
 <div *ngIf="artistsPaging$ | async as artistsPaging">
   <div class="row">
     <div *ngFor="let artist of artistsPaging?.artists" class="col-lg-3 col-md-4 col-sm-6 p-2">
-      <app-artist-card [artist]="artist"></app-artist-card>
+      <app-card
+        [name]="artist.name"
+        [imageUrl]="artist.imageUrl"
+        navUrl="/artists/details/{{ artist.name }}"
+      ></app-card>
     </div>
   </div>
   <app-pagination [pagingData]="artistsPaging.pagingData" [pageSizes]="pageSizes" [paging$]="paging$"></app-pagination>

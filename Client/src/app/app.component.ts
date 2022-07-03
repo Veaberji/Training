@@ -12,8 +12,6 @@ export class AppComponent {
   loading = true;
 
   constructor(private router: Router) {
-    console.log(this.loading);
-
     router.events.subscribe((routerEvent: Event) => this.checkRouterEvent(routerEvent));
   }
 

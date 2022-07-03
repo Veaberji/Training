@@ -1,8 +1,13 @@
 <a routerLink="/artists/details/City Girls/similar"
-  >Test: similar artists for City Girls fetch by artistName:Observable</a
+  >Test: similar artists for City Girls fetch by listening to artistName:Observable</a
 >
 <div class="row" *ngIf="artists$ | async as artists">
   <div *ngFor="let artist of artists" class="col-lg-4 p-2">
-    <app-artist-card [artist]="artist" [newWindow]="true"></app-artist-card>
+    <app-card
+      [name]="artist.name"
+      [imageUrl]="artist.imageUrl"
+      navUrl="/artists/details/{{ artist.name }}"
+      [newWindow]="true"
+    ></app-card>
   </div>
 </div>
