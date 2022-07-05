@@ -45,7 +45,7 @@ public class AlbumsService : IAlbumsService
         string artistName, string albumName)
     {
         var albumFromDb = await _unitOfWork.Albums.GetAlbumDetailsAsync(artistName, albumName);
-        if (albumFromDb.IsAlbumDetailsUpToDate())
+        if (albumFromDb?.IsAlbumDetailsUpToDate() ?? false)
         {
             return _mapper.Map<AlbumDetailsBL>(albumFromDb);
         }

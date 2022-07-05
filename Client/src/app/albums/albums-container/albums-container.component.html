@@ -1,0 +1,9 @@
+<div class="row" *ngIf="albums$ | async as albums">
+  <div *ngFor="let album of albums" class="col-lg-4 p-2">
+    <app-card
+      [name]="album.name"
+      [imageUrl]="album.imageUrl"
+      navUrl="/albums/{{ artistName }}/{{ album.name }}/details"
+    ></app-card>
+  </div>
+</div>

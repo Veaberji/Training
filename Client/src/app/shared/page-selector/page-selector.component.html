@@ -1,0 +1,24 @@
+<div *ngIf="paging$ | async as paging">
+  <ul class="pagination">
+    <li class="page-item" [class.disabled]="firstPage == paging.page">
+      <a class="page-link" [routerLink]="['/artists', 'page', paging.page - 1, 'pageSize', paging.pageSize]"
+        >Previous
+      </a>
+    </li>
+    <li *ngFor="let page of pages" class="page-item" [class.active]="page == paging.page">
+      <a *ngIf="!paging.pageSize" class="page-link" [routerLink]="['/artists', 'page', page]" routerLinkActive="active"
+        >{{ page }}
+      </a>
+      <a
+        *ngIf="paging.pageSize"
+        class="page-link"
+        [routerLink]="['/artists', 'page', page, 'pageSize', paging.pageSize]"
+        routerLinkActive="active"
+        >{{ page }}
+      </a>
+    </li>
+    <li class="page-item" [class.disabled]="lastPage == paging.page">
+      <a class="page-link" [routerLink]="['/artists', 'page', paging.page + 1, 'pageSize', paging.pageSize]">Next</a>
+    </li>
+  </ul>
+</div>

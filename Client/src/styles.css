@@ -1,5 +1,8 @@
-@import "~bootstrap/dist/css/bootstrap.css";
+@import '~bootstrap/dist/css/bootstrap.css';
 
 .pointer {
   cursor: pointer;
+}
+a {
+  outline: none;
 }

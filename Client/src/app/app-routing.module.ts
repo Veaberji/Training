@@ -1,41 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AlbumDetailsComponent } from './album-details/album-details.component';
-import { ArtistDetailsComponent } from './artist-details/artist-details.component';
-import { ArtistsContainerComponent } from './artists-container/artists-container.component';
-import { NotFoundComponent } from './common/not-found/not-found.component';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/artists', pathMatch: 'full' },
   {
     path: 'artists',
-    component: ArtistsContainerComponent,
+    loadChildren: () => import('./artists/artist-routing.module').then((m) => m.ArtistRoutingModule),
   },
   {
-    path: 'artists/page/:page',
-    component: ArtistsContainerComponent,
+    path: 'albums',
+    loadChildren: () => import('./albums/album-routing.module').then((m) => m.AlbumRoutingModule),
   },
   {
-    path: 'artists/page/:page/pageSize/:pageSize',
-    component: ArtistsContainerComponent,
-  },
-
-  {
-    path: 'artist-details/:name',
-    component: ArtistDetailsComponent,
-  },
-  {
-    path: 'artist-details/:name/:supplement',
-    component: ArtistDetailsComponent,
-  },
-  {
-    path: ':artistName/album-details/:albumTitle',
-    component: AlbumDetailsComponent,
-  },
-  {
-    path: '**',
+    path: 'not-found',
     component: NotFoundComponent,
   },
+  { path: '**', redirectTo: '/not-found', pathMatch: 'full' },
 ];
 
 @NgModule({

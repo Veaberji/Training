@@ -2,6 +2,7 @@
 using MusiciansAPP.DAL.DALModels;
 using MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.AlbumDetails;
 using MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.ArtistTopAlbums;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MusiciansAPP.DAL.WebDataProvider.AutoMapperProfiles;
@@ -29,8 +30,14 @@ public class AlbumProfile : Profile
                 opt => opt.MapFrom(scr =>
                         MapImageUrl(scr.Images.First(i => i.Size == DefaultImageSize).Url)))
             .ForMember(dest => dest.Tracks,
+                opt => opt.MapFrom(scr => scr.Track.Tracks));
+
+        CreateMap<LastFmArtistAlbumOneTrackDto, AlbumDetailsDAL>()
+            .ForMember(dest => dest.ImageUrl,
                 opt => opt.MapFrom(scr =>
-                    scr.Track.Tracks));
+                    MapImageUrl(scr.Images.First(i => i.Size == DefaultImageSize).Url)))
+            .ForMember(dest => dest.Tracks,
+        opt => opt.MapFrom(scr => new List<LastFmAlbumTrackDto> { scr.Track.Track }));
     }
 
     private string MapImageUrl(string imageUrl)
