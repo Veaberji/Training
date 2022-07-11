@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, Observable, concatMap, of } from 'rxjs';
-import { ArtistsPagingService } from '../services/artist-paging.service';
-import ArtistsPaging from '../models/artist-paging';
+import { CardItem } from 'src/app/shared/models/card-item';
+import { environment } from 'src/environments/environment';
+import { Artist } from '../models/artist';
+import { ArtistService } from '../services/artist.service';
 
 @Component({
   selector: 'app-artists-container',
@@ -11,31 +13,41 @@ import ArtistsPaging from '../models/artist-paging';
 })
 export class ArtistsContainerComponent implements OnInit {
   readonly pageSizes: [12, 24, 48] = [12, 24, 48];
-  readonly pageParamFromUrl = 'page';
-  readonly pageSizeParamFromUrl = 'pageSize';
-  artistsPaging$: Observable<ArtistsPaging> | undefined;
+  totalTopArtists: number | undefined;
+  topArtists$: Observable<Artist[]> | undefined;
   paging$: Observable<{ page: number; pageSize: number }> | undefined;
 
-  constructor(private route: ActivatedRoute, private service: ArtistsPagingService) {}
+  constructor(private route: ActivatedRoute, private service: ArtistService) {}
 
   ngOnInit(): void {
-    this.initArtistsPaging();
+    this.initTopArtists();
+    this.totalTopArtists = environment.totalTopArtists;
   }
 
-  private initArtistsPaging(): void {
+  getCardItems(artists: Artist[]): CardItem[] {
+    return artists.map((artist) => {
+      return {
+        name: artist.name,
+        imageUrl: artist.imageUrl,
+        navUrl: `/artists/details/${artist.name}`,
+      };
+    });
+  }
+
+  private initTopArtists(): void {
     this.initPaging();
     if (!this.paging$) {
       return;
     }
 
     const pagingQuery$ = this.paging$.pipe(map(({ page, pageSize }) => `?pageSize=${pageSize}&page=${page}`));
-    this.artistsPaging$ = this.service.getByObservable(pagingQuery$);
+    this.topArtists$ = this.service.getAllByObservable(pagingQuery$);
   }
 
   private initPaging() {
     const params = this.route.params;
-    const currentPage$ = params.pipe(map((param) => +param[this.pageParamFromUrl]));
-    const currentPageSize$ = params.pipe(map((param) => +param[this.pageSizeParamFromUrl]));
+    const currentPage$ = params.pipe(map((param) => +param['page']));
+    const currentPageSize$ = params.pipe(map((param) => +param['pageSize']));
 
     this.paging$ = combineLatest([currentPage$, currentPageSize$]).pipe(
       concatMap(([page, pageSize]) => {

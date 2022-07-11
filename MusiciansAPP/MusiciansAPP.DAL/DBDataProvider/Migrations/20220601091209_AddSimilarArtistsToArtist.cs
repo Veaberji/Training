@@ -14,7 +14,7 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                 columns: table => new
                 {
                     ReverseSimilarArtistsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SimilarArtistsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    SimilarArtistsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                 },
                 constraints: table =>
                 {

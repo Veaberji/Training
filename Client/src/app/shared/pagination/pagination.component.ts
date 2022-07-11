@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
-import PagingData from '../models/paging-data';
 
 @Component({
   selector: 'app-pagination',
@@ -9,6 +9,6 @@ import PagingData from '../models/paging-data';
 })
 export class PaginationComponent {
   @Input('pageSizes') pageSizes!: number[];
-  @Input('pagingData') pagingData!: PagingData;
+  @Input('totalItems') totalItems!: number;
   @Input('paging$') paging$: Observable<{ page: number; pageSize: number }> | undefined;
 }

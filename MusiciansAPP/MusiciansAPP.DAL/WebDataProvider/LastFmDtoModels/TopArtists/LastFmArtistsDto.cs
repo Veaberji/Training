@@ -1,6 +1,5 @@
-﻿using MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.Common;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.TopArtists;
 
@@ -13,7 +12,4 @@ internal class LastFmArtistsDto
 
     [JsonProperty(PropertyName = "artist")]
     public IEnumerable<LastFmArtistDto> Artists { get; set; }
-
-    [JsonProperty(PropertyName = "@attr")]
-    public LastFmArtistsMetaDataDto MetaData { get; set; }
 }

@@ -1,16 +1,17 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { TableColumn } from 'src/app/shared/models/table-column';
-import AlbumTrack from '../models/album-track';
+import { Track } from '../models/track';
 
 @Component({
   selector: 'app-album-track-list',
   templateUrl: './album-track-list.component.html',
 })
 export class AlbumTrackListComponent {
-  @Input('tracks') tracks!: AlbumTrack[];
+  @Input('tracks') tracks!: Track[];
 
   columns: TableColumn[] = [
+    { header: '#', field: '' },
     { header: 'Title', field: 'name' },
     { header: 'Duration', field: 'duration' },
   ];

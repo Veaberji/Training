@@ -1,6 +1,6 @@
-﻿using MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.Common;
+﻿using System.Collections.Generic;
+using MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.Common;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace MusiciansAPP.DAL.WebDataProvider.LastFmDtoModels.TopArtists;
 

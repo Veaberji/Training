@@ -4,6 +4,7 @@
 
 namespace MusiciansAPP.DAL.DBDataProvider.Migrations
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1122:Use string.Empty for empty strings", Justification = "<Pending>")]
     public partial class SetArtistImageUrlOptional : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

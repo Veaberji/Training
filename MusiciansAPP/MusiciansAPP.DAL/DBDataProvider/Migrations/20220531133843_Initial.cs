@@ -16,7 +16,7 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Biography = table.Column<string>(type: "nvarchar(3500)", maxLength: 3500, nullable: true)
+                    Biography = table.Column<string>(type: "nvarchar(3500)", maxLength: 3500, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -31,7 +31,7 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     PlayCount = table.Column<int>(type: "int", nullable: false),
-                    ArtistId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ArtistId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -53,7 +53,7 @@ namespace MusiciansAPP.DAL.DBDataProvider.Migrations
                     PlayCount = table.Column<int>(type: "int", nullable: false),
                     DurationInSeconds = table.Column<int>(type: "int", nullable: true),
                     ArtistId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AlbumId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    AlbumId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                 },
                 constraints: table =>
                 {

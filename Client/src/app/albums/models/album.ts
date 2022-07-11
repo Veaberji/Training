@@ -1,5 +1,9 @@
+import { Track } from 'src/app/tracks/models/track';
+
 export interface Album {
   name: string;
-  playCount: number;
   imageUrl: string;
+  playCount: number;
+  artistName: string | null;
+  tracks: Track[];
 }

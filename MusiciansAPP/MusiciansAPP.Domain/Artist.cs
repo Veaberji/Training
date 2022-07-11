@@ -1,8 +1,8 @@
-﻿using MusiciansAPP.Domain.Constraints;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MusiciansAPP.Domain.Constraints;
 
 namespace MusiciansAPP.Domain;
 
@@ -28,7 +28,9 @@ public class Artist : Entity
     [Column(TypeName = "ntext")]
     [MaxLength(ArtistConstraints.BiographyMaxLength)]
     public string Biography { get; set; }
+
     public IEnumerable<Track> Tracks { get; set; }
+
     public IEnumerable<Album> Albums { get; set; }
 
     [InverseProperty(nameof(ReverseSimilarArtists))]

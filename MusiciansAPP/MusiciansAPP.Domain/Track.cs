@@ -1,6 +1,6 @@
-﻿using MusiciansAPP.Domain.Constraints;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MusiciansAPP.Domain.Constraints;
 
 namespace MusiciansAPP.Domain;
 
@@ -17,7 +17,9 @@ public class Track : Entity
 
     [Range(TrackConstraints.DurationInSecondsMinValue, int.MaxValue)]
     public int? DurationInSeconds { get; set; }
+
     public Artist Artist { get; set; }
+
     public Album Album { get; set; }
 
     public bool IsTrackHasPlayCount()

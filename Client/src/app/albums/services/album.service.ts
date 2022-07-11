@@ -17,4 +17,9 @@ export class AlbumService extends DataService<Album> {
     const topAlbumsApiPostfix = 'top-albums';
     return this.getAll(`${artistName}/${topAlbumsApiPostfix}`);
   }
+
+  getAlbumDetails(artistName: string, albumTitle: string): Observable<Album> {
+    const albumDetailsApiPostfix = 'album-details';
+    return this.get(`${artistName}/${albumDetailsApiPostfix}/${albumTitle}`);
+  }
 }

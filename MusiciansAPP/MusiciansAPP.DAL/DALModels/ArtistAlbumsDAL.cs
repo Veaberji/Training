@@ -10,5 +10,6 @@ public class ArtistAlbumsDAL
     }
 
     public string ArtistName { get; set; }
+
     public IEnumerable<AlbumDAL> Albums { get; set; }
 }

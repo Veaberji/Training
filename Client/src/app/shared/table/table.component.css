@@ -1,0 +1,9 @@
+.mat-table {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.mat-column-header {
+  text-align: center;
+  font-size: medium;
+}
