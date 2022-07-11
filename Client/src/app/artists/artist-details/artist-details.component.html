@@ -1,46 +1,19 @@
 <div *ngIf="artist$ | async as artist">
-  <div class="card mb-3">
-    <div class="row g-0">
-      <div class="col-md-4">
-        <img src="{{ artist.imageUrl }}" class="img-fluid rounded-start" alt="{{ artist.name }}" />
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h5 class="card-title fs-4">{{ artist.name }}</h5>
-          <div class="card-text">{{ artist.biography }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-hero [imageName]="artist.name" [imageUrl]="artist.imageUrl" [title]="artist.name">
+    <p>{{ artist.biography }}</p>
+  </app-hero>
 
-  <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a
-        class="nav-link"
-        [routerLink]="['/artists', componentRouteName, artist.name, supplementRoute.TopTracks]"
-        routerLinkActive="active"
-        >Top Tracks
-      </a>
-    </li>
-    <li class="nav-item">
-      <a
-        class="nav-link"
-        [routerLink]="['/artists', componentRouteName, artist.name, supplementRoute.TopAlbums]"
-        routerLinkActive="active"
-        >Top Albums
-      </a>
-    </li>
-    <li class="nav-item">
-      <a
-        class="nav-link"
-        [routerLink]="['/artists', componentRouteName, artist.name, supplementRoute.SimilarArtists]"
-        routerLinkActive="active"
-        >Similar Artists
-      </a>
-    </li>
-  </ul>
+  <app-tab
+    [tabs]="[
+      { navUrl: ['/artists', 'details', artist.name, supplementRoute.TopTracks], title: 'Top Tracks' },
+      { navUrl: ['/artists', 'details', artist.name, supplementRoute.TopAlbums], title: 'Top Albums' },
+      {
+        navUrl: ['/artists', 'details', artist.name, supplementRoute.SimilarArtists],
+        title: 'Similar Artists'
+      }
+    ]"
+  >
+  </app-tab>
 
-  <div class="container">
-    <router-outlet></router-outlet>
-  </div>
+  <router-outlet></router-outlet>
 </div>

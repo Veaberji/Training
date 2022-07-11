@@ -19,6 +19,7 @@ export class TopTrackListComponent implements OnInit {
   }
 
   columns: TableColumn[] = [
+    { header: '#', field: '' },
     { header: 'Title', field: 'name' },
     { header: 'Times Playied', field: 'playCount' },
   ];

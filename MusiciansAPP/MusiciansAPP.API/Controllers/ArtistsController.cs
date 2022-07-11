@@ -1,15 +1,14 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MusiciansAPP.API.Services.Interfaces;
-using MusiciansAPP.API.UIModels;
-using MusiciansAPP.API.Utils;
-using MusiciansAPP.BL.Services.Albums.Interfaces;
-using MusiciansAPP.BL.Services.Artists.Interfaces;
-using MusiciansAPP.BL.Services.Tracks.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MusiciansAPP.API.Services;
+using MusiciansAPP.API.UIModels;
+using MusiciansAPP.BL.Services.Albums;
+using MusiciansAPP.BL.Services.Artists;
+using MusiciansAPP.BL.Services.Tracks;
 
 namespace MusiciansAPP.API.Controllers;
 
@@ -25,41 +24,46 @@ public class ArtistsController : ControllerBase
     private readonly IAlbumsService _albumsService;
     private readonly IMapper _mapper;
     private readonly IErrorHandler _errorHandler;
-    public ArtistsController(IArtistsService artistsService,
+    private readonly PagingHelper _pagingHelper;
+
+    public ArtistsController(
+        IArtistsService artistsService,
         ITracksService tracksService,
         IAlbumsService albumsService,
         IMapper mapper,
-        IErrorHandler errorHandler)
+        IErrorHandler errorHandler,
+        PagingHelper pagingHelper)
     {
         _artistsService = artistsService;
         _mapper = mapper;
         _errorHandler = errorHandler;
+        _pagingHelper = pagingHelper;
         _albumsService = albumsService;
         _tracksService = tracksService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<ArtistsPagingUI>> GetTopArtists(
+    public async Task<ActionResult<IEnumerable<ArtistUI>>> GetTopArtists(
         [FromQuery] int pageSize, [FromQuery] int page = 1)
     {
         var action = async () =>
         {
-            int size = PagingHelper.GetCorrectPageSize(pageSize);
+            int size = _pagingHelper.GetCorrectPageSize(pageSize);
             var artists = await _artistsService.GetTopArtistsAsync(size, page);
-            return _mapper.Map<ArtistsPagingUI>(artists);
+            return _mapper.Map<IEnumerable<ArtistUI>>(artists);
         };
 
-        return await GetDataAsync(action, nameof(GetArtistDetails));
+        return await GetDataAsync(action, nameof(GetTopArtists));
     }
 
     [HttpGet("{name}")]
-    public async Task<ActionResult<ArtistDetailsUI>> GetArtistDetails(
+    public async Task<ActionResult<ArtistUI>> GetArtistDetails(
         string name)
     {
         var action = async () =>
         {
             var artist = await _artistsService.GetArtistDetailsAsync(name);
-            return _mapper.Map<ArtistDetailsUI>(artist);
+            return _mapper.Map<ArtistUI>(artist);
         };
 
         return await GetDataAsync(action, nameof(GetArtistDetails));
@@ -104,15 +108,14 @@ public class ArtistsController : ControllerBase
         return await GetDataAsync(action, nameof(GetSimilarArtists));
     }
 
-
     [HttpGet("{artistName}/album-details/{albumName}")]
-    public async Task<ActionResult<AlbumDetailsUI>> GetArtistAlbumDetails(
+    public async Task<ActionResult<AlbumUI>> GetArtistAlbumDetails(
         string artistName, string albumName)
     {
         var action = async () =>
         {
             var blModels = await _albumsService.GetArtistAlbumDetailsAsync(artistName, albumName);
-            return _mapper.Map<AlbumDetailsUI>(blModels);
+            return _mapper.Map<AlbumUI>(blModels);
         };
 
         return await GetDataAsync(action, nameof(GetArtistAlbumDetails));
@@ -137,7 +140,8 @@ public class ArtistsController : ControllerBase
 
     private ObjectResult CreateError()
     {
-        return StatusCode(StatusCodes.Status500InternalServerError,
+        return StatusCode(
+            StatusCodes.Status500InternalServerError,
             "A problem happened while handling your request.");
     }
 }

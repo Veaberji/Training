@@ -1,6 +1,6 @@
-<div class="card pointer" (click)="goToPage()">
-  <div class="card-header fs-5">{{ name }}</div>
-  <div>
-    <img src="{{ imageUrl }}" alt="{{ name }}" class="img-thumbnail" />
-  </div>
-</div>
+<mat-card class="pointer" (click)="goToPage()">
+  <mat-card-header>
+    <mat-card-title>{{ name }}</mat-card-title>
+  </mat-card-header>
+  <img mat-card-image src="{{ imageUrl }}" alt="{{ name }}" />
+</mat-card>

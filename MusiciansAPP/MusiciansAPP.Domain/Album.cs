@@ -1,8 +1,8 @@
-﻿using MusiciansAPP.Domain.Constraints;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using MusiciansAPP.Domain.Constraints;
 
 namespace MusiciansAPP.Domain;
 
@@ -25,7 +25,9 @@ public class Album : Entity
 
     [Range(AlbumConstraints.PlayCountMinValue, int.MaxValue)]
     public int? PlayCount { get; set; }
+
     public Artist Artist { get; set; }
+
     public List<Track> Tracks { get; set; }
 
     public bool IsAlbumHasPlayCount()

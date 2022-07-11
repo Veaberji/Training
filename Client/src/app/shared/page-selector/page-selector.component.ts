@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { PagingService } from '../services/paging.service';
-import PagingData from '../models/paging-data';
 import PagingDetails from '../models/paging-details';
 
 @Component({
@@ -15,7 +14,7 @@ export class PageSelectorComponent implements OnInit, OnDestroy {
   pages: number[] = [];
   firstPage!: number;
   lastPage!: number;
-  @Input('pagingData') pagingData!: PagingData;
+  @Input('totalItems') totalItems!: number;
   @Input('paging$') paging$: Observable<{ page: number; pageSize: number }> | undefined;
 
   constructor(private service: PagingService) {}
@@ -39,7 +38,7 @@ export class PageSelectorComponent implements OnInit, OnDestroy {
   private getPagingDetails(page: number, pageSize: number): PagingDetails {
     const pagingDetails: PagingDetails = {
       CurrentPage: page,
-      TotalItems: this.pagingData.totalItems,
+      TotalItems: this.totalItems,
       PageSize: pageSize,
       PagesAmount: this.pagesAmount,
     };

@@ -1,22 +1,18 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MusiciansAPP.API.Extensions.Configuration;
-using MusiciansAPP.API.Extensions.DependencyInjection;
+using MusiciansAPP.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
-
-builder.BindObjects();
+builder.Configuration.BindObjects();
 services.AddAppCors();
 services.AddAppServices(builder.Configuration);
 services.AddDbServices(builder.Configuration);
 services.AddControllers();
 
-
 var app = builder.Build();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

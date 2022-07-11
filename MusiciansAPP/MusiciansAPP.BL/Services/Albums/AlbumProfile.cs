@@ -1,0 +1,16 @@
+﻿using AutoMapper;
+using MusiciansAPP.DAL.DALModels;
+using MusiciansAPP.Domain;
+
+namespace MusiciansAPP.BL.Services.Albums;
+
+public class AlbumProfile : Profile
+{
+    public AlbumProfile()
+    {
+        CreateMap<AlbumDAL, AlbumBL>();
+        CreateMap<AlbumBL, Album>().ReverseMap();
+
+        CreateMap<ArtistAlbumsDAL, ArtistAlbumsBL>();
+    }
+}

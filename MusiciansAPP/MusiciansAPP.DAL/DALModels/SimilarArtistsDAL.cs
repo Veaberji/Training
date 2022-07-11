@@ -10,5 +10,6 @@ public class SimilarArtistsDAL
     }
 
     public string ArtistName { get; set; }
+
     public IEnumerable<ArtistDAL> Artists { get; set; }
 }

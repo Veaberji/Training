@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ArtistDetailsService } from '../services/artist-details.service';
-import { ArtistDetails } from '../models/artist-details';
+import { TabItem } from 'src/app/shared/models/tab-item';
+import { Artist } from '../models/artist';
+import { ArtistService } from '../services/artist.service';
 import { SupplementRoute } from '../supplementRoutes';
 
 @Component({
@@ -11,11 +12,10 @@ import { SupplementRoute } from '../supplementRoutes';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArtistDetailsComponent implements OnInit {
-  readonly componentRouteName: string = 'details';
-  supplementRoute = SupplementRoute;
-  artist$: Observable<ArtistDetails> | undefined;
+  readonly supplementRoute = SupplementRoute;
+  artist$: Observable<Artist> | undefined;
 
-  constructor(private route: ActivatedRoute, private artistDetailsService: ArtistDetailsService) {}
+  constructor(private route: ActivatedRoute, private artistService: ArtistService) {}
 
   ngOnInit(): void {
     this.initArtist();
@@ -23,6 +23,6 @@ export class ArtistDetailsComponent implements OnInit {
 
   private initArtist(): void {
     const name = String(this.route.snapshot.paramMap.get('name'));
-    this.artist$ = this.artistDetailsService.get(name);
+    this.artist$ = this.artistService.get(name);
   }
 }

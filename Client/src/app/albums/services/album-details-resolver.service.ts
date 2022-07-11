@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { catchError, EMPTY, Observable } from 'rxjs';
 import { AppErrorHandler } from 'src/app/shared/common/errors/app-error-handler';
-import { AlbumDetails } from '../models/album-details';
-import { AlbumDetailsService } from './album-details.service';
+import { Album } from '../models/album';
+import { AlbumService } from './album.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AlbumDetailsResolver implements Resolve<AlbumDetails> {
-  constructor(private service: AlbumDetailsService, private errorHandler: AppErrorHandler) {}
+export class AlbumDetailsResolver implements Resolve<Album> {
+  constructor(private service: AlbumService, private errorHandler: AppErrorHandler) {}
 
-  resolve(route: ActivatedRouteSnapshot, _: RouterStateSnapshot): Observable<AlbumDetails> {
+  resolve(route: ActivatedRouteSnapshot, _: RouterStateSnapshot): Observable<Album> {
     let params = route.paramMap;
     const albumTitle = String(params.get('albumTitle'));
     const artistName = String(params.get('artistName'));

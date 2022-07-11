@@ -1,5 +1,5 @@
 <div class="row" *ngIf="albums$ | async as albums">
-  <div *ngFor="let album of albums" class="col-lg-4 p-2">
+  <div *ngFor="let album of albums" class="col-lg-3 col-md-4 col-sm-6 p-2">
     <app-card
       [name]="album.name"
       [imageUrl]="album.imageUrl"

@@ -1,0 +1,10 @@
+<mat-grid-list [cols]="breakpoint" (window:resize)="onResize($event)">
+  <mat-grid-tile *ngFor="let item of data"
+    ><app-card
+      [name]="item.name"
+      [imageUrl]="item.imageUrl"
+      [navUrl]="item.navUrl"
+      [newWindow]="item.newWindow ?? false"
+    ></app-card
+  ></mat-grid-tile>
+</mat-grid-list>
